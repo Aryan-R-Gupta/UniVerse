@@ -34,10 +34,10 @@ export const teacherNavItems: NavItem[] = [
 
 export const adminNavItems: NavItem[] = [
   { title: 'Overview', href: '/admin/dashboard', icon: Shield },
-  { title: 'Canteen', href: '/canteen', icon: Utensils },
   { title: 'Canteen Analytics', href: '/admin/canteen-analytics', icon: UtensilsIcon },
   { title: 'Resource Analytics', href: '/admin/resource-analytics', icon: BookOpen },
   { title: 'Event Analytics', href: '/admin/event-analytics', icon: BarChart2 },
+  { title: 'Canteen', href: '/canteen', icon: Utensils },
   { title: 'Events', href: '/events', icon: PartyPopper },
   { title: 'Feedback', href: '/feedback', icon: MessageSquare },
   { title: 'Support', href: '/support', icon: HelpCircle },
@@ -112,7 +112,7 @@ export const allCanteenItems = {
     { id: 13, name: 'Burger', price: 70, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXJnZXJ8ZW58MHx8fHwxNzU3NjY3Mzc4fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'burger' },
   ],
   drinks: [
-    { id: 3, name: 'Cold Coffee', price: 50, image: 'https://images.unsplash.com/photo-1530373239216-42518e6b4063?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb2xkJTIwY29mZmVlfGVufDB8fHx8MTc1NzY2NzUwOXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'cold coffee' },
+    { id: 3, name: 'Cold Coffee', price: 50, image: 'https://images.unsplash.com/photo-1530373239216-42518e6b4063?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb2xkJTIwY29mZmVlfGVufDB8fHx8MTc1NzY2NzUwOXww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'cold coffee' },
     { id: 4, name: 'Masala Chai', price: 15, image: 'https://images.unsplash.com/photo-1630748662359-40a2105640c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHhjaGFpfGVufDB8fHx8MTc1NzY2NzU1MXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'masala chai' },
   ],
   meals: [
@@ -124,7 +124,7 @@ export const allCanteenItems = {
 export const events = [
   { id: 1, title: 'AI & The Future', slug: 'ai-and-the-future', category: 'Workshops', date: 'Dec 15', image: 'https://images.unsplash.com/photo-1694903110330-cc64b7e1d21d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxBSSUyMHxlbnwwfHx8fDE3NTc1Nzk3ODB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'AI workshop' },
   { id: 2, title: 'Encore - Music Fest', slug: 'encore-music-fest', category: 'Cultural', date: 'Dec 18', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtdXNpYyUyMGZlc3R8ZW58MHx8fHwxNzU3NjY5NTM2fDA&ixlibrb-4.1.0&q=80&w=1080', dataAiHint: 'music festival' },
-  { id: 3, title: 'Hackathon 5.0', slug: 'hackathon-5-0', category: 'Tech', date: 'Dec 20', image: 'https://images.unsplash.com/photo-1637073849667-91120a924221?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoYWNrYXRob258ZW58MHx8fHwxNzU3NjY5NDQ5fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'hackathon event' },
+  { id: 3, title: 'Hackathon 5.0', slug: 'hackathon-5-0', category: 'Tech', date: 'Dec 20', image: 'https://images.unsplash.com/photo-1637073849667-91120a924221?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoYWNrYXRob258ZW58MHx8fHwxNzU3NjY5NDQ5fDA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'hackathon event' },
   { id: 4, title: 'University Soccer League', slug: 'university-soccer-league', category: 'Sports', date: 'Dec 22', image: 'https://images.unsplash.com/photo-1583027383321-51847ab7ada0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8U29jY2VyJTIwTGVhZ3VlfGVufDB8fHx8MTc1NzY2OTU1OHww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'soccer match' },
 ];
 
