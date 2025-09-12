@@ -59,15 +59,15 @@ const features = [
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-sky-100 to-purple-100/50 text-gray-800 font-body overflow-x-hidden dark:from-gray-900 dark:to-purple-900/50 dark:text-gray-200">
+    <div className="flex flex-col min-h-screen bg-background text-foreground font-body overflow-x-hidden">
       <header className="px-4 lg:px-8 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center justify-center gap-2">
-          <GraduationCap className="h-7 w-7 text-blue-500" />
-          <span className="font-bold text-xl text-gray-900 dark:text-gray-100 tracking-tight">UniVerse</span>
+          <GraduationCap className="h-7 w-7 text-primary" />
+          <span className="font-bold text-xl text-foreground tracking-tight">UniVerse</span>
         </Link>
         <nav className="flex items-center gap-2 sm:gap-4">
           <ThemeToggle />
-          <Button asChild className="rounded-full bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <Button asChild className="rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Link href="/dashboard">Get Started</Link>
           </Button>
         </nav>
@@ -79,21 +79,21 @@ export default function LandingPage() {
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
               <div className="flex flex-col justify-center space-y-6">
                 <div className="space-y-4">
-                  <h1 className="text-4xl font-extrabold font-headline tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none text-gray-900 dark:text-white">
+                  <h1 className="text-4xl font-extrabold font-headline tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none text-foreground">
                     Your entire campus, connected in one app.
                   </h1>
-                  <p className="max-w-[600px] text-gray-600 md:text-xl dark:text-gray-400">
+                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
                     A unified campus platform to schedule, order, book, and discover — all in one place.
                   </p>
                 </div>
                 <div className="flex flex-col gap-4 min-[400px]:flex-row">
-                   <Button asChild size="lg" className="rounded-full bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                   <Button asChild size="lg" className="rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
                     <Link href="/dashboard">
                       Go to App
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
-                  <Button asChild size="lg" variant="ghost" className="rounded-full text-gray-700 dark:text-gray-300 hover:bg-sky-200/50 dark:hover:bg-purple-900/30 transform hover:-translate-y-1 transition-transform duration-300">
+                  <Button asChild size="lg" variant="ghost" className="rounded-full text-foreground hover:bg-accent hover:text-accent-foreground transform hover:-translate-y-1 transition-transform duration-300">
                      <Link href="#">
                         Learn More
                      </Link>
@@ -101,7 +101,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="relative flex items-center justify-center p-8">
-                 <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-full -z-10 animate-blob-bounce dark:bg-purple-900/20"></div>
+                 <div className="absolute inset-0 bg-muted/30 backdrop-blur-sm rounded-full -z-10 animate-blob-bounce"></div>
                  <Image
                     src="https://images.unsplash.com/photo-1538334421852-687c439c92f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjYW50ZWVufGVufDB8fHx8MTc1NzY3MTEwMHww&ixlib=rb-4.1.0&q=80&w=1080"
                     alt="Floating mascot one"
@@ -132,39 +132,39 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <div className="w-full py-4 bg-white/50 backdrop-blur-sm shadow-inner overflow-hidden group dark:bg-purple-900/10">
+        <div className="w-full py-4 bg-muted/50 backdrop-blur-sm shadow-inner overflow-hidden group">
           <div className="marquee flex group-hover:[animation-play-state:paused] motion-safe:animate-marquee">
             {[...Array(6)].map((_, i) => (
               <div key={i} className="flex items-center shrink-0">
-                <p className="text-xl md:text-2xl font-bold uppercase tracking-widest text-gray-700 dark:text-gray-300 px-8 flex items-center gap-4">
+                <p className="text-xl md:text-2xl font-bold uppercase tracking-widest text-muted-foreground px-8 flex items-center gap-4">
                   <span>Navigate</span>
-                  <GraduationCap className="h-6 w-6 text-blue-400" />
+                  <GraduationCap className="h-6 w-6 text-primary" />
                   <span>Join</span>
-                  <GraduationCap className="h-6 w-6 text-blue-400" />
+                  <GraduationCap className="h-6 w-6 text-primary" />
                   <span>Experience</span>
                 </p>
-                <GraduationCap className="h-6 w-6 text-blue-400" />
+                <GraduationCap className="h-6 w-6 text-primary" />
               </div>
             ))}
           </div>
         </div>
 
-        <section className="w-full py-12 md:py-24 bg-white/50 dark:bg-transparent">
+        <section className="w-full py-12 md:py-24 bg-muted/50">
           <div className="container px-4 md:px-6">
-            <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 text-gray-900 dark:text-white">Loved by students nationwide</h2>
+            <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 text-foreground">Loved by students nationwide</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((testimonial, index) => (
-                <Card key={index} className="bg-background/80 dark:bg-card/60 backdrop-blur-sm border-gray-200/50 dark:border-gray-800 shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <Card key={index} className="bg-background/80 backdrop-blur-sm border-border/50 shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
                   <CardContent className="p-6">
-                    <p className="text-gray-700 dark:text-gray-300 mb-6">"{testimonial.quote}"</p>
+                    <p className="text-muted-foreground mb-6">"{testimonial.quote}"</p>
                     <div className="flex items-center gap-4">
-                      <Avatar className="h-12 w-12 border-2 border-white dark:border-gray-600">
+                      <Avatar className="h-12 w-12 border-2 border-background">
                         <AvatarImage src={testimonial.avatarUrl} alt={testimonial.name} data-ai-hint={testimonial.dataAiHint} />
                         <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.title}</p>
+                        <p className="font-semibold text-foreground">{testimonial.name}</p>
+                        <p className="text-sm text-muted-foreground">{testimonial.title}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -177,8 +177,8 @@ export default function LandingPage() {
          <section className="w-full py-12 md:py-24">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-gray-900 dark:text-white">Why Choose UniVerse?</h2>
-                <p className="max-w-[700px] text-gray-600 md:text-xl/relaxed dark:text-gray-400">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-foreground">Why Choose UniVerse?</h2>
+                <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed">
                     UniVerse is designed to make your campus life simpler, more connected, and more engaging.
                 </p>
             </div>
@@ -186,13 +186,13 @@ export default function LandingPage() {
               {features.map((feature, index) => (
                 <Card key={index} className="bg-transparent border-0 shadow-none">
                   <CardHeader className="items-center text-center">
-                    <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 mb-2">
+                    <div className="p-3 rounded-full bg-primary/10 mb-2">
                         {feature.icon}
                     </div>
-                    <CardTitle className="dark:text-white">{feature.title}</CardTitle>
+                    <CardTitle>{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
+                    <p className="text-muted-foreground">{feature.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -202,15 +202,17 @@ export default function LandingPage() {
 
       </main>
 
-      <footer className="w-full py-6 px-4 md:px-6 border-t bg-white/50 backdrop-blur-sm dark:bg-transparent dark:border-gray-800">
+      <footer className="w-full py-6 px-4 md:px-6 border-t bg-muted/50 backdrop-blur-sm">
         <div className="container flex items-center justify-between">
-          <p className="text-sm text-gray-500 dark:text-gray-400">&copy; 2024 UniVerse. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">&copy; 2024 UniVerse. All rights reserved.</p>
           <Link href="/" className="flex items-center justify-center gap-2">
-            <GraduationCap className="h-6 w-6 text-blue-500" />
-            <span className="font-bold text-lg text-gray-900 dark:text-gray-100">UniVerse</span>
+            <GraduationCap className="h-6 w-6 text-primary" />
+            <span className="font-bold text-lg text-foreground">UniVerse</span>
           </Link>
         </div>
       </footer>
     </div>
   );
 }
+
+    
