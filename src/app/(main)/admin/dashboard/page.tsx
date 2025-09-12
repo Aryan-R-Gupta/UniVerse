@@ -1,6 +1,4 @@
 
-'use client';
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,19 +8,51 @@ import { Users, MessageSquare, HelpCircle, Megaphone, CalendarPlus, BarChart2, B
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { getFirestore, collection, getDocs, query, orderBy, limit, Timestamp } from 'firebase/firestore';
+import { app } from '@/lib/firebase';
+import { formatDistanceToNow } from 'date-fns';
 
 
-const mockFeedback = [
-    { id: 1, text: "The app is great, but it would be nice to have a dark mode for the map.", submittedAt: "2 days ago" },
-    { id: 2, text: "The canteen menu should show allergens.", submittedAt: "3 days ago" },
-];
+type Feedback = {
+  id: string;
+  text: string;
+  submittedAt: string;
+};
+
+type SupportTicket = {
+  id: string;
+  subject: string;
+  user: string;
+  status: string;
+  createdAt: string;
+};
+
+async function getFeedback(): Promise<Feedback[]> {
+  const db = getFirestore(app);
+  const feedbackCol = collection(db, 'feedback');
+  const q = query(feedbackCol, orderBy('createdAt', 'desc'), limit(5));
+  const feedbackSnapshot = await getDocs(q);
+  const feedbackList = feedbackSnapshot.docs.map(doc => {
+    const data = doc.data();
+    const createdAt = data.createdAt as Timestamp;
+    return {
+      id: doc.id,
+      text: data.text,
+      submittedAt: createdAt ? formatDistanceToNow(createdAt.toDate(), { addSuffix: true }) : 'Just now',
+    };
+  });
+  return feedbackList;
+}
+
 
 const mockSupportTickets = [
     { id: 1, subject: "Can't register for event", user: "payal.soni@universe.edu", status: "Open", createdAt: "1 day ago" },
     { id: 2, subject: "Payment failed for canteen", user: "kanksha.d@universe.edu", status: "Closed", createdAt: "4 days ago" },
 ];
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  const latestFeedback = await getFeedback();
+
   return (
     <div className="space-y-8">
       <h1 className="text-3xl font-bold">Administrator Overview</h1>
@@ -83,12 +113,16 @@ export default function AdminDashboardPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {mockFeedback.map(fb => (
+                        {latestFeedback.length > 0 ? latestFeedback.map(fb => (
                             <TableRow key={fb.id}>
                                 <TableCell className="truncate max-w-xs">{fb.text}</TableCell>
                                 <TableCell className="text-right">{fb.submittedAt}</TableCell>
                             </TableRow>
-                        ))}
+                        )) : (
+                          <TableRow>
+                            <TableCell colSpan={2} className="text-center">No feedback yet.</TableCell>
+                          </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </CardContent>
