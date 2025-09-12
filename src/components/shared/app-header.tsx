@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -71,7 +72,9 @@ export function AppHeader() {
             </DropdownMenuItem>
           </Link>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <Link href="/">
+            <DropdownMenuItem>Logout</DropdownMenuItem>
+          </Link>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
