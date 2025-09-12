@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { BookMarked, CalendarDays, Home, Utensils, PartyPopper, User, Library, Salad, Search, Book, Navigation, Bell, TestTube, Dribbble, Compass } from 'lucide-react';
+import { BookMarked, CalendarDays, Home, Utensils, PartyPopper, User, Library, Salad, Search, Book, Navigation, Bell, TestTube, Dribbble, Compass, MessageSquare } from 'lucide-react';
 
 export type NavItem = {
   title: string;
@@ -14,6 +14,7 @@ export const navItems: NavItem[] = [
   { title: 'Events', href: '/events', icon: PartyPopper },
   { title: 'Resources', href: '/resources', icon: BookMarked },
   { title: 'Navigate', href: '/navigation', icon: Compass },
+  { title: 'Feedback', href: '/feedback', icon: MessageSquare },
   { title: 'Profile', href: '/profile', icon: User },
 ];
 

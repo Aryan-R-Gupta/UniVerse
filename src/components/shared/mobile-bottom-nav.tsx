@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 export function MobileBottomNav() {
   const pathname = usePathname();
-  const mainNavItems = navItems.filter(item => ['Home', 'Timetable', 'Canteen', 'Events', 'Navigate'].includes(item.title));
+  const mainNavItems = navItems.filter(item => ['Home', 'Timetable', 'Canteen', 'Events', 'Feedback'].includes(item.title));
 
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card border-t z-50">
