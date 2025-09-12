@@ -1,5 +1,4 @@
 
-
 import { ArrowRight, GraduationCap, LayoutGrid, Cpu, Users, CalendarCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -21,7 +20,7 @@ const testimonials = [
       quote: "Joined 2 clubs in week 1 — game changer!",
       name: "Anika S.",
       title: "3rd Year, CS",
-      avatarUrl: "https://picsum.photos/seed/anika/100/100",
+      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHdvbWVufGVufDB8fHx8MTc1NzY5NDYzMnww&ixlib=rb-4.1.0&q=80&w=1080",
       dataAiHint: "student avatar"
     },
     {
