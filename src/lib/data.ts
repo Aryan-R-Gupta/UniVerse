@@ -74,6 +74,13 @@ export const allCanteenItems = {
   snacks: [
     { id: 1, name: 'Samosa', price: 15, image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzYW1vc2F8ZW58MHx8fHwxNzU3NjY2NTA1fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'samosa' },
     { id: 2, name: 'Chaat', price: 20, image: 'https://images.unsplash.com/photo-1653850280260-aa3b9e00b230?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFhdHxlbnwwfHx8fDE3NTc2NjY2NzB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'chaat' },
+    { id: 7, name: 'Noodles', price: 40, image: 'https://picsum.photos/seed/noodles/200/200', dataAiHint: 'noodles' },
+    { id: 8, name: 'Fried Rice', price: 50, image: 'https://picsum.photos/seed/friedrice/200/200', dataAiHint: 'fried rice' },
+    { id: 9, name: 'Vada Pav', price: 15, image: 'https://picsum.photos/seed/vadapav/200/200', dataAiHint: 'vada pav' },
+    { id: 10, name: 'Idli', price: 30, image: 'https://picsum.photos/seed/idli/200/200', dataAiHint: 'idli' },
+    { id: 11, name: 'Medu Vada', price: 35, image: 'https://picsum.photos/seed/meduvada/200/200', dataAiHint: 'medu vada' },
+    { id: 12, name: 'Upma', price: 25, image: 'https://picsum.photos/seed/upma/200/200', dataAiHint: 'upma' },
+    { id: 13, name: 'Poha', price: 25, image: 'https://picsum.photos/seed/poha/200/200', dataAiHint: 'poha' },
   ],
   drinks: [
     { id: 3, name: 'Cold Coffee', price: 50, image: 'https://picsum.photos/seed/coldcoffee/200/200', dataAiHint: 'cold coffee' },
