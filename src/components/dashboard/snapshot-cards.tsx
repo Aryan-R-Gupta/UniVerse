@@ -53,20 +53,6 @@ export function SnapshotCards() {
           </CardFooter>
         </Card>
 
-        {/* Upcoming Event Card */}
-        <Card className="min-w-[300px] flex-shrink-0 overflow-hidden">
-            <Image src={upcomingEvent.image} alt={upcomingEvent.title} width={300} height={150} className="w-full h-32 object-cover" data-ai-hint={upcomingEvent.dataAiHint} />
-          <CardHeader>
-            <CardTitle>Upcoming Event</CardTitle>
-            <CardDescription>{upcomingEvent.title}</CardDescription>
-          </CardHeader>
-          <CardContent>
-             <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
-                <Link href={`/events/${upcomingEvent.slug}/register`}>Register</Link>
-             </Button>
-          </CardContent>
-        </Card>
-
         {/* Active Bookings Card */}
         <Card className="min-w-[300px] flex-shrink-0">
           <CardHeader>
