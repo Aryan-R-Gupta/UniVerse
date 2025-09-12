@@ -1,12 +1,19 @@
 import { AppSidebar } from "@/components/shared/app-sidebar";
 import { MobileBottomNav } from "@/components/shared/mobile-bottom-nav";
 import { AppHeader } from "@/components/shared/app-header";
+import { redirect } from 'next/navigation';
 
 export default function MainAppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const userLoggedIn = true; // Replace with actual auth check
+
+  if (!userLoggedIn) {
+    redirect('/');
+  }
+
   return (
     <div className="min-h-screen w-full bg-background">
       <AppSidebar />

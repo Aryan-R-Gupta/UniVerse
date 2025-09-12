@@ -15,7 +15,7 @@ export function AppSidebar() {
     <aside className="hidden md:flex flex-col fixed inset-y-0 left-0 z-40 w-64 bg-card border-r">
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-16 items-center border-b px-6">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
+          <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
             <GraduationCap className="h-6 w-6 text-primary" />
             <span className="">CampusLife Hub</span>
           </Link>
