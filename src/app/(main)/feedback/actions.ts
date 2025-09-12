@@ -2,6 +2,8 @@
 'use server';
 
 import { z } from 'zod';
+import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { app } from '@/lib/firebase';
 
 const FeedbackSchema = z.object({
   feedback: z.string().min(10, { message: 'Feedback must be at least 10 characters long.' }),
@@ -27,17 +29,19 @@ export async function submitFeedback(prevState: FeedbackState, formData: FormDat
   }
 
   const { feedback } = validatedFields.data;
+  const db = getFirestore(app);
 
   try {
-    // For now, we'll just log the feedback to the server console.
-    // Later, we can replace this with code to save to Firestore.
-    console.log('Feedback received:', feedback);
+    await addDoc(collection(db, 'feedback'), {
+      text: feedback,
+      createdAt: serverTimestamp(),
+    });
 
     return {
       message: 'Thank you for your feedback!',
     };
   } catch (error) {
-    console.error('Error submitting feedback:', error);
+    console.error('Error submitting feedback to Firestore:', error);
     return {
       message: 'Failed to submit feedback. Please try again.',
     };
