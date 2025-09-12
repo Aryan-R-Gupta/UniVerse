@@ -17,7 +17,7 @@ export default function AdministratorLoginPage() {
         localStorage.setItem('userType', 'Administrator');
         window.dispatchEvent(new Event('storage'));
     }
-    router.push('/canteen'); // Administrators are redirected to canteen
+    router.push('/admin/dashboard'); // Administrators are redirected to admin dashboard
   };
 
   return (
