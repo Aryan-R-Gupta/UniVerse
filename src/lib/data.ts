@@ -106,4 +106,27 @@ export const resources = [
   { id: 4, name: 'Basketball Court', location: 'Sports Complex', available: true, icon: Dribbble },
 ];
 
-    
+export const userProfileData = {
+  name: 'Payal',
+  studentId: '12345',
+  email: 'payal.soni@universe.edu',
+  avatarUrl: 'https://picsum.photos/seed/payal/100/100',
+  major: 'Computer Science',
+  year: 2,
+  gpa: '3.8',
+};
+
+export const registeredEvents = [
+  { ...events[2] }, // Hackathon 5.0
+  { ...events[1] }, // Encore - Music Fest
+];
+
+export const recentOrders = [
+    { ...allCanteenItems.snacks[12], quantity: 1, id: 13 }, // Burger
+    { ...allCanteenItems.drinks[0], quantity: 2, id: 3 }, // Cold Coffee
+];
+
+export const userBookings = [
+  { id: 1, resourceName: 'Study Room 1A', timeSlot: 'Today, 4:00 PM - 5:00 PM', status: 'Confirmed' },
+  { id: 2, resourceName: 'Basketball Court', timeSlot: 'Today, 6:00 PM - 7:00 PM', status: 'Confirmed' },
+];
