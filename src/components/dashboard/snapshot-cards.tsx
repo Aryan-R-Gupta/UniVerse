@@ -1,12 +1,33 @@
 
+'use client';
+
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { nextClass, canteenItems, upcomingEvent, activeBookings } from "@/lib/data";
 import { ArrowRight, Navigation } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export function SnapshotCards() {
+  const [userType, setUserType] = useState('Student');
+
+  useEffect(() => {
+    const storedUserType = localStorage.getItem('userType') || 'Student';
+    setUserType(storedUserType);
+
+    const handleStorageChange = () => {
+        const updatedUserType = localStorage.getItem('userType') || 'Student';
+        setUserType(updatedUserType);
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+        window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   return (
     <div className="w-full">
       <h2 className="text-xl font-semibold mb-4">Today's Snapshot</h2>
