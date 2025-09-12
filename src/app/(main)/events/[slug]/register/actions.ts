@@ -50,9 +50,12 @@ export async function registerForEvent(eventSlug: string, prevState: Registratio
   const db = getFirestore(app);
 
   try {
+    const eventData = events.find(e => e.slug === eventSlug);
+
     await addDoc(collection(db, 'event-registrations'), {
       eventId: event.id,
       eventTitle: event.title,
+      eventCategory: eventData?.category, // For analytics
       eventSlug: event.slug,
       firstName,
       lastName,
