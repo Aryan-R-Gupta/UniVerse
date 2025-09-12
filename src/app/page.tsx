@@ -136,17 +136,17 @@ export default function LandingPage() {
                  <Image
                     src="https://images.unsplash.com/photo-1538334421852-687c439c92f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjYW50ZWVufGVufDB8fHx8MTc1NzY3MTEwMHww&ixlib=rb-4.1.0&q=80&w=1080"
                     alt="Floating mascot one"
-                    width={80}
-                    height={80}
-                    className="absolute top-12 left-12 animate-float"
+                    width={60}
+                    height={60}
+                    className="absolute top-16 left-16 animate-float"
                     data-ai-hint="cute mascot character"
                   />
                   <Image
                     src="https://images.unsplash.com/photo-1741636174186-3fffe1614c39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8Y29sbGVnZSUyMGV2ZW50c3xlbnwwfHx8fDE3NTc2NzEyMDd8MA&ixlib=rb-4.1.0&q=80&w=1080"
                     alt="Floating mascot two"
-                    width={100}
-                    height={100}
-                    className="absolute bottom-12 right-10 animate-float-delay"
+                    width={80}
+                    height={80}
+                    className="absolute bottom-16 right-16 animate-float-delay"
                     data-ai-hint="friendly robot mascot"
                   />
                  <Image
