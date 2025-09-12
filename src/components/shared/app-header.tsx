@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AppSidebar } from "./app-sidebar";
+import { ThemeToggle } from "./theme-toggle";
 
 export function AppHeader() {
   return (
@@ -44,6 +45,7 @@ export function AppHeader() {
           </div>
         </form>
       </div>
+      <ThemeToggle />
       <Button variant="ghost" size="icon" className="rounded-full">
         <Bell className="h-5 w-5" />
         <span className="sr-only">Toggle notifications</span>
