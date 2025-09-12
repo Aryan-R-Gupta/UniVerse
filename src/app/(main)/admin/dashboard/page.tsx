@@ -6,31 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { BarChart, LineChart, PieChart, Users, MessageSquare, HelpCircle, Megaphone, CalendarPlus, BarChart2, BookOpen, Utensils } from "lucide-react";
+import { Users, MessageSquare, HelpCircle, Megaphone, CalendarPlus, BarChart2, BookOpen, Utensils } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Bar, Pie, Line, ResponsiveContainer, PieLabel } from 'recharts';
+import Link from "next/link";
 
-const analyticsData = {
-  canteenSales: [
-    { hour: '9am', sales: 45 },
-    { hour: '11am', sales: 75 },
-    { hour: '1pm', sales: 120 },
-    { hour: '3pm', sales: 80 },
-    { hour: '5pm', sales: 60 },
-  ],
-  resourceBookings: [
-    { name: 'Study Rooms', value: 400 },
-    { name: 'Labs', value: 300 },
-    { name: 'Courts', value: 200 },
-  ],
-  eventPopularity: [
-    { name: 'Tech', value: 500 },
-    { name: 'Cultural', value: 800 },
-    { name: 'Sports', value: 650 },
-  ],
-};
 
 const mockFeedback = [
     { id: 1, text: "The app is great, but it would be nice to have a dark mode for the map.", submittedAt: "2 days ago" },
@@ -45,59 +25,44 @@ const mockSupportTickets = [
 export default function AdminDashboardPage() {
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Administrator Dashboard</h1>
+      <h1 className="text-3xl font-bold">Administrator Overview</h1>
 
-      {/* Live Campus Analytics */}
+      {/* Analytics Quick Links */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Live Campus Analytics</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Utensils /> Canteen Sales</CardTitle>
-              <CardDescription>Peak ordering times</CardDescription>
+              <CardTitle className="flex items-center gap-2"><Utensils /> Canteen Analytics</CardTitle>
+              <CardDescription>View sales trends, popular items, and peak ordering times.</CardDescription>
             </CardHeader>
-            <CardContent>
-               <ChartContainer config={{}} className="h-48 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={analyticsData.canteenSales} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                      <Line type="monotone" dataKey="sales" stroke="hsl(var(--primary))" strokeWidth={2} />
-                       <ChartTooltip content={<ChartTooltipContent />} />
-                    </LineChart>
-                  </ResponsiveContainer>
-              </ChartContainer>
-            </CardContent>
+            <CardFooter>
+              <Button asChild className="w-full">
+                <Link href="/admin/canteen-analytics">View Canteen Analytics</Link>
+              </Button>
+            </CardFooter>
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><BookOpen /> Resource Bookings</CardTitle>
-              <CardDescription>Most booked resource types</CardDescription>
+              <CardTitle className="flex items-center gap-2"><BookOpen /> Resource Analytics</CardTitle>
+              <CardDescription>Track booking rates, popular resources, and utilization.</CardDescription>
             </CardHeader>
-            <CardContent>
-               <ChartContainer config={{}} className="h-48 w-full">
-                 <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={analyticsData.resourceBookings} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={60} fill="hsl(var(--primary))" label />
-                       <ChartTooltip content={<ChartTooltipContent />} />
-                    </PieChart>
-                  </ResponsiveContainer>
-              </ChartContainer>
-            </CardContent>
+            <CardFooter>
+               <Button asChild className="w-full">
+                <Link href="/admin/resource-analytics">View Resource Analytics</Link>
+              </Button>
+            </CardFooter>
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><BarChart2 /> Event Popularity</CardTitle>
-              <CardDescription>Interest by category</CardDescription>
+              <CardTitle className="flex items-center gap-2"><BarChart2 /> Event Analytics</CardTitle>
+              <CardDescription>Analyze event popularity, registration trends, and attendance.</CardDescription>
             </CardHeader>
-             <CardContent>
-               <ChartContainer config={{}} className="h-48 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={analyticsData.eventPopularity} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                      <Bar dataKey="value" fill="hsl(var(--primary))" radius={4} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                    </BarChart>
-                  </ResponsiveContainer>
-              </ChartContainer>
-            </CardContent>
+             <CardFooter>
+               <Button asChild className="w-full">
+                <Link href="/admin/event-analytics">View Event Analytics</Link>
+              </Button>
+            </CardFooter>
           </Card>
         </div>
       </section>
