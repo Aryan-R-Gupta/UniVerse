@@ -13,9 +13,6 @@ export default function LandingPage() {
           <span className="font-bold text-xl text-gray-900 tracking-tight">UniVerse</span>
         </Link>
         <nav className="flex items-center gap-2 sm:gap-4">
-          <Button variant="ghost" asChild className="text-gray-700 hover:bg-sky-200/50">
-            <Link href="/login">Login</Link>
-          </Button>
           <Button asChild className="rounded-full bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Link href="/dashboard">Get Started</Link>
           </Button>
