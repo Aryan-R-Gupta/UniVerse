@@ -28,8 +28,8 @@ export default function LandingPage() {
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
               <div className="flex flex-col justify-center space-y-6">
                 <div className="space-y-4">
-                  <h1 className="text-4xl font-extrabold font-headline tracking-tighter uppercase sm:text-5xl md:text-6xl lg:text-7xl/none">
-                    GROUP CHAT THAT'S ALL FUN & GAMES
+                  <h1 className="text-4xl font-extrabold font-headline tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none">
+                    Your entire campus, connected in one app.
                   </h1>
                   <p className="max-w-[600px] text-gray-600 md:text-xl">
                     A unified campus platform to schedule, order, book, and discover — all in one place.
