@@ -129,6 +129,23 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <div className="w-full py-4 bg-white/50 backdrop-blur-sm shadow-inner overflow-hidden group">
+          <div className="marquee flex group-hover:[animation-play-state:paused] motion-safe:animate-marquee">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="flex items-center shrink-0">
+                <p className="text-xl md:text-2xl font-bold uppercase tracking-widest text-gray-700 px-8 flex items-center gap-4">
+                  <span>Navigate</span>
+                  <GraduationCap className="h-6 w-6 text-blue-400" />
+                  <span>Join</span>
+                  <GraduationCap className="h-6 w-6 text-blue-400" />
+                  <span>Experience</span>
+                </p>
+                <GraduationCap className="h-6 w-6 text-blue-400" />
+              </div>
+            ))}
+          </div>
+        </div>
+
         <section className="w-full py-12 md:py-24 bg-white/50">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter text-center mb-12">Loved by students nationwide</h2>
@@ -182,22 +199,15 @@ export default function LandingPage() {
 
       </main>
 
-      <div className="w-full py-4 bg-white/50 backdrop-blur-sm shadow-inner overflow-hidden group">
-        <div className="marquee flex group-hover:[animation-play-state:paused] motion-safe:animate-marquee">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="flex items-center shrink-0">
-              <p className="text-xl md:text-2xl font-bold uppercase tracking-widest text-gray-700 px-8 flex items-center gap-4">
-                <span>Navigate</span>
-                <GraduationCap className="h-6 w-6 text-blue-400" />
-                <span>Join</span>
-                <GraduationCap className="h-6 w-6 text-blue-400" />
-                <span>Experience</span>
-              </p>
-              <GraduationCap className="h-6 w-6 text-blue-400" />
-            </div>
-          ))}
+      <footer className="w-full py-6 px-4 md:px-6 border-t bg-white/50 backdrop-blur-sm">
+        <div className="container flex items-center justify-between">
+          <p className="text-sm text-gray-500">&copy; 2024 UniVerse. All rights reserved.</p>
+          <Link href="/" className="flex items-center justify-center gap-2">
+            <GraduationCap className="h-6 w-6 text-blue-500" />
+            <span className="font-bold text-lg text-gray-900">UniVerse</span>
+          </Link>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
