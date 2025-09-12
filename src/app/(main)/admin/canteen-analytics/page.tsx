@@ -1,32 +1,76 @@
 
 'use client';
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from 'recharts';
-import { Utensils, Calendar as CalendarIcon } from "lucide-react";
+import { Utensils } from "lucide-react";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
+import { useEffect, useState } from "react";
+import { getFirestore, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { app } from '@/lib/firebase';
+import { format } from 'date-fns';
 
-const salesData = [
-  { date: '2023-12-01', sales: 4500 },
-  { date: '2023-12-02', sales: 4800 },
-  { date: '2023-12-03', sales: 5200 },
-  { date: '2023-12-04', sales: 4900 },
-  { date: '2023-12-05', sales: 5500 },
-  { date: '2023-12-06', sales: 6000 },
-  { date: '2023-12-07', sales: 5800 },
-];
+type SalesData = {
+  date: string;
+  sales: number;
+};
 
-const topItems = [
-    { id: 1, name: 'Veg Thali', category: 'Meals', itemsSold: 120, totalRevenue: 14400 },
-    { id: 2, name: 'Cold Coffee', category: 'Drinks', itemsSold: 250, totalRevenue: 12500 },
-    { id: 3, name: 'Samosa', category: 'Snacks', itemsSold: 500, totalRevenue: 7500 },
-    { id: 4, name: 'Burger', category: 'Snacks', itemsSold: 90, totalRevenue: 6300 },
-];
+type TopItem = {
+  id: string;
+  name: string;
+  category: string;
+  itemsSold: number;
+  totalRevenue: number;
+};
+
+async function getSalesData(): Promise<SalesData[]> {
+  const db = getFirestore(app);
+  const salesCol = collection(db, 'canteen-sales');
+  // Example: fetching last 7 days of sales, ordered by date
+  const q = query(salesCol, orderBy('date', 'desc'), limit(7));
+  const salesSnapshot = await getDocs(q);
+  const salesList = salesSnapshot.docs.map(doc => {
+    const data = doc.data();
+    // Assuming 'date' is a Firestore Timestamp
+    const date = data.date.toDate();
+    return {
+      date: format(date, 'yyyy-MM-dd'),
+      sales: data.sales,
+    };
+  }).reverse(); // Reverse to have dates in ascending order for the chart
+  return salesList;
+}
+
+async function getTopItems(): Promise<TopItem[]> {
+  const db = getFirestore(app);
+  const itemsCol = collection(db, 'canteen-items');
+  // Example: fetching top 4 items by total revenue
+  const q = query(itemsCol, orderBy('totalRevenue', 'desc'), limit(4));
+  const itemsSnapshot = await getDocs(q);
+  const itemsList = itemsSnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  } as TopItem));
+  return itemsList;
+}
 
 export default function CanteenAnalyticsPage() {
+  const [salesData, setSalesData] = useState<SalesData[]>([]);
+  const [topItems, setTopItems] = useState<TopItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      const [sales, items] = await Promise.all([getSalesData(), getTopItems()]);
+      setSalesData(sales);
+      setTopItems(items);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -46,7 +90,7 @@ export default function CanteenAnalyticsPage() {
                     <XAxis dataKey="date" tickFormatter={(str) => new Date(str).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
                     <YAxis strokeWidth={0} tickFormatter={(value) => `₹${value / 1000}k`} />
                   <Line type="monotone" dataKey="sales" stroke="hsl(var(--primary))" strokeWidth={3} dot={false} />
-                   <ChartTooltip content={<ChartTooltipContent formatter={(value) => `₹${value.toLocaleString()}`} />} />
+                   <ChartTooltip content={<ChartTooltipContent formatter={(value) => `₹${Number(value).toLocaleString()}`} />} />
                 </LineChart>
               </ResponsiveContainer>
           </ChartContainer>
@@ -69,7 +113,13 @@ export default function CanteenAnalyticsPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {topItems.map(item => (
+                        {loading ? (
+                            Array.from({ length: 4 }).map((_, index) => (
+                                <TableRow key={index}>
+                                    <TableCell className="h-12" colSpan={4}></TableCell>
+                                </TableRow>
+                            ))
+                        ) : topItems.map(item => (
                             <TableRow key={item.id}>
                                 <TableCell className="font-medium">{item.name}</TableCell>
                                 <TableCell>{item.category}</TableCell>
