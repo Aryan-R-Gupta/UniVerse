@@ -1,13 +1,57 @@
 
+'use client';
+
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { events } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { registerForEvent, type RegistrationState } from './actions';
+import { useEffect } from 'react';
+import { useToast } from '@/hooks/use-toast';
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white" disabled={pending}>
+      {pending ? 'Confirming...' : 'Confirm Registration'}
+    </Button>
+  );
+}
 
 export default function EventRegistrationPage({ params }: { params: { slug: string } }) {
   const event = events.find(e => e.slug === params.slug);
+  const { toast } = useToast();
+
+  const initialState: RegistrationState = { message: null, errors: null };
+  // The first argument to useActionState is the server action, 
+  // and the second is the initial state.
+  // We also need to pass the event slug to our action.
+  const registerWithSlug = registerForEvent.bind(null, params.slug);
+  const [state, dispatch] = useActionState(registerWithSlug, initialState);
+
+
+  useEffect(() => {
+    if (state.message) {
+      if (state.errors) {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: state.message,
+        });
+      } else {
+        toast({
+          title: 'Success!',
+          description: state.message,
+        });
+        // Optionally, reset the form or redirect the user
+      }
+    }
+  }, [state, toast]);
+
 
   if (!event) {
     notFound();
@@ -25,31 +69,33 @@ export default function EventRegistrationPage({ params }: { params: { slug: stri
           <CardTitle>Registration Form</CardTitle>
           <CardDescription>Event: {event.title}</CardDescription>
         </CardHeader>
-        <form>
+        <form action={dispatch}>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="firstName">First Name</Label>
                     <Input id="firstName" name="firstName" placeholder="Payal" required />
+                    {state.errors?.firstName && <p className="text-sm text-destructive">{state.errors.firstName[0]}</p>}
                 </div>
                  <div className="space-y-2">
                     <Label htmlFor="lastName">Last Name</Label>
                     <Input id="lastName" name="lastName" placeholder="Soni" required />
+                    {state.errors?.lastName && <p className="text-sm text-destructive">{state.errors.lastName[0]}</p>}
                 </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" name="email" type="email" placeholder="payal@example.com" required />
+              {state.errors?.email && <p className="text-sm text-destructive">{state.errors.email[0]}</p>}
             </div>
              <div className="space-y-2">
               <Label htmlFor="studentId">Student ID</Label>
               <Input id="studentId" name="studentId" placeholder="12345" required />
+              {state.errors?.studentId && <p className="text-sm text-destructive">{state.errors.studentId[0]}</p>}
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
-                Confirm Registration
-            </Button>
+            <SubmitButton />
           </CardFooter>
         </form>
       </Card>
@@ -57,11 +103,9 @@ export default function EventRegistrationPage({ params }: { params: { slug: stri
   );
 }
 
-// Generate static paths for each event
+// generateStaticParams remains unchanged for generating static paths
 export async function generateStaticParams() {
   return events.map(event => ({
     slug: event.slug,
   }));
 }
-
-    
