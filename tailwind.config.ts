@@ -8,6 +8,13 @@ export default {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       fontFamily: {
         body: ['Inter', 'sans-serif'],
@@ -15,6 +22,19 @@ export default {
         code: ['monospace'],
       },
       colors: {
+        emerald: {
+          DEFAULT: '#10B981',
+          '50': '#E8FDF5',
+          '100': '#D1FBEB',
+          '200': '#A3F7D6',
+          '300': '#75F2C2',
+          '400': '#47EDAD',
+          '500': '#19E899',
+          '600': '#10B981',
+          '700': '#0D8B61',
+          '800': '#095C41',
+          '900': '#052E20',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -67,6 +87,8 @@ export default {
         },
       },
       borderRadius: {
+        '2xl': 'calc(var(--radius) * 2)',
+        xl: 'calc(var(--radius) + 4px)',
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',

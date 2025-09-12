@@ -1,0 +1,135 @@
+'use client';
+import { useState } from 'react';
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { allCanteenItems } from "@/lib/data";
+import { Plus, Minus, ShoppingCart } from "lucide-react";
+import Image from "next/image";
+
+type CartItem = {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+};
+
+function CanteenItemCard({ item, addToCart }: { item: { id: number; name: string; price: number; image: string; dataAiHint: string }, addToCart: (item: any) => void }) {
+  const [quantity, setQuantity] = useState(0);
+
+  const handleAddToCart = () => {
+    if (quantity > 0) {
+      addToCart({ ...item, quantity });
+      setQuantity(0);
+    } else {
+        setQuantity(1);
+        addToCart({ ...item, quantity: 1});
+    }
+  };
+
+  return (
+    <Card className="overflow-hidden">
+      <Image src={item.image} alt={item.name} width={200} height={200} className="w-full h-32 object-cover" data-ai-hint={item.dataAiHint} />
+      <CardContent className="p-4">
+        <h3 className="font-semibold truncate">{item.name}</h3>
+        <p className="text-muted-foreground">₹{item.price}</p>
+      </CardContent>
+      <CardFooter className="p-2">
+        {quantity > 0 ? (
+          <div className="flex items-center justify-between w-full">
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => {
+                const newQuantity = quantity - 1;
+                setQuantity(newQuantity);
+                addToCart({ ...item, quantity: newQuantity });
+            }}>
+              <Minus className="h-4 w-4" />
+            </Button>
+            <span className="font-bold text-lg">{quantity}</span>
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => {
+                const newQuantity = quantity + 1;
+                setQuantity(newQuantity);
+                addToCart({ ...item, quantity: newQuantity });
+            }}>
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : (
+          <Button className="w-full" variant="outline" onClick={handleAddToCart}>
+            Add
+          </Button>
+        )}
+      </CardFooter>
+    </Card>
+  );
+}
+
+
+export default function CanteenPage() {
+  const [cart, setCart] = useState<CartItem[]>([]);
+  
+  const handleAddToCart = (itemToAdd: CartItem) => {
+    setCart(prevCart => {
+      const existingItem = prevCart.find(item => item.id === itemToAdd.id);
+      if (existingItem) {
+        if(itemToAdd.quantity === 0) {
+            return prevCart.filter(item => item.id !== itemToAdd.id);
+        }
+        return prevCart.map(item =>
+          item.id === itemToAdd.id ? { ...item, quantity: itemToAdd.quantity } : item
+        );
+      } else {
+        return [...prevCart, itemToAdd];
+      }
+    });
+  };
+
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+
+  return (
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold">Canteen</h1>
+      <Tabs defaultValue="snacks">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="snacks">Snacks</TabsTrigger>
+          <TabsTrigger value="drinks">Drinks</TabsTrigger>
+          <TabsTrigger value="meals">Meals</TabsTrigger>
+        </TabsList>
+        <TabsContent value="snacks">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {allCanteenItems.snacks.map(item => <CanteenItemCard key={item.id} item={item} addToCart={handleAddToCart} />)}
+          </div>
+        </TabsContent>
+        <TabsContent value="drinks">
+           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {allCanteenItems.drinks.map(item => <CanteenItemCard key={item.id} item={item} addToCart={handleAddToCart} />)}
+          </div>
+        </TabsContent>
+        <TabsContent value="meals">
+           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {allCanteenItems.meals.map(item => <CanteenItemCard key={item.id} item={item} addToCart={handleAddToCart} />)}
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      {totalItems > 0 && (
+        <div className="fixed bottom-16 md:bottom-0 left-0 right-0 md:relative p-4">
+          <div className="md:max-w-4xl mx-auto">
+            <Card className="bg-primary text-primary-foreground shadow-2xl">
+              <CardContent className="p-4 flex items-center justify-between">
+                <div>
+                  <p className="font-semibold">{totalItems} items | ₹{totalPrice}</p>
+                  <p className="text-sm opacity-80">Ready to checkout?</p>
+                </div>
+                <Button variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90">
+                  <ShoppingCart className="mr-2 h-4 w-4" />
+                  Checkout
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -1,3 +1,53 @@
+
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "event-poster-1",
+      "description": "A placeholder image for a tech workshop event.",
+      "imageUrl": "https://picsum.photos/seed/techworkshop/600/400",
+      "imageHint": "tech workshop"
+    },
+    {
+      "id": "event-poster-2",
+      "description": "A placeholder image for a cultural festival event.",
+      "imageUrl": "https://picsum.photos/seed/culturalfest/600/400",
+      "imageHint": "cultural festival"
+    },
+    {
+      "id": "event-poster-3",
+      "description": "A placeholder image for a sports competition.",
+      "imageUrl": "https://picsum.photos/seed/sportsmeet/600/400",
+      "imageHint": "sports competition"
+    },
+    {
+      "id": "campus-map",
+      "description": "A placeholder image for the interactive campus map.",
+      "imageUrl": "https://picsum.photos/seed/campusmap/1200/800",
+      "imageHint": "campus map"
+    },
+    {
+      "id": "canteen-food-1",
+      "description": "A placeholder image for a food item from the canteen.",
+      "imageUrl": "https://picsum.photos/seed/food1/200/200",
+      "imageHint": "canteen food"
+    },
+    {
+      "id": "canteen-food-2",
+      "description": "A placeholder image for a beverage from the canteen.",
+      "imageUrl": "https://picsum.photos/seed/drink1/200/200",
+      "imageHint": "canteen drink"
+    },
+    {
+      "id": "canteen-food-3",
+      "description": "A placeholder image for a snack from the canteen.",
+      "imageUrl": "https://picsum.photos/seed/snack1/200/200",
+      "imageHint": "canteen snack"
+    },
+    {
+      "id": "profile-pic-payal",
+      "description": "A placeholder avatar for the user Payal.",
+      "imageUrl": "https://picsum.photos/seed/payal/100/100",
+      "imageHint": "profile picture"
+    }
+  ]
 }
