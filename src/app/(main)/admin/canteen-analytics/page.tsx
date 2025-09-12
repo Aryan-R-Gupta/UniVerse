@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { getFirestore, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { format } from 'date-fns';
+import { Skeleton } from "@/components/ui/skeleton";
 
 type SalesData = {
   date: string;
@@ -63,10 +64,16 @@ export default function CanteenAnalyticsPage() {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const [sales, items] = await Promise.all([getSalesData(), getTopItems()]);
-      setSalesData(sales);
-      setTopItems(items);
-      setLoading(false);
+      try {
+        const [sales, items] = await Promise.all([getSalesData(), getTopItems()]);
+        setSalesData(sales);
+        setTopItems(items);
+      } catch (error) {
+        console.error("Failed to fetch canteen analytics data:", error);
+        // Optionally, set an error state and display a message to the user
+      } finally {
+        setLoading(false);
+      }
     }
     fetchData();
   }, []);
@@ -84,16 +91,20 @@ export default function CanteenAnalyticsPage() {
           <CardDescription>Daily sales revenue over the selected period.</CardDescription>
         </CardHeader>
         <CardContent>
-           <ChartContainer config={{}} className="h-72 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={salesData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                    <XAxis dataKey="date" tickFormatter={(str) => new Date(str).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
-                    <YAxis strokeWidth={0} tickFormatter={(value) => `₹${value / 1000}k`} />
-                  <Line type="monotone" dataKey="sales" stroke="hsl(var(--primary))" strokeWidth={3} dot={false} />
-                   <ChartTooltip content={<ChartTooltipContent formatter={(value) => `₹${Number(value).toLocaleString()}`} />} />
-                </LineChart>
-              </ResponsiveContainer>
-          </ChartContainer>
+           {loading ? (
+             <Skeleton className="h-72 w-full" />
+           ) : (
+             <ChartContainer config={{}} className="h-72 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={salesData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                      <XAxis dataKey="date" tickFormatter={(str) => new Date(str).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
+                      <YAxis strokeWidth={0} tickFormatter={(value) => `₹${value / 1000}k`} />
+                    <Line type="monotone" dataKey="sales" stroke="hsl(var(--primary))" strokeWidth={3} dot={false} />
+                     <ChartTooltip content={<ChartTooltipContent formatter={(value) => `₹${Number(value).toLocaleString()}`} />} />
+                  </LineChart>
+                </ResponsiveContainer>
+            </ChartContainer>
+           )}
         </CardContent>
       </Card>
 
@@ -116,7 +127,10 @@ export default function CanteenAnalyticsPage() {
                         {loading ? (
                             Array.from({ length: 4 }).map((_, index) => (
                                 <TableRow key={index}>
-                                    <TableCell className="h-12" colSpan={4}></TableCell>
+                                    <TableCell><Skeleton className="h-5 w-3/4" /></TableCell>
+                                    <TableCell><Skeleton className="h-5 w-1/2" /></TableCell>
+                                    <TableCell className="text-right"><Skeleton className="h-5 w-1/4 ml-auto" /></TableCell>
+                                    <TableCell className="text-right"><Skeleton className="h-5 w-1/2 ml-auto" /></TableCell>
                                 </TableRow>
                             ))
                         ) : topItems.map(item => (
