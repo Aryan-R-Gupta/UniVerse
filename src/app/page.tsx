@@ -70,8 +70,8 @@ export default function LandingPage() {
                  <Image
                   src="https://images.unsplash.com/flagged/photo-1554473675-d0904f3cbf38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8Y29sbGVnZXxlbnwwfHx8fDE3NTc2NzA1MjF8MA&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="App Screenshot"
-                  width={420}
-                  height={630}
+                  width={520}
+                  height={730}
                   className="mx-auto rounded-3xl object-cover shadow-2xl transform -rotate-6 transition-transform duration-500 hover:rotate-0 hover:scale-105"
                   data-ai-hint="mobile app interface"
                 />
@@ -86,7 +86,7 @@ export default function LandingPage() {
         <div className="marquee flex group-hover:[animation-play-state:paused] motion-safe:animate-marquee">
           {[...Array(6)].map((_, i) => (
             <div key={i} className="flex items-center shrink-0">
-              <p className="text-xl md:text-2xl font-bold uppercase tracking-widest text-gray-700 px-8">ONE STOP FOR EVERYONE</p>
+              <p className="text-xl md:text-2xl font-bold uppercase tracking-widest text-gray-700 px-8">Navigate. Join. Experience.</p>
               <GraduationCap className="h-6 w-6 text-blue-400" />
             </div>
           ))}
