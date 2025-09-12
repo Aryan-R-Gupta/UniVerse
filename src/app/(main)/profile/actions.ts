@@ -19,7 +19,7 @@ const personaPrompt = ai.definePrompt({
 
 Analyze the following user data:
 - Name: {{name}}
-- Major: {{major}}
+- Course: {{course}}
 - Registered Events: {{events}}
 - Canteen Orders: {{orders}}
 - Resource Bookings: {{bookings}}
@@ -36,7 +36,7 @@ export async function generatePersona(): Promise<PersonaOutput> {
 
   const { output } = await personaPrompt({
     name: userProfileData.name,
-    major: userProfileData.major,
+    course: userProfileData.course,
     events: eventsSummary,
     orders: ordersSummary,
     bookings: bookingsSummary,
@@ -44,3 +44,5 @@ export async function generatePersona(): Promise<PersonaOutput> {
 
   return output!;
 }
+
+    

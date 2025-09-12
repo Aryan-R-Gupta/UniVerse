@@ -39,7 +39,9 @@ export default function ProfilePage() {
     setProfile(prev => ({
         ...prev,
         name: formData.get('name') as string,
-        major: formData.get('major') as string,
+        course: formData.get('course') as string,
+        year: Number(formData.get('year') as string),
+        cgpa: formData.get('cgpa') as string,
     }));
     // In a real app, you'd probably want to find a way to close the dialog.
     // document.getElementById('close-dialog')?.click(); // A bit of a hack, but works for this case.
@@ -63,9 +65,9 @@ export default function ProfilePage() {
               <CardDescription>Student ID: {profile.studentId}</CardDescription>
               <p className="text-sm text-muted-foreground mt-1">{profile.email}</p>
               <div className="flex flex-wrap gap-2 mt-2">
-                <Badge variant="secondary">{profile.major}</Badge>
+                <Badge variant="secondary">{profile.course}</Badge>
                 <Badge variant="secondary">Year {profile.year}</Badge>
-                <Badge variant="secondary">GPA: {profile.gpa}</Badge>
+                <Badge variant="secondary">CGPA: {profile.cgpa}</Badge>
               </div>
             </div>
              <Dialog>
@@ -91,10 +93,34 @@ export default function ProfilePage() {
                                 <Input id="name" name="name" defaultValue={profile.name} className="col-span-3" />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="major" className="text-right">
-                                    Major
+                                <Label htmlFor="studentId" className="text-right">
+                                    Student ID
                                 </Label>
-                                <Input id="major" name="major" defaultValue={profile.major} className="col-span-3" />
+                                <Input id="studentId" name="studentId" defaultValue={profile.studentId} className="col-span-3" readOnly />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="email" className="text-right">
+                                    Email
+                                </Label>
+                                <Input id="email" name="email" defaultValue={profile.email} className="col-span-3" readOnly />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="course" className="text-right">
+                                    Course
+                                </Label>
+                                <Input id="course" name="course" defaultValue={profile.course} className="col-span-3" />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="year" className="text-right">
+                                    Year
+                                </Label>
+                                <Input id="year" name="year" type="number" defaultValue={profile.year} className="col-span-3" />
+                            </div>
+                             <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="cgpa" className="text-right">
+                                    CGPA
+                                </Label>
+                                <Input id="cgpa" name="cgpa" defaultValue={profile.cgpa} className="col-span-3" />
                             </div>
                         </div>
                         <DialogFooter>
@@ -200,3 +226,6 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+
+    

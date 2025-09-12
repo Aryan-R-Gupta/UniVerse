@@ -111,9 +111,9 @@ export const userProfileData = {
   studentId: '12345',
   email: 'payal.soni@universe.edu',
   avatarUrl: 'https://picsum.photos/seed/kanksha/100/100',
-  major: 'Bsc IT',
+  course: 'Bsc IT',
   year: 2,
-  gpa: '3.8',
+  cgpa: '3.8',
 };
 
 export const registeredEvents = [
@@ -131,3 +131,6 @@ export const userBookings = [
   { id: 2, resourceName: 'Basketball Court', timeSlot: 'Today, 6:00 PM - 7:00 PM', status: 'Confirmed' },
 ];
 
+
+
+    
