@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
 import { app } from "@/lib/firebase";
 import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
 
 type Resource = {
   id: number;
