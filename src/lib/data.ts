@@ -88,7 +88,7 @@ export const allCanteenItems = {
   ],
   meals: [
     { id: 5, name: 'Veg Thali', price: 120, image: 'https://images.unsplash.com/photo-1680359873864-43e89bf248ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8dmVnJTIwdGhhYWxpfGVufDB8fHx8MTc1NzY2NzYzN3ww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'veg thali' },
-    { id: 6, name: 'Non-veg thaali', price: 90, image: 'https://images.unsplash.com/photo-1723066217456-cf0b10ceda2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8bm9uJTIwdmVnJTIwdGhhYWxpfGVufDB8fHx8MTc1NzY2Nzc4Nnww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'chole bhature' },
+    { id: 6, name: 'Non-veg thaali', price: 160, image: 'https://images.unsplash.com/photo-1723066217456-cf0b10ceda2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8bm9uJTIwdmVnJTIwdGhhYWxpfGVufDB8fHx8MTc1NzY2Nzc4Nnww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'chole bhature' },
   ]
 }
 
