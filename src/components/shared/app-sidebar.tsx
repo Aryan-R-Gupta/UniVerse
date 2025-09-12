@@ -17,7 +17,7 @@ export function AppSidebar() {
         <div className="flex h-16 items-center border-b px-6">
           <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
             <GraduationCap className="h-6 w-6 text-primary" />
-            <span className="">CampusLife Hub</span>
+            <span className="">UniVerse</span>
           </Link>
         </div>
         <div className="flex-1 overflow-y-auto py-2">

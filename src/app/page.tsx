@@ -9,7 +9,7 @@ export default function LandingPage() {
       <header className="px-4 lg:px-8 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center justify-center gap-2">
           <GraduationCap className="h-7 w-7 text-blue-500" />
-          <span className="font-bold text-xl text-gray-900 tracking-tight">CampusLife Hub</span>
+          <span className="font-bold text-xl text-gray-900 tracking-tight">UniVerse</span>
         </Link>
         <nav className="flex items-center gap-2 sm:gap-4">
           <Button variant="ghost" asChild className="text-gray-700 hover:bg-sky-200/50">

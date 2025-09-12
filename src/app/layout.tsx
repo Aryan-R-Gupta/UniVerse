@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/shared/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'CampusLife Hub',
+  title: 'UniVerse',
   description: 'Your All-in-One Campus Companion',
 };
 
