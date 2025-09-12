@@ -122,7 +122,7 @@ export const registeredEvents = [
 ];
 
 export const recentOrders = [
-    { ...allCanteenItems.snacks[12], quantity: 1, id: 13 }, // Burger
+    { ...allCanteenItems.snacks[8], quantity: 1, id: 13 }, // Burger
     { ...allCanteenItems.drinks[0], quantity: 2, id: 3 }, // Cold Coffee
 ];
 
