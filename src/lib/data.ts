@@ -1,3 +1,4 @@
+
 import type { LucideIcon } from 'lucide-react';
 import { BookMarked, CalendarDays, Home, Utensils, PartyPopper, User, Library, Salad, Search, Book, Navigation, Bell, TestTube, Dribbble, Compass, MessageSquare } from 'lucide-react';
 
@@ -72,7 +73,7 @@ export const timetableData = {
 export const allCanteenItems = {
   snacks: [
     { id: 1, name: 'Samosa', price: 15, image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzYW1vc2F8ZW58MHx8fHwxNzU3NjY2NTA1fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'samosa' },
-    { id: 2, name: 'Veg Puff', price: 20, image: 'https://picsum.photos/seed/puff/200/200', dataAiHint: 'veg puff' },
+    { id: 2, name: 'Veg Puff', price: 20, image: 'https://images.unsplash.com/photo-1653850280260-aa3b9e00b230?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFhdHxlbnwwfHx8fDE3NTc2NjY2NzB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'veg puff' },
   ],
   drinks: [
     { id: 3, name: 'Cold Coffee', price: 50, image: 'https://picsum.photos/seed/coldcoffee/200/200', dataAiHint: 'cold coffee' },
