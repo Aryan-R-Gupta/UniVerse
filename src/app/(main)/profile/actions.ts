@@ -3,7 +3,9 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
-import { registeredEvents, recentOrders, userBookings, userProfileData } from '@/lib/data';
+import { getFirestore, collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
+import { app } from '@/lib/firebase';
+import { userProfileData } from '@/lib/data';
 
 const PersonaOutputSchema = z.object({
   title: z.string().describe("A creative, single-word title for the user's campus persona (e.g., 'Innovator', 'Explorer')."),
@@ -11,6 +13,25 @@ const PersonaOutputSchema = z.object({
 });
 
 type PersonaOutput = z.infer<typeof PersonaOutputSchema>;
+
+async function getDynamicDataForPersona(userEmail: string) {
+    const db = getFirestore(app);
+
+    const eventsQuery = query(collection(db, 'event-registrations'), where('email', '==', userEmail), limit(5));
+    const eventsSnapshot = await getDocs(eventsQuery);
+    const registeredEvents = eventsSnapshot.docs.map(doc => doc.data().eventTitle).join(', ') || 'None';
+
+    const ordersQuery = query(collection(db, 'canteen-orders'), where('userEmail', '==', userEmail), limit(5));
+    const ordersSnapshot = await getDocs(ordersQuery);
+    const recentOrders = ordersSnapshot.docs.map(doc => doc.data().items.map((item: any) => item.name).join(', ')).join(', ') || 'None';
+
+    const bookingsQuery = query(collection(db, 'resource-bookings'), where('userEmail', '==', userEmail), limit(5));
+    const bookingsSnapshot = await getDocs(bookingsQuery);
+    const userBookings = bookingsSnapshot.docs.map(doc => doc.data().resourceName).join(', ') || 'None';
+    
+    return { registeredEvents, recentOrders, userBookings };
+}
+
 
 const personaPrompt = ai.definePrompt({
   name: 'personaPrompt',
@@ -30,16 +51,14 @@ Generate a persona for the user.`,
 });
 
 export async function generatePersona(): Promise<PersonaOutput> {
-  const eventsSummary = registeredEvents.map(e => e.title).join(', ');
-  const ordersSummary = recentOrders.map(o => o.name).join(', ');
-  const bookingsSummary = userBookings.map(b => b.resourceName).join(', ');
+  const { registeredEvents, recentOrders, userBookings } = await getDynamicDataForPersona(userProfileData.email);
 
   const { output } = await personaPrompt({
     name: userProfileData.name,
     course: userProfileData.course,
-    events: eventsSummary,
-    orders: ordersSummary,
-    bookings: bookingsSummary,
+    events: registeredEvents,
+    orders: recentOrders,
+    bookings: userBookings,
   });
 
   return output!;
