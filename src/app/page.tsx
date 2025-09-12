@@ -34,7 +34,7 @@ const testimonials = [
       quote: "The leaderboard adds a fun, competitive edge to campus involvement.",
       name: "Mihir T.",
       title: "4th Year, Business",
-      avatarUrl: "https://images.unsplash.com/photo-1652471943570-f3590a4e52ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxidXNpbmVzcyUyMG1hbnxlbnwwfHx8fDE3NTc2OTQ1NTd8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      avatarUrl: "https://images.unsplash.com/photo-1652471943570-f3590a4e52ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxidXNpbmVzcyUyMG1hbnxlbnwwfHx8fDE3NTc2OTQ1NTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       dataAiHint: "student avatar"
     },
   ];
@@ -138,7 +138,7 @@ export default function LandingPage() {
                     alt="Floating mascot one"
                     width={150}
                     height={150}
-                    className="absolute top-10 right-full -mr-24 rounded-lg shadow-lg animate-float"
+                    className="absolute top-10 right-full -mr-24 rounded-lg shadow-lg animate-float transition-transform duration-300 hover:rotate-3"
                     data-ai-hint="cute mascot character"
                   />
                   <Image
@@ -146,7 +146,7 @@ export default function LandingPage() {
                     alt="Floating mascot two"
                     width={150}
                     height={150}
-                    className="absolute bottom-10 left-full -ml-24 rounded-lg shadow-lg animate-float-delay"
+                    className="absolute bottom-10 left-full -ml-24 rounded-lg shadow-lg animate-float-delay transition-transform duration-300 hover:-rotate-3"
                     data-ai-hint="friendly robot mascot"
                   />
                  <Image
@@ -154,7 +154,7 @@ export default function LandingPage() {
                   alt="App Screenshot"
                   width={400}
                   height={500}
-                  className="mx-auto rounded-2xl object-cover shadow-2xl"
+                  className="mx-auto rounded-2xl object-cover shadow-2xl transition-transform duration-300 hover:rotate-1"
                   data-ai-hint="mobile app interface"
                 />
                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-4 bg-black/20 rounded-full blur-lg -z-10"></div>
