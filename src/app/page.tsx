@@ -27,7 +27,7 @@ const testimonials = [
       quote: "The leaderboard adds a fun, competitive edge to campus involvement.",
       name: "Mihir T.",
       title: "4th Year, Business",
-      avatarUrl: "https://picsum.photos/seed/mihir/100/100",
+      avatarUrl: "https://images.unsplash.com/photo-1652471943570-f3590a4e52ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxidXNpbmVzcyUyMG1hbnxlbnwwfHx8fDE3NTc2OTQ1NTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       dataAiHint: "student avatar"
     },
   ];
