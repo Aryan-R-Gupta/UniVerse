@@ -39,11 +39,11 @@ export default function ProfilePage() {
     setProfile(prev => ({
         ...prev,
         name: formData.get('name') as string,
+        studentId: formData.get('studentId') as string,
+        email: formData.get('email') as string,
         course: formData.get('course') as string,
         year: Number(formData.get('year') as string),
     }));
-    // In a real app, you'd probably want to find a way to close the dialog.
-    // document.getElementById('close-dialog')?.click(); // A bit of a hack, but works for this case.
   };
 
 
@@ -94,13 +94,13 @@ export default function ProfilePage() {
                                 <Label htmlFor="studentId" className="text-right">
                                     Student ID
                                 </Label>
-                                <Input id="studentId" name="studentId" defaultValue={profile.studentId} className="col-span-3" readOnly />
+                                <Input id="studentId" name="studentId" defaultValue={profile.studentId} className="col-span-3" />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
                                 <Label htmlFor="email" className="text-right">
                                     Email
                                 </Label>
-                                <Input id="email" name="email" defaultValue={profile.email} className="col-span-3" readOnly />
+                                <Input id="email" name="email" type="email" defaultValue={profile.email} className="col-span-3" />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
                                 <Label htmlFor="course" className="text-right">
