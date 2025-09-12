@@ -83,8 +83,8 @@ export const allCanteenItems = {
     { id: 13, name: 'Burger', price: 70, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXJnZXJ8ZW58MHx8fHwxNzU3NjY3Mzc4fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'burger' },
   ],
   drinks: [
-    { id: 3, name: 'Cold Coffee', price: 50, image: 'https://picsum.photos/seed/coldcoffee/200/200', dataAiHint: 'cold coffee' },
-    { id: 4, name: 'Masala Chai', price: 15, image: 'https://picsum.photos/seed/chai/200/200', dataAiHint: 'masala chai' },
+    { id: 3, name: 'Cold Coffee', price: 50, image: 'https://images.unsplash.com/photo-1530373239216-42518e6b4063?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb2xkJTIwY29mZmVlfGVufDB8fHx8MTc1NzY2NzUwOXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'cold coffee' },
+    { id: 4, name: 'Masala Chai', price: 15, image: 'https://images.unsplash.com/photo-1630748662359-40a2105640c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjaGFpfGVufDB8fHx8MTc1NzY2NzU1MXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'masala chai' },
   ],
   meals: [
     { id: 5, name: 'Veg Thali', price: 120, image: 'https://picsum.photos/seed/thali/200/200', dataAiHint: 'veg thali' },
