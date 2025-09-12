@@ -154,7 +154,7 @@ export default function LandingPage() {
                   alt="App Screenshot"
                   width={400}
                   height={500}
-                  className="mx-auto rounded-2xl object-cover shadow-2xl transition-transform duration-300 hover:scale-110"
+                  className="mx-auto rounded-2xl object-cover shadow-2xl transition-transform duration-300 hover:scale-105"
                   data-ai-hint="mobile app interface"
                 />
                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-4 bg-black/20 rounded-full blur-lg -z-10"></div>
