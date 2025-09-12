@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useActionState } from 'react';
@@ -101,11 +102,4 @@ export default function EventRegistrationPage({ params }: { params: { slug: stri
       </Card>
     </div>
   );
-}
-
-// generateStaticParams remains unchanged for generating static paths
-export async function generateStaticParams() {
-  return events.map(event => ({
-    slug: event.slug,
-  }));
 }
