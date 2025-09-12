@@ -13,7 +13,11 @@ export default function AdministratorLoginPage() {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    router.push('/dashboard');
+     if (typeof window !== 'undefined') {
+        localStorage.setItem('userType', 'Administrator');
+        window.dispatchEvent(new Event('storage'));
+    }
+    router.push('/canteen'); // Administrators are redirected to canteen
   };
 
   return (
@@ -48,3 +52,5 @@ export default function AdministratorLoginPage() {
     </div>
   );
 }
+
+    

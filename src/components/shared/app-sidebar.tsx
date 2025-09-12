@@ -4,12 +4,42 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Compass, GraduationCap } from "lucide-react";
-import { navItems } from "@/lib/data";
+import { studentNavItems, teacherNavItems, adminNavItems, type NavItem } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 function AppSidebarContent() {
     const pathname = usePathname();
+    const [navItems, setNavItems] = useState<NavItem[]>(studentNavItems);
+    const [userType, setUserType] = useState('Student');
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const storedUserType = localStorage.getItem('userType') || 'Student';
+            setUserType(storedUserType);
+            switch (storedUserType) {
+                case 'Teacher':
+                    setNavItems(teacherNavItems);
+                    break;
+                case 'Administrator':
+                    setNavItems(adminNavItems);
+                    break;
+                default:
+                    setNavItems(studentNavItems);
+                    break;
+            }
+        };
+
+        handleStorageChange(); // Initial check
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
+
+
     return (
         <>
             <div className="flex h-16 items-center border-b px-6">
@@ -47,7 +77,7 @@ function AppSidebarContent() {
                 />
                 <div>
                   <p className="font-semibold">Kanksha Dakua</p>
-                  <p className="text-xs text-muted-foreground">Student</p>
+                  <p className="text-xs text-muted-foreground">{userType}</p>
                 </div>
               </div>
             </div>
@@ -65,3 +95,5 @@ export function AppSidebar() {
     </aside>
   );
 }
+
+    

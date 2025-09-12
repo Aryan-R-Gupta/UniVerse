@@ -13,7 +13,11 @@ export default function TeacherLoginPage() {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    router.push('/dashboard');
+     if (typeof window !== 'undefined') {
+        localStorage.setItem('userType', 'Teacher');
+        window.dispatchEvent(new Event('storage'));
+    }
+    router.push('/timetable'); // Teachers are redirected to timetable
   };
 
   return (
@@ -48,3 +52,5 @@ export default function TeacherLoginPage() {
     </div>
   );
 }
+
+    

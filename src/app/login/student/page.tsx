@@ -13,6 +13,11 @@ export default function StudentLoginPage() {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    // Set user type in localStorage to be used by the sidebar
+    if (typeof window !== 'undefined') {
+        localStorage.setItem('userType', 'Student');
+        window.dispatchEvent(new Event('storage'));
+    }
     router.push('/dashboard');
   };
 
@@ -48,3 +53,5 @@ export default function StudentLoginPage() {
     </div>
   );
 }
+
+    

@@ -1,13 +1,18 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { navItems } from "@/lib/data";
+import { studentNavItems } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 export function MobileBottomNav() {
   const pathname = usePathname();
-  const mainNavItems = navItems.filter(item => ['Dashboard', 'Timetable', 'Canteen', 'Events', 'Feedback'].includes(item.title));
+  // For mobile, we can show a standard set of important icons.
+  // Or we could adapt this based on userType from localStorage as well.
+  // Sticking to student items for now for simplicity on mobile.
+  const mainNavItems = studentNavItems.filter(item => ['Dashboard', 'Timetable', 'Canteen', 'Events', 'Profile'].includes(item.title));
+
 
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card border-t z-50">
@@ -29,3 +34,5 @@ export function MobileBottomNav() {
     </nav>
   );
 }
+
+    
