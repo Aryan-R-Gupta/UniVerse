@@ -1,6 +1,8 @@
+
 "use client";
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -46,7 +48,9 @@ export default function EventsPage() {
               <p className="text-sm text-muted-foreground">Date: {event.date}</p>
             </CardContent>
             <CardFooter className="p-4 pt-0">
-              <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">Register</Button>
+              <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+                <Link href={`/events/${event.slug}/register`}>Register</Link>
+              </Button>
             </CardFooter>
           </Card>
         ))}
@@ -54,3 +58,5 @@ export default function EventsPage() {
     </div>
   );
 }
+
+    
