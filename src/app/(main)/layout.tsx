@@ -11,7 +11,7 @@ export default function MainAppLayout({
   const userLoggedIn = true; // Replace with actual auth check
 
   if (!userLoggedIn) {
-    redirect('/');
+    redirect('/login');
   }
 
   return (

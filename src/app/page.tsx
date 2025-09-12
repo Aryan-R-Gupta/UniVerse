@@ -14,7 +14,7 @@ export default function LandingPage() {
         </Link>
         <nav className="flex items-center gap-2 sm:gap-4">
           <Button variant="ghost" asChild className="text-gray-700 hover:bg-sky-200/50">
-            <Link href="/dashboard">Login</Link>
+            <Link href="/login">Login</Link>
           </Button>
           <Button asChild className="rounded-full bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Link href="/dashboard">Get Started</Link>
@@ -70,8 +70,8 @@ export default function LandingPage() {
                  <Image
                   src="https://images.unsplash.com/flagged/photo-1554473675-d0904f3cbf38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8Y29sbGVnZXxlbnwwfHx8fDE3NTc2NzA1MjF8MA&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="App Screenshot"
-                  width={520}
-                  height={730}
+                  width={550}
+                  height={760}
                   className="mx-auto rounded-3xl object-cover shadow-2xl transform -rotate-6 transition-transform duration-500 hover:rotate-0 hover:scale-105"
                   data-ai-hint="mobile app interface"
                 />
