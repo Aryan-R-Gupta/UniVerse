@@ -136,25 +136,25 @@ export default function LandingPage() {
                  <Image
                     src="https://images.unsplash.com/photo-1538334421852-687c439c92f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjYW50ZWVufGVufDB8fHx8MTc1NzY3MTEwMHww&ixlib=rb-4.1.0&q=80&w=1080"
                     alt="Floating mascot one"
-                    width={80}
-                    height={80}
-                    className="absolute top-10 left-10 animate-float"
+                    width={70}
+                    height={70}
+                    className="absolute top-16 left-16 animate-float"
                     data-ai-hint="cute mascot character"
                   />
                   <Image
                     src="https://images.unsplash.com/photo-1741636174186-3fffe1614c39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8Y29sbGVnZSUyMGV2ZW50c3xlbnwwfHx8fDE3NTc2NzEyMDd8MA&ixlib=rb-4.1.0&q=80&w=1080"
                     alt="Floating mascot two"
-                    width={90}
-                    height={90}
+                    width={80}
+                    height={80}
                     className="absolute bottom-12 right-12 animate-float-delay"
                     data-ai-hint="friendly robot mascot"
                   />
                  <Image
                   src="https://images.unsplash.com/flagged/photo-1554473675-d0904f3cbf38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8Y29sbGVnZXxlbnwwfHx8fDE3NTc2NzA1MjF8MA&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="App Screenshot"
-                  width={350}
-                  height={450}
-                  className="mx-auto rounded-2xl object-cover shadow-2xl transform -rotate-2 transition-transform duration-500 hover:rotate-0 hover:scale-105"
+                  width={300}
+                  height={400}
+                  className="mx-auto rounded-2xl object-cover shadow-2xl transition-transform duration-500 hover:scale-105"
                   data-ai-hint="mobile app interface"
                 />
                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-4 bg-black/20 rounded-full blur-lg -z-10"></div>
