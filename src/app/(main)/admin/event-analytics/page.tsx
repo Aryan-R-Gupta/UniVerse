@@ -7,24 +7,127 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { BarChart2, TrendingUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getFirestore, collection, getDocs, query, orderBy, limit, where } from 'firebase/firestore';
+import { app } from '@/lib/firebase';
+import { format } from 'date-fns';
+import { Skeleton } from "@/components/ui/skeleton";
 
-const registrationData = [
-  { date: 'Dec 1', Tech: 20, Cultural: 35, Sports: 15 },
-  { date: 'Dec 2', Tech: 25, Cultural: 40, Sports: 20 },
-  { date: 'Dec 3', Tech: 30, Cultural: 55, Sports: 25 },
-  { date: 'Dec 4', Tech: 28, Cultural: 60, Sports: 30 },
-  { date: 'Dec 5', Tech: 40, Cultural: 70, Sports: 35 },
-  { date: 'Dec 6', Tech: 50, Cultural: 80, Sports: 40 },
-];
+type RegistrationData = {
+  date: string;
+  [key: string]: number | string; // Allows for dynamic category keys
+};
 
-const eventPopularity = [
-    { id: 1, name: 'Encore - Music Fest', category: 'Cultural', registrations: 800, attendance: 650, feedback: 4.8 },
-    { id: 2, name: 'University Soccer League', category: 'Sports', registrations: 650, attendance: 600, feedback: 4.6 },
-    { id: 3, name: 'Hackathon 5.0', category: 'Tech', registrations: 500, attendance: 480, feedback: 4.9 },
-    { id: 4, name: 'AI & The Future', category: 'Workshops', registrations: 300, attendance: 280, feedback: 4.7 },
-];
+type EventPerformance = {
+  id: string;
+  name: string;
+  category: string;
+  registrations: number;
+  attendance: number; // For simplicity, we'll make attendance a random percentage of registrations
+  feedback: number; // Mocked for now
+};
+
+async function getRegistrationData(): Promise<RegistrationData[]> {
+  const db = getFirestore(app);
+  const registrationsCol = collection(db, 'event-registrations');
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  const q = query(registrationsCol, where('registeredAt', '>=', sevenDaysAgo));
+  const registrationsSnapshot = await getDocs(q);
+
+  const dailyCounts: { [date: string]: { [category: string]: number } } = {};
+  const categories = new Set<string>();
+
+  registrationsSnapshot.docs.forEach(doc => {
+    const data = doc.data();
+    if (data.registeredAt && data.eventCategory) {
+      const date = format(data.registeredAt.toDate(), 'yyyy-MM-dd');
+      const category = data.eventCategory;
+      categories.add(category);
+      if (!dailyCounts[date]) {
+        dailyCounts[date] = {};
+      }
+      if (!dailyCounts[date][category]) {
+        dailyCounts[date][category] = 0;
+      }
+      dailyCounts[date][category]++;
+    }
+  });
+
+  const formattedData = Object.keys(dailyCounts).map(date => {
+    const entry: RegistrationData = { date };
+    categories.forEach(cat => {
+        entry[cat] = dailyCounts[date][cat] || 0;
+    });
+    return entry;
+  });
+
+  return formattedData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+}
+
+async function getEventPerformance(): Promise<EventPerformance[]> {
+  const db = getFirestore(app);
+  const eventsCol = collection(db, 'events'); // Assuming an 'events' collection
+  const registrationsCol = collection(db, 'event-registrations');
+
+  const eventsSnapshot = await getDocs(query(eventsCol, orderBy('date', 'desc'), limit(4)));
+  const performanceList: EventPerformance[] = [];
+
+  for (const eventDoc of eventsSnapshot.docs) {
+    const eventData = eventDoc.data();
+    const eventId = eventDoc.id;
+
+    const registrationsQuery = query(registrationsCol, where('eventId', '==', eventId));
+    const registrationsSnapshot = await getDocs(registrationsQuery);
+    const registrations = registrationsSnapshot.size;
+
+    performanceList.push({
+      id: eventId,
+      name: eventData.title,
+      category: eventData.category,
+      registrations: registrations,
+      // Mocking attendance and feedback for demonstration
+      attendance: Math.floor(registrations * (Math.random() * (0.9 - 0.7) + 0.7)),
+      feedback: parseFloat((Math.random() * (5 - 4.2) + 4.2).toFixed(1)),
+    });
+  }
+
+  return performanceList;
+}
 
 export default function EventAnalyticsPage() {
+  const [registrationData, setRegistrationData] = useState<RegistrationData[]>([]);
+  const [eventPerformance, setEventPerformance] = useState<EventPerformance[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      try {
+        const [regData, perfData] = await Promise.all([getRegistrationData(), getEventPerformance()]);
+        
+        const allCategories = new Set<string>();
+        regData.forEach(d => Object.keys(d).forEach(k => {
+          if(k !== 'date') allCategories.add(k);
+        }));
+
+        setRegistrationData(regData);
+        setEventPerformance(perfData);
+        setCategories(Array.from(allCategories));
+
+      } catch (error) {
+        console.error("Failed to fetch event analytics:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+  
+  const chartColors = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
+
   return (
     <div className="space-y-8">
       <h1 className="text-3xl font-bold">Event Analytics</h1>
@@ -32,42 +135,40 @@ export default function EventAnalyticsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><TrendingUp /> Registration Trends</CardTitle>
-          <CardDescription>Daily new registrations by event category.</CardDescription>
+          <CardDescription>Daily new registrations by event category for the last 7 days.</CardDescription>
         </CardHeader>
         <CardContent>
-           <ChartContainer config={{}} className="h-72 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={registrationData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                    <XAxis dataKey="date" />
-                    <YAxis strokeWidth={0} />
-                    <defs>
-                        <linearGradient id="colorTech" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="hsl(var(--chart-1))" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="hsl(var(--chart-1))" stopOpacity={0}/>
-                        </linearGradient>
-                        <linearGradient id="colorCultural" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="hsl(var(--chart-2))" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="hsl(var(--chart-2))" stopOpacity={0}/>
-                        </linearGradient>
-                         <linearGradient id="colorSports" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="hsl(var(--chart-3))" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="hsl(var(--chart-3))" stopOpacity={0}/>
-                        </linearGradient>
-                    </defs>
-                    <Area type="monotone" dataKey="Tech" stroke="hsl(var(--chart-1))" fill="url(#colorTech)" />
-                    <Area type="monotone" dataKey="Cultural" stroke="hsl(var(--chart-2))" fill="url(#colorCultural)" />
-                    <Area type="monotone" dataKey="Sports" stroke="hsl(var(--chart-3))" fill="url(#colorSports)" />
-                   <ChartTooltip content={<ChartTooltipContent />} />
-                </AreaChart>
-              </ResponsiveContainer>
-          </ChartContainer>
+           {loading ? (
+             <Skeleton className="h-72 w-full" />
+           ) : (
+            <ChartContainer config={{}} className="h-72 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={registrationData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                      <XAxis dataKey="date" tickFormatter={(str) => new Date(str).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
+                      <YAxis strokeWidth={0} />
+                      <defs>
+                        {categories.map((cat, i) => (
+                           <linearGradient key={cat} id={`color${cat}`} x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor={chartColors[i % chartColors.length]} stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor={chartColors[i % chartColors.length]} stopOpacity={0}/>
+                           </linearGradient>
+                        ))}
+                      </defs>
+                      {categories.map((cat, i) => (
+                        <Area key={cat} type="monotone" dataKey={cat} stroke={chartColors[i % chartColors.length]} fill={`url(#color${cat})`} />
+                      ))}
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                  </AreaChart>
+                </ResponsiveContainer>
+            </ChartContainer>
+           )}
         </CardContent>
       </Card>
 
       <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2"><BarChart2 /> Event Performance</CardTitle>
-                <CardDescription>Detailed comparison of all recent events.</CardDescription>
+                <CardDescription>Detailed comparison of the 4 most recent events.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>
@@ -81,7 +182,17 @@ export default function EventAnalyticsPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {eventPopularity.map(event => (
+                        {loading ? (
+                          Array.from({ length: 4 }).map((_, index) => (
+                              <TableRow key={index}>
+                                  <TableCell><Skeleton className="h-5 w-3/4" /></TableCell>
+                                  <TableCell><Skeleton className="h-5 w-1/2" /></TableCell>
+                                  <TableCell className="text-right"><Skeleton className="h-5 w-1/4 ml-auto" /></TableCell>
+                                  <TableCell className="text-right"><Skeleton className="h-5 w-1/4 ml-auto" /></TableCell>
+                                  <TableCell className="text-right"><Skeleton className="h-5 w-1/4 ml-auto" /></TableCell>
+                              </TableRow>
+                          ))
+                        ) : eventPerformance.map(event => (
                             <TableRow key={event.id}>
                                 <TableCell className="font-medium">{event.name}</TableCell>
                                 <TableCell><Badge variant="outline">{event.category}</Badge></TableCell>
