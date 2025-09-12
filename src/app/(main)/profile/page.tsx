@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Pencil, Ticket, Utensils, BookCheck, Sparkles, Loader2 } from "lucide-react";
-import { userProfileData, registeredEvents, recentOrders, activeBookings as userBookings } from "@/lib/data";
+import { userProfileData, registeredEvents, recentOrders, userBookings } from "@/lib/data";
 import { generatePersona } from './actions';
 
 export default function ProfilePage() {
