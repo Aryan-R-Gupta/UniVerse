@@ -51,7 +51,7 @@ export default function LandingPage() {
               <div className="relative flex items-center justify-center p-8">
                  <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-full -z-10 animate-blob-bounce"></div>
                  <Image
-                    src="https://picsum.photos/seed/mascot1/100/100"
+                    src="https://images.unsplash.com/photo-1538334421852-687c439c92f4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjYW50ZWVufGVufDB8fHx8MTc1NzY3MTEwMHww&ixlib=rb-4.1.0&q=80&w=1080"
                     alt="Floating mascot one"
                     width={100}
                     height={100}
