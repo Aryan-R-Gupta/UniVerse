@@ -41,7 +41,6 @@ export default function ProfilePage() {
         name: formData.get('name') as string,
         course: formData.get('course') as string,
         year: Number(formData.get('year') as string),
-        cgpa: formData.get('cgpa') as string,
     }));
     // In a real app, you'd probably want to find a way to close the dialog.
     // document.getElementById('close-dialog')?.click(); // A bit of a hack, but works for this case.
@@ -67,7 +66,6 @@ export default function ProfilePage() {
               <div className="flex flex-wrap gap-2 mt-2">
                 <Badge variant="secondary">{profile.course}</Badge>
                 <Badge variant="secondary">Year {profile.year}</Badge>
-                <Badge variant="secondary">CGPA: {profile.cgpa}</Badge>
               </div>
             </div>
              <Dialog>
@@ -115,12 +113,6 @@ export default function ProfilePage() {
                                     Year
                                 </Label>
                                 <Input id="year" name="year" type="number" defaultValue={profile.year} className="col-span-3" />
-                            </div>
-                             <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="cgpa" className="text-right">
-                                    CGPA
-                                </Label>
-                                <Input id="cgpa" name="cgpa" defaultValue={profile.cgpa} className="col-span-3" />
                             </div>
                         </div>
                         <DialogFooter>
@@ -226,6 +218,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-
-    

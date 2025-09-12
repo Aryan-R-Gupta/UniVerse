@@ -73,7 +73,7 @@ export const timetableData = {
 export const allCanteenItems = {
   snacks: [
     { id: 1, name: 'Samosa', price: 15, image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzYW1vc2F8ZW58MHx8fHwxNzU3NjY2NTA1fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'samosa' },
-    { id: 2, name: 'Chaat', price: 20, image: 'https://images.unsplash.com/photo-1653850280260-aa3b9e00b230?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFhdHxlbnwwfHx8fDE3NTc2NjY2NzB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'chaat' },
+    { id: 2, name: 'Chaat', price: 20, image: 'https://images.unsplash.com/photo-1546069901-d5bfd2cbfb1f?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', dataAiHint: 'aesthetic college canteen' },
     { id: 7, name: 'Noodles', price: 40, image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxub29kbGVzfGVufDB8fHx8MTc1NzY2NzAxOXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'noodles' },
     { id: 8, name: 'Fried Rice', price: 50, image: 'https://images.unsplash.com/photo-1596560548464-f010549b84d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcmllZCUyMHJpY2V8ZW58MHx8fHwxNzU3NjY3MDY3fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'fried rice' },
     { id: 9, name: 'Vada Pav', price: 15, image: 'https://images.unsplash.com/photo-1750767397012-3413ba4fdbc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8dmFkYSUyMHBhdnxlbnwwfHx8fDE3NTc2NjcxMzZ8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'vada pav' },
@@ -113,7 +113,6 @@ export const userProfileData = {
   avatarUrl: 'https://picsum.photos/seed/kanksha/100/100',
   course: 'Bsc IT',
   year: 2,
-  cgpa: '3.8',
 };
 
 export const registeredEvents = [
@@ -130,7 +129,3 @@ export const userBookings = [
   { id: 1, resourceName: 'Study Room 1A', timeSlot: 'Today, 4:00 PM - 5:00 PM', status: 'Confirmed' },
   { id: 2, resourceName: 'Basketball Court', timeSlot: 'Today, 6:00 PM - 7:00 PM', status: 'Confirmed' },
 ];
-
-
-
-    
