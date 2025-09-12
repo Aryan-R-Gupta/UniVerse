@@ -10,10 +10,14 @@ import { Badge } from "@/components/ui/badge";
 import { Pencil, Ticket, Utensils, BookCheck, Sparkles, Loader2 } from "lucide-react";
 import { userProfileData, registeredEvents, recentOrders, userBookings } from "@/lib/data";
 import { generatePersona } from './actions';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export default function ProfilePage() {
   const [persona, setPersona] = useState<{ title: string; description: string } | null>(null);
   const [isLoadingPersona, setIsLoadingPersona] = useState(false);
+  const [profile, setProfile] = useState(userProfileData);
 
   const handleGeneratePersona = async () => {
     setIsLoadingPersona(true);
@@ -29,6 +33,18 @@ export default function ProfilePage() {
     }
   };
 
+  const handleProfileUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    setProfile(prev => ({
+        ...prev,
+        name: formData.get('name') as string,
+        major: formData.get('major') as string,
+    }));
+    // In a real app, you'd probably want to find a way to close the dialog.
+    // document.getElementById('close-dialog')?.click(); // A bit of a hack, but works for this case.
+  };
+
 
   return (
     <div className="space-y-8">
@@ -39,23 +55,56 @@ export default function ProfilePage() {
         <CardHeader>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <Avatar className="h-24 w-24 border">
-              <AvatarImage src={userProfileData.avatarUrl} alt={userProfileData.name} />
-              <AvatarFallback>{userProfileData.name.charAt(0)}</AvatarFallback>
+              <AvatarImage src={profile.avatarUrl} alt={profile.name} />
+              <AvatarFallback>{profile.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <CardTitle className="text-2xl">{userProfileData.name}</CardTitle>
-              <CardDescription>Student ID: {userProfileData.studentId}</CardDescription>
-              <p className="text-sm text-muted-foreground mt-1">{userProfileData.email}</p>
+              <CardTitle className="text-2xl">{profile.name}</CardTitle>
+              <CardDescription>Student ID: {profile.studentId}</CardDescription>
+              <p className="text-sm text-muted-foreground mt-1">{profile.email}</p>
               <div className="flex flex-wrap gap-2 mt-2">
-                <Badge variant="secondary">{userProfileData.major}</Badge>
-                <Badge variant="secondary">Year {userProfileData.year}</Badge>
-                <Badge variant="secondary">GPA: {userProfileData.gpa}</Badge>
+                <Badge variant="secondary">{profile.major}</Badge>
+                <Badge variant="secondary">Year {profile.year}</Badge>
+                <Badge variant="secondary">GPA: {profile.gpa}</Badge>
               </div>
             </div>
-            <Button variant="outline" size="icon">
-                <Pencil className="h-4 w-4" />
-                <span className="sr-only">Edit Profile</span>
-            </Button>
+             <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="outline" size="icon">
+                        <Pencil className="h-4 w-4" />
+                        <span className="sr-only">Edit Profile</span>
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Edit profile</DialogTitle>
+                        <DialogDescription>
+                            Make changes to your profile here. Click save when you're done.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleProfileUpdate}>
+                        <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="name" className="text-right">
+                                    Name
+                                </Label>
+                                <Input id="name" name="name" defaultValue={profile.name} className="col-span-3" />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="major" className="text-right">
+                                    Major
+                                </Label>
+                                <Input id="major" name="major" defaultValue={profile.major} className="col-span-3" />
+                            </div>
+                        </div>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button type="submit">Save changes</Button>
+                          </DialogClose>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
           </div>
         </CardHeader>
       </Card>
