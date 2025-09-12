@@ -38,7 +38,7 @@ function AppSidebarContent() {
             <div className="mt-auto p-4 border-t">
               <div className="flex items-center gap-3">
                 <Image
-                  src="https://picsum.photos/seed/payal/100/100"
+                  src="https://picsum.photos/seed/kanksha/100/100"
                   alt="User avatar"
                   width={40}
                   height={40}
@@ -46,7 +46,7 @@ function AppSidebarContent() {
                   data-ai-hint="profile picture"
                 />
                 <div>
-                  <p className="font-semibold">Payal</p>
+                  <p className="font-semibold">Kanksha Dakua</p>
                   <p className="text-xs text-muted-foreground">Student</p>
                 </div>
               </div>

@@ -107,11 +107,11 @@ export const resources = [
 ];
 
 export const userProfileData = {
-  name: 'Payal',
+  name: 'Kanksha Dakua',
   studentId: '12345',
   email: 'payal.soni@universe.edu',
-  avatarUrl: 'https://picsum.photos/seed/payal/100/100',
-  major: 'Computer Science',
+  avatarUrl: 'https://picsum.photos/seed/kanksha/100/100',
+  major: 'Bsc IT',
   year: 2,
   gpa: '3.8',
 };
