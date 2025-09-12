@@ -138,15 +138,15 @@ export default function LandingPage() {
                     alt="Floating mascot one"
                     width={150}
                     height={150}
-                    className="absolute top-10 right-full -mr-12 rounded-lg shadow-lg animate-float transition-transform duration-300 hover:rotate-3"
+                    className="absolute top-10 left-0 rounded-lg shadow-lg animate-float transition-transform duration-300 hover:rotate-3"
                     data-ai-hint="cute mascot character"
                   />
                   <Image
-                    src="https://images.unsplash.com/photo-1741636174186-3fffe1614c39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8Y29sbGVnZSUyMGV2ZW50c3xlbnwwfHx8fDE3NTc2NzEyMDd8MA&ixlib=rb-4.1.0&q=80&w=1080"
+                    src="https://images.unsplash.com/photo-1741636174186-3fffe1614c39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8Y29sbGVnZSUyMGV2ZW50c3xlbnwwfHx8fDE3NTc2NzEyMDd8MA&ixlib-rb-4.1.0&q=80&w=1080"
                     alt="Floating mascot two"
                     width={150}
                     height={150}
-                    className="absolute bottom-10 left-full -ml-36 rounded-lg shadow-lg animate-float-delay transition-transform duration-300 hover:-rotate-3"
+                    className="absolute bottom-10 right-0 rounded-lg shadow-lg animate-float-delay transition-transform duration-300 hover:-rotate-3"
                     data-ai-hint="friendly robot mascot"
                   />
                  <Image
