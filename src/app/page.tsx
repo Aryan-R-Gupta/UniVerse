@@ -1,94 +1,98 @@
-import { GraduationCap, ArrowRight } from 'lucide-react';
+import { ArrowRight, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <header className="px-4 lg:px-6 h-16 flex items-center border-b">
-        <Link href="/" className="flex items-center justify-center">
-          <GraduationCap className="h-6 w-6 text-primary" />
-          <span className="ml-2 font-semibold">CampusLife Hub</span>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-sky-100 to-purple-100/50 text-gray-800 font-body overflow-x-hidden">
+      <header className="px-4 lg:px-8 h-20 flex items-center justify-between">
+        <Link href="/" className="flex items-center justify-center gap-2">
+          <GraduationCap className="h-7 w-7 text-blue-500" />
+          <span className="font-bold text-xl text-gray-900 tracking-tight">CampusLife Hub</span>
         </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link href="/dashboard" className="text-sm font-medium hover:underline underline-offset-4">
-            Login
-          </Link>
-          <Button asChild>
-             <Link href="/dashboard">Get Started</Link>
+        <nav className="flex items-center gap-2 sm:gap-4">
+          <Button variant="ghost" asChild className="text-gray-700 hover:bg-sky-200/50">
+            <Link href="/dashboard">Login</Link>
+          </Button>
+          <Button asChild className="rounded-full bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <Link href="/dashboard">Get Started</Link>
           </Button>
         </nav>
       </header>
-      <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-card">
+
+      <main className="flex-1 flex items-center">
+        <section className="w-full py-12 md:py-24">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    Your All-in-One Campus Companion
+            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+              <div className="flex flex-col justify-center space-y-6">
+                <div className="space-y-4">
+                  <h1 className="text-4xl font-extrabold font-headline tracking-tighter uppercase sm:text-5xl md:text-6xl lg:text-7xl/none">
+                    GROUP CHAT THAT'S ALL FUN & GAMES
                   </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    CampusLife Hub simplifies your university experience. Manage your timetable, order food, discover events, and navigate campus with ease.
+                  <p className="max-w-[600px] text-gray-600 md:text-xl">
+                    A unified campus platform to schedule, order, book, and discover — all in one place.
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button asChild size="lg">
+                <div className="flex flex-col gap-4 min-[400px]:flex-row">
+                   <Button asChild size="lg" className="rounded-full bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
                     <Link href="/dashboard">
                       Go to App
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
+                  </Button>
+                  <Button asChild size="lg" variant="ghost" className="rounded-full text-gray-700 hover:bg-sky-200/50 transform hover:-translate-y-1 transition-transform duration-300">
+                     <Link href="#">
+                        Learn More
+                     </Link>
                   </Button>
                 </div>
               </div>
-              <Image
-                src="https://picsum.photos/seed/landing/600/400"
-                alt="Hero"
-                width={600}
-                height={400}
-                className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last lg:aspect-square"
-                data-ai-hint="university campus life"
-              />
-            </div>
-          </div>
-        </section>
-
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Key Features</div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Everything you need in one place</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  From academics to social life, we've got you covered. Spend less time organizing and more time experiencing.
-                </p>
-              </div>
-            </div>
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3 lg:gap-12">
-              <div className="grid gap-1 text-center">
-                 <Image src="https://picsum.photos/seed/feature1/300/200" alt="Timetable" width={300} height={200} className="rounded-lg object-cover w-full aspect-video mx-auto" data-ai-hint="student calendar schedule" />
-                <h3 className="text-xl font-bold mt-4">Smart Timetable</h3>
-                <p className="text-muted-foreground">Never miss a class with our intuitive and always up-to-date timetable.</p>
-              </div>
-              <div className="grid gap-1 text-center">
-                <Image src="https://picsum.photos/seed/feature2/300/200" alt="Canteen" width={300} height={200} className="rounded-lg object-cover w-full aspect-video mx-auto" data-ai-hint="food delivery order" />
-                <h3 className="text-xl font-bold mt-4">Canteen Ordering</h3>
-                <p className="text-muted-foreground">Pre-order your meals from the campus canteen and skip the long queues.</p>
-              </div>
-              <div className="grid gap-1 text-center">
-                <Image src="https://picsum.photos/seed/feature3/300/200" alt="Events" width={300} height={200} className="rounded-lg object-cover w-full aspect-video mx-auto" data-ai-hint="campus event festival" />
-                <h3 className="text-xl font-bold mt-4">Event Discovery</h3>
-                <p className="text-muted-foreground">Stay in the loop with all the latest workshops, fests, and sports events.</p>
+              <div className="relative flex items-center justify-center p-8">
+                 <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-full -z-10 animate-blob-bounce"></div>
+                 <Image
+                    src="https://picsum.photos/seed/mascot1/100/100"
+                    alt="Floating mascot one"
+                    width={100}
+                    height={100}
+                    className="absolute top-10 left-10 animate-float"
+                    data-ai-hint="cute mascot character"
+                  />
+                  <Image
+                    src="https://picsum.photos/seed/mascot2/120/120"
+                    alt="Floating mascot two"
+                    width={120}
+                    height={120}
+                    className="absolute bottom-10 right-5 animate-float-delay"
+                    data-ai-hint="friendly robot mascot"
+                  />
+                 <Image
+                  src="https://picsum.photos/seed/app-screenshot/400/600"
+                  alt="App Screenshot"
+                  width={350}
+                  height={525}
+                  className="mx-auto rounded-3xl object-cover shadow-2xl transform -rotate-6 transition-transform duration-500 hover:rotate-0 hover:scale-105"
+                  data-ai-hint="mobile app interface"
+                />
+                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-4 bg-black/20 rounded-full blur-lg -z-10"></div>
               </div>
             </div>
           </div>
         </section>
-
       </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <p className="text-xs text-muted-foreground">&copy; 2024 CampusLife Hub. All rights reserved.</p>
-      </footer>
+
+      <div className="w-full py-4 bg-white/50 backdrop-blur-sm shadow-inner overflow-hidden group">
+        <div className="marquee flex group-hover:[animation-play-state:paused] motion-safe:animate-marquee">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="flex items-center shrink-0">
+              <p className="text-xl md:text-2xl font-bold uppercase tracking-widest text-gray-700 px-8">ONE STOP FOR EVERYONE</p>
+              <GraduationCap className="h-6 w-6 text-blue-400" />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
+
+    
