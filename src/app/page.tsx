@@ -34,7 +34,7 @@ const testimonials = [
       quote: "The leaderboard adds a fun, competitive edge to campus involvement.",
       name: "Mihir T.",
       title: "4th Year, Business",
-      avatarUrl: "https://images.unsplash.com/photo-1652471943570-f3590a4e52ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxidXNpbmVzcyUyMG1hbnxlbnwwfHx8fDE3NTc2OTQ1NTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      avatarUrl: "https://images.unsplash.com/photo-1652471943570-f3590a4e52ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxidXNpbmVzcyUyMG1hbnxlbnwwfHx8fDE3NTc2OTQ1NTd8MA&ixlib-rb-4.1.0&q=80&w=1080",
       dataAiHint: "student avatar"
     },
   ];
@@ -144,9 +144,9 @@ export default function LandingPage() {
                   <Image
                     src="https://images.unsplash.com/photo-1741636174186-3fffe1614c39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8Y29sbGVnZSUyMGV2ZW50c3xlbnwwfHx8fDE3NTc2NzEyMDd8MA&ixlib=rb-4.1.0&q=80&w=1080"
                     alt="Floating mascot two"
-                    width={180}
-                    height={180}
-                    className="absolute bottom-10 left-full -ml-32 rounded-lg shadow-lg animate-float-delay"
+                    width={150}
+                    height={150}
+                    className="absolute bottom-10 left-full -ml-24 rounded-lg shadow-lg animate-float-delay"
                     data-ai-hint="friendly robot mascot"
                   />
                  <Image
