@@ -153,7 +153,7 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 text-foreground">Loved by students nationwide</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((testimonial, index) => (
-                <Card key={index} className="bg-background/80 backdrop-blur-sm border-border/50 shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <Card key={index} className="bg-background/80 backdrop-blur-sm border shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
                   <CardContent className="p-6">
                     <p className="text-muted-foreground mb-6">"{testimonial.quote}"</p>
                     <div className="flex items-center gap-4">
@@ -213,3 +213,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+    
