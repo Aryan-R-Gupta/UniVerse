@@ -71,7 +71,7 @@ export const timetableData = {
 
 export const allCanteenItems = {
   snacks: [
-    { id: 1, name: 'Samosa', price: 15, image: 'https://picsum.photos/seed/samosa/200/200', dataAiHint: 'samosa' },
+    { id: 1, name: 'Samosa', price: 15, image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzYW1vc2F8ZW58MHx8fHwxNzU3NjY2NTA1fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'samosa' },
     { id: 2, name: 'Veg Puff', price: 20, image: 'https://picsum.photos/seed/puff/200/200', dataAiHint: 'veg puff' },
   ],
   drinks: [
