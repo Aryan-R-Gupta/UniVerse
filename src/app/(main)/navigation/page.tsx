@@ -13,7 +13,7 @@ export default function NavigationPage() {
       <Card>
         <CardContent className="p-2">
            <Image
-            src="https://images.unsplash.com/photo-1622470190232-81df3782484b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjb2xsZWdlJTIwY2FtcHVzfGVufDB8fHx8MTc1NzY3MjM1MHww&ixlib=rb-4.1.0&q=80&w=1080"
+            src="https://images.unsplash.com/photo-1659292862395-2ded345088df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjb2xsZWdlcyUyMCUyMGluZGlhfGVufDB8fHx8MTc1NzY3MjU4Mnww&ixlib=rb-4.1.0&q=80&w=1080"
             alt="Campus map"
             width={1200}
             height={800}
