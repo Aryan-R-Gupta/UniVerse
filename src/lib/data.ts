@@ -41,8 +41,8 @@ export const canteenItems = [
 
 export const upcomingEvent = {
   title: 'InnovateX 2024',
-  image: 'https://picsum.photos/seed/innovatex/600/400',
-  dataAiHint: 'tech conference'
+  image: 'https://images.unsplash.com/photo-1637073849667-91120a924221?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoYWNrYXRob258ZW58MHx8fHwxNzU3NjY5NDQ5fDA&ixlib=rb-4.1.0&q=80&w=1080',
+  dataAiHint: 'hackathon event'
 };
 
 export const activeBookings = {
@@ -72,11 +72,11 @@ export const timetableData = {
 
 export const allCanteenItems = {
   snacks: [
-    { id: 1, name: 'Samosa', price: 15, image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzYW1vc2F8ZW58MHx8fHwxNzU3NjY2NTA1fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'samosa' },
-    { id: 2, name: 'Chaat', price: 20, image: 'https://images.unsplash.com/photo-1653850280260-aa3b9e00b230?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFhdHxlbnwwfHx8fDE3NTc2NjY2NzB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'chaat' },
-    { id: 7, name: 'Noodles', price: 40, image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxub29kbGVzfGVufDB8fHx8MTc1NzY2NzAxOXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'noodles' },
-    { id: 8, name: 'Fried Rice', price: 50, image: 'https://images.unsplash.com/photo-1596560548464-f010549b84d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcmllZCUyMHJpY2V8ZW58MHx8fHwxNzU3NjY3MDY3fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'fried rice' },
-    { id: 9, name: 'Vada Pav', price: 15, image: 'https://images.unsplash.com/photo-1750767397012-3413ba4fdbc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8dmFkYSUyMHBhdnxlbnwwfHx8fDE3NTc2NjcxMzZ8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'vada pav' },
+    { id: 1, name: 'Samosa', price: 15, image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzYW1vc2F8ZW58MHx8fHwxNzU3NjY2NTA1fDA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'samosa' },
+    { id: 2, name: 'Chaat', price: 20, image: 'https://images.unsplash.com/photo-1653850280260-aa3b9e00b230?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFhdHxlbnwwfHx8fDE3NTc2NjY2NzB8MA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'chaat' },
+    { id: 7, name: 'Noodles', price: 40, image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxub29kbGVzfGVufDB8fHx8MTc1NzY2NzAxOXww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'noodles' },
+    { id: 8, name: 'Fried Rice', price: 50, image: 'https://images.unsplash.com/photo-1596560548464-f010549b84d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcmllZCUyMHJpY2V8ZW58MHx8fHwxNzU3NjY3MDY3fDA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'fried rice' },
+    { id: 9, name: 'Vada Pav', price: 15, image: 'https://images.unsplash.com/photo-1750767397012-3413ba4fdbc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8dmFkYSUyMHBhdnxlbnwwfHx8fDE3NTc2NjcxMzZ8MA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'vada pav' },
     { id: 10, name: 'Idli', price: 30, image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpZGxpfGVufDB8fHx8MTc1NzY2NzE1OHww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'idli' },
     { id: 11, name: 'Medu Vada', price: 35, image: 'https://images.unsplash.com/photo-1730191843435-073792ba22bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2YWRhfGVufDB8fHx8MTc1NzY2NzI2MXww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'medu vada' },
     { id: 12, name: 'Pizza', price: 120, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwaXp6YXxlbnwwfHx8fDE3NTc2NjczNjN8MA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'pizza' },
@@ -93,10 +93,10 @@ export const allCanteenItems = {
 }
 
 export const events = [
-  { id: 1, title: 'AI & The Future', category: 'Workshops', date: 'Dec 15', image: 'https://images.unsplash.com/photo-1694903110330-cc64b7e1d21d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxBSSUyMHxlbnwwfHx8fDE3NTc2NjkzNzR8MA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'AI workshop' },
-  { id: 2, title: 'Encore - Music Fest', category: 'Cultural', date: 'Dec 18', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxNdXNpYyUyMEZlc3R8ZW58MHx8fHwxNzU3NjY5NDA0fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'music festival' },
-  { id: 3, title: 'Hackathon 5.0', category: 'Tech', date: 'Dec 20', image: 'https://picsum.photos/seed/eventhack/600/400', dataAiHint: 'hackathon event' },
-  { id: 4, title: 'University Soccer League', category: 'Sports', date: 'Dec 22', image: 'https://picsum.photos/seed/eventsoccer/600/400', dataAiHint: 'soccer match' },
+  { id: 1, title: 'AI & The Future', category: 'Workshops', date: 'Dec 15', image: 'https://images.unsplash.com/photo-1694903110330-cc64b7e1d21d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxBSSUyMHxlbnwwfHx8fDE3NTc1Nzk3ODB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'AI workshop' },
+  { id: 2, title: 'Encore - Music Fest', category: 'Cultural', date: 'Dec 18', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtdXNpYyUyMGZlc3R8ZW58MHx8fHwxNzU3NjY5NTM2fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'music festival' },
+  { id: 3, title: 'Hackathon 5.0', category: 'Tech', date: 'Dec 20', image: 'https://images.unsplash.com/photo-1637073849667-91120a924221?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoYWNrYXRob258ZW58MHx8fHwxNzU3NjY5NDQ5fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'hackathon event' },
+  { id: 4, title: 'University Soccer League', category: 'Sports', date: 'Dec 22', image: 'https://images.unsplash.com/photo-1583027383321-51847ab7ada0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8U29jY2VyJTIwTGVhZ3VlfGVufDB8fHx8MTc1NzY2OTU1OHww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'soccer match' },
 ];
 
 export const resources = [
