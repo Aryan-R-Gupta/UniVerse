@@ -14,7 +14,7 @@ const testimonials = [
       quote: "UniVerse helped me find my team for our winning hackathon project.",
       name: "Sameer B.",
       title: "2nd Year, Design",
-      avatarUrl: "https://picsum.photos/seed/sameer/100/100",
+      avatarUrl: "https://images.unsplash.com/photo-1718209881014-83732ea8376d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxidXNpbmVzcyUyMG1hbiUyMHxlbnwwfHx8fDE3NTc2OTQ1ODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
       dataAiHint: "student avatar"
     },
     {
@@ -79,7 +79,7 @@ export default function LandingPage() {
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
               <div className="flex flex-col justify-center space-y-6">
                 <div className="space-y-4">
-                  <h1 className="text-4xl font-extrabold font-headline tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none text-foreground">
+                  <h1 className="text-4xl font-extrabold font-headline tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none text-black dark:text-white">
                     Your entire campus, connected in one app.
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
@@ -214,5 +214,3 @@ export default function LandingPage() {
     </div>
   );
 }
-
-    
