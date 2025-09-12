@@ -1,11 +1,16 @@
+
 'use client';
+import { useActionState, useEffect, useRef } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useState } from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { allCanteenItems } from "@/lib/data";
-import { Plus, Minus, ShoppingCart } from "lucide-react";
+import { Plus, Minus, ShoppingCart, Loader2 } from "lucide-react";
 import Image from "next/image";
+import { placeOrder, type OrderState } from './actions';
+import { useToast } from '@/hooks/use-toast';
 
 type CartItem = {
   id: number;
@@ -14,17 +19,16 @@ type CartItem = {
   quantity: number;
 };
 
-function CanteenItemCard({ item, addToCart }: { item: { id: number; name: string; price: number; image: string; dataAiHint: string }, addToCart: (item: any) => void }) {
-  const [quantity, setQuantity] = useState(0);
+function CanteenItemCard({ item, cart, addToCart }: { item: { id: number; name: string; price: number; image: string; dataAiHint: string }, cart: CartItem[], addToCart: (item: any) => void }) {
+  const cartItem = cart.find(ci => ci.id === item.id);
+  const quantity = cartItem ? cartItem.quantity : 0;
 
-  const handleAddToCart = () => {
-    if (quantity > 0) {
-      addToCart({ ...item, quantity });
-      setQuantity(0);
-    } else {
-        setQuantity(1);
-        addToCart({ ...item, quantity: 1});
-    }
+  const handleUpdateQuantity = (newQuantity: number) => {
+    addToCart({ ...item, quantity: newQuantity });
+  };
+  
+  const handleInitialAdd = () => {
+    handleUpdateQuantity(1);
   };
 
   return (
@@ -37,24 +41,16 @@ function CanteenItemCard({ item, addToCart }: { item: { id: number; name: string
       <CardFooter className="p-2">
         {quantity > 0 ? (
           <div className="flex items-center justify-between w-full">
-            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => {
-                const newQuantity = quantity - 1;
-                setQuantity(newQuantity);
-                addToCart({ ...item, quantity: newQuantity });
-            }}>
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleUpdateQuantity(quantity - 1)}>
               <Minus className="h-4 w-4" />
             </Button>
             <span className="font-bold text-lg">{quantity}</span>
-            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => {
-                const newQuantity = quantity + 1;
-                setQuantity(newQuantity);
-                addToCart({ ...item, quantity: newQuantity });
-            }}>
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleUpdateQuantity(quantity + 1)}>
               <Plus className="h-4 w-4" />
             </Button>
           </div>
         ) : (
-          <Button className="w-full" variant="outline" onClick={handleAddToCart}>
+          <Button className="w-full" variant="outline" onClick={handleInitialAdd}>
             Add
           </Button>
         )}
@@ -63,17 +59,41 @@ function CanteenItemCard({ item, addToCart }: { item: { id: number; name: string
   );
 }
 
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" disabled={pending}>
+            {pending ? (
+                <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Placing order...
+                </>
+            ) : (
+                <>
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    Checkout
+                </>
+            )}
+        </Button>
+    )
+}
+
 
 export default function CanteenPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const initialState: OrderState = { message: null, errors: null };
+  const [state, dispatch] = useActionState(placeOrder, initialState);
   
   const handleAddToCart = (itemToAdd: CartItem) => {
     setCart(prevCart => {
       const existingItem = prevCart.find(item => item.id === itemToAdd.id);
+      if (itemToAdd.quantity === 0) {
+        return prevCart.filter(item => item.id !== itemToAdd.id);
+      }
       if (existingItem) {
-        if(itemToAdd.quantity === 0) {
-            return prevCart.filter(item => item.id !== itemToAdd.id);
-        }
         return prevCart.map(item =>
           item.id === itemToAdd.id ? { ...item, quantity: itemToAdd.quantity } : item
         );
@@ -82,6 +102,25 @@ export default function CanteenPage() {
       }
     });
   };
+
+  useEffect(() => {
+    if (state.message) {
+      if (state.errors) {
+        toast({
+          variant: 'destructive',
+          title: 'Error placing order',
+          description: state.message,
+        });
+      } else {
+        toast({
+          title: 'Order Placed!',
+          description: state.message,
+        });
+        setCart([]); // Clear the cart on successful order
+        formRef.current?.reset();
+      }
+    }
+  }, [state, toast]);
 
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
   const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -97,17 +136,17 @@ export default function CanteenPage() {
         </TabsList>
         <TabsContent value="snacks">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {allCanteenItems.snacks.map(item => <CanteenItemCard key={item.id} item={item} addToCart={handleAddToCart} />)}
+            {allCanteenItems.snacks.map(item => <CanteenItemCard key={item.id} item={item} cart={cart} addToCart={handleAddToCart} />)}
           </div>
         </TabsContent>
         <TabsContent value="drinks">
            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {allCanteenItems.drinks.map(item => <CanteenItemCard key={item.id} item={item} addToCart={handleAddToCart} />)}
+            {allCanteenItems.drinks.map(item => <CanteenItemCard key={item.id} item={item} cart={cart} addToCart={handleAddToCart} />)}
           </div>
         </TabsContent>
         <TabsContent value="meals">
            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {allCanteenItems.meals.map(item => <CanteenItemCard key={item.id} item={item} addToCart={handleAddToCart} />)}
+            {allCanteenItems.meals.map(item => <CanteenItemCard key={item.id} item={item} cart={cart} addToCart={handleAddToCart} />)}
           </div>
         </TabsContent>
       </Tabs>
@@ -121,10 +160,11 @@ export default function CanteenPage() {
                   <p className="font-semibold">{totalItems} items | ₹{totalPrice}</p>
                   <p className="text-sm opacity-80">Ready to checkout?</p>
                 </div>
-                <Button variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90">
-                  <ShoppingCart className="mr-2 h-4 w-4" />
-                  Checkout
-                </Button>
+                 <form action={dispatch} ref={formRef}>
+                    <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+                    <input type="hidden" name="totalPrice" value={totalPrice} />
+                    <SubmitButton />
+                </form>
               </CardContent>
             </Card>
           </div>
