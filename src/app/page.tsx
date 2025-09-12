@@ -3,6 +3,33 @@ import { ArrowRight, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Card, CardContent } from '@/components/ui/card';
+
+
+const testimonials = [
+    {
+      quote: "UniVerse helped me find my team for our winning hackathon project.",
+      name: "Sameer B.",
+      title: "2nd Year, Design",
+      avatarUrl: "https://picsum.photos/seed/sameer/100/100",
+      dataAiHint: "student avatar"
+    },
+    {
+      quote: "Joined 2 clubs in week 1 — game changer!",
+      name: "Anika S.",
+      title: "3rd Year, CS",
+      avatarUrl: "https://picsum.photos/seed/anika/100/100",
+      dataAiHint: "student avatar"
+    },
+    {
+      quote: "The leaderboard adds a fun, competitive edge to campus involvement.",
+      name: "Mihir T.",
+      title: "4th Year, Business",
+      avatarUrl: "https://picsum.photos/seed/mihir/100/100",
+      dataAiHint: "student avatar"
+    },
+  ];
 
 export default function LandingPage() {
   return (
@@ -19,7 +46,7 @@ export default function LandingPage() {
         </nav>
       </header>
 
-      <main className="flex-1 flex items-center">
+      <main className="flex-1">
         <section className="w-full py-12 md:py-24">
           <div className="container px-4 md:px-6">
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
@@ -77,6 +104,32 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        <section className="w-full py-12 md:py-24 bg-white/50">
+          <div className="container px-4 md:px-6">
+            <h2 className="text-3xl font-bold tracking-tighter text-center mb-12">Loved by students nationwide</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <Card key={index} className="bg-background/80 backdrop-blur-sm border-gray-200/50 shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                  <CardContent className="p-6">
+                    <p className="text-gray-700 mb-6">"{testimonial.quote}"</p>
+                    <div className="flex items-center gap-4">
+                      <Avatar className="h-12 w-12 border-2 border-white">
+                        <AvatarImage src={testimonial.avatarUrl} alt={testimonial.name} data-ai-hint={testimonial.dataAiHint} />
+                        <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                        <p className="text-sm text-gray-500">{testimonial.title}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
       </main>
 
       <div className="w-full py-4 bg-white/50 backdrop-blur-sm shadow-inner overflow-hidden group">
