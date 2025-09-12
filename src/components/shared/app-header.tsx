@@ -62,10 +62,14 @@ export function AppHeader() {
           <DropdownMenuSeparator />
           <Link href="/profile">
             <DropdownMenuItem>
-                Settings
+                Profile
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          <Link href="/support">
+            <DropdownMenuItem>
+                Support
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Logout</DropdownMenuItem>
         </DropdownMenuContent>
