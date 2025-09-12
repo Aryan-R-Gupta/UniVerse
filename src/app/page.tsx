@@ -1,10 +1,10 @@
 
-import { ArrowRight, GraduationCap } from 'lucide-react';
+import { ArrowRight, GraduationCap, LayoutGrid, Cpu, Users, CalendarCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 
 const testimonials = [
@@ -30,6 +30,30 @@ const testimonials = [
       dataAiHint: "student avatar"
     },
   ];
+
+const features = [
+    {
+        icon: <LayoutGrid className="h-8 w-8 text-primary" />,
+        title: "Unified Hub",
+        description: "Access everything from your timetable to canteen orders in one central place. No more switching between different apps.",
+    },
+    {
+        icon: <Cpu className="h-8 w-8 text-primary" />,
+        title: "AI-Powered Assistance",
+        description: "Get smart recommendations, navigate campus with AI guidance, and discover your unique campus persona.",
+    },
+    {
+        icon: <Users className="h-8 w-8 text-primary" />,
+        title: "Community Connection",
+        description: "Easily find and register for events, join clubs, and connect with fellow students who share your interests.",
+    },
+    {
+        icon: <CalendarCheck className="h-8 w-8 text-primary" />,
+        title: "Effortless Management",
+        description: "Book study rooms, manage your schedule, and pre-order meals with just a few taps. Save time and stay organized.",
+    }
+];
+
 
 export default function LandingPage() {
   return (
@@ -123,6 +147,32 @@ export default function LandingPage() {
                         <p className="text-sm text-gray-500">{testimonial.title}</p>
                       </div>
                     </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+         <section className="w-full py-12 md:py-24">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Why Choose UniVerse?</h2>
+                <p className="max-w-[700px] text-gray-600 md:text-xl/relaxed">
+                    UniVerse is designed to make your campus life simpler, more connected, and more engaging.
+                </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {features.map((feature, index) => (
+                <Card key={index} className="bg-transparent border-0 shadow-none">
+                  <CardHeader className="items-center text-center">
+                    <div className="p-3 rounded-full bg-blue-100 mb-2">
+                        {feature.icon}
+                    </div>
+                    <CardTitle>{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <p className="text-gray-600">{feature.description}</p>
                   </CardContent>
                 </Card>
               ))}
