@@ -1,11 +1,18 @@
 
-import { ArrowRight, GraduationCap, LayoutGrid, Cpu, Users, CalendarCheck } from 'lucide-react';
+
+import { ArrowRight, GraduationCap, LayoutGrid, Cpu, Users, CalendarCheck, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/shared/theme-toggle';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 
 const testimonials = [
@@ -62,9 +69,34 @@ export default function LandingPage() {
       <header className="px-4 lg:px-8 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center justify-center gap-2">
           <GraduationCap className="h-7 w-7 text-primary" />
-          <span className="font-bold text-xl text-foreground tracking-tight">UniVerse</span>
+          <span className="font-bold text-xl text-black dark:text-white tracking-tight">UniVerse</span>
         </Link>
         <nav className="flex items-center gap-2 sm:gap-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <LogIn className="h-5 w-5" />
+                <span className="sr-only">Toggle login menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <Link href="/login/student">
+                <DropdownMenuItem>
+                    Student Login
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/login/teacher">
+                <DropdownMenuItem>
+                    Teacher Login
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/login/administrator">
+                <DropdownMenuItem>
+                    Administrator Login
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <ThemeToggle />
           <Button asChild className="rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Link href="/dashboard">Get Started</Link>
@@ -153,7 +185,7 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold tracking-tighter text-center mb-12 text-foreground">Loved by students nationwide</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((testimonial, index) => (
-                <Card key={index} className="bg-background/80 backdrop-blur-sm border shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                <Card key={index} className="bg-card border border-black/10 backdrop-blur-sm shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
                   <CardContent className="p-6">
                     <p className="text-muted-foreground mb-6">"{testimonial.quote}"</p>
                     <div className="flex items-center gap-4">
