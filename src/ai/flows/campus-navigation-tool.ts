@@ -19,7 +19,7 @@ export type CampusNavigationInput = z.infer<typeof CampusNavigationInputSchema>;
 
 const CampusNavigationOutputSchema = z.object({
   directions: z.string().describe('Step-by-step directions to the location.'),
-  distance: z.string().describe('The estimated distance to the location.'),
+  distance: z.string().describe('The estimated distance to the location in meters or kilometers.'),
   estimatedTime: z.string().describe('The estimated travel time to the location.'),
 });
 export type CampusNavigationOutput = z.infer<typeof CampusNavigationOutputSchema>;
@@ -32,7 +32,7 @@ const navigateCampusPrompt = ai.definePrompt({
   name: 'navigateCampusPrompt',
   input: {schema: CampusNavigationInputSchema},
   output: {schema: CampusNavigationOutputSchema},
-  prompt: `You are a campus navigation expert. A student is at {{currentLocation}} and wants to go to {{location}}. Provide clear, step-by-step directions, the estimated distance, and the estimated travel time to reach the destination.
+  prompt: `You are a campus navigation expert. A student is at {{currentLocation}} and wants to go to {{location}}. Provide clear, step-by-step directions, the estimated distance (in meters or kilometers), and the estimated travel time to reach the destination.
 `,
 });
 
