@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { nextClass, canteenItems, upcomingEvent, activeBookings } from "@/lib/data";
@@ -60,7 +61,9 @@ export function SnapshotCards() {
             <CardDescription>{upcomingEvent.title}</CardDescription>
           </CardHeader>
           <CardContent>
-             <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">Register</Button>
+             <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+                <Link href={`/events/${upcomingEvent.slug}/register`}>Register</Link>
+             </Button>
           </CardContent>
         </Card>
 
