@@ -74,6 +74,24 @@ export function SnapshotCards() {
           </CardFooter>
         </Card>
 
+        {/* Upcoming Event Card (for Students and Teachers) */}
+        {(userType === 'Student' || userType === 'Teacher') && (
+            <Card className="min-w-[300px] flex-shrink-0 overflow-hidden">
+                <CardHeader>
+                    <CardTitle>Upcoming Event</CardTitle>
+                    <CardDescription>{upcomingEvent.title}</CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                    <Image src={upcomingEvent.image} alt={upcomingEvent.title} width={300} height={150} className="w-full h-24 object-cover" data-ai-hint={upcomingEvent.dataAiHint} />
+                </CardContent>
+                <CardFooter className="p-4">
+                    <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white">
+                        <Link href={`/events/${upcomingEvent.slug}/register`}>Register</Link>
+                    </Button>
+                </CardFooter>
+            </Card>
+        )}
+
         {/* Active Bookings Card */}
         <Card className="min-w-[300px] flex-shrink-0">
           <CardHeader>
