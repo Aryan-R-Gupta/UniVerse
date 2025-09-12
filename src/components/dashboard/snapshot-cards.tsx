@@ -92,22 +92,24 @@ export function SnapshotCards() {
             </Card>
         )}
 
-        {/* Active Bookings Card */}
-        <Card className="min-w-[300px] flex-shrink-0">
-          <CardHeader>
-            <CardTitle>Active Bookings</CardTitle>
-            <CardDescription>Your reserved resources</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold">{activeBookings.count}</p>
-            <p className="text-muted-foreground">bookings today</p>
-          </CardContent>
-          <CardFooter>
-             <Button asChild variant="secondary" className="w-full">
-              <Link href="/resources">View All</Link>
-            </Button>
-          </CardFooter>
-        </Card>
+        {/* Active Bookings Card (not for students) */}
+        {userType !== 'Student' && (
+          <Card className="min-w-[300px] flex-shrink-0">
+            <CardHeader>
+              <CardTitle>Active Bookings</CardTitle>
+              <CardDescription>Your reserved resources</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-4xl font-bold">{activeBookings.count}</p>
+              <p className="text-muted-foreground">bookings today</p>
+            </CardContent>
+            <CardFooter>
+              <Button asChild variant="secondary" className="w-full">
+                <Link href="/resources">View All</Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        )}
       </div>
     </div>
   );
