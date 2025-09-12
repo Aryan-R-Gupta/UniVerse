@@ -78,7 +78,7 @@ export const allCanteenItems = {
     { id: 8, name: 'Fried Rice', price: 50, image: 'https://images.unsplash.com/photo-1596560548464-f010549b84d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcmllZCUyMHJpY2V8ZW58MHx8fHwxNzU3NjY3MDY3fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'fried rice' },
     { id: 9, name: 'Vada Pav', price: 15, image: 'https://images.unsplash.com/photo-1750767397012-3413ba4fdbc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8dmFkYSUyMHBhdnxlbnwwfHx8fDE3NTc2NjcxMzZ8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'vada pav' },
     { id: 10, name: 'Idli', price: 30, image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpZGxpfGVufDB8fHx8MTc1NzY2NzE1OHww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'idli' },
-    { id: 11, name: 'Medu Vada', price: 35, image: 'https://picsum.photos/seed/meduvada/200/200', dataAiHint: 'medu vada' },
+    { id: 11, name: 'Medu Vada', price: 35, image: 'https://images.unsplash.com/photo-1730191843435-073792ba22bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2YWRhfGVufDB8fHx8MTc1NzY2NzI2MXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'medu vada' },
     { id: 12, name: 'Upma', price: 25, image: 'https://picsum.photos/seed/upma/200/200', dataAiHint: 'upma' },
     { id: 13, name: 'Poha', price: 25, image: 'https://picsum.photos/seed/poha/200/200', dataAiHint: 'poha' },
   ],
