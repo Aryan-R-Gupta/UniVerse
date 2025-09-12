@@ -34,8 +34,8 @@ export const nextClass = {
 };
 
 export const canteenItems = [
-  { name: 'Veg Burger', price: 60, image: 'https://picsum.photos/seed/burger/200/200', dataAiHint: 'veg burger' },
-  { name: 'Iced Coffee', price: 80, image: 'https://picsum.photos/seed/coffee/200/200', dataAiHint: 'iced coffee' },
+  { name: 'Veg Burger', price: 60, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXJnZXJ8ZW58MHx8fHwxNzU3NjY3Mzc4fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'veg burger' },
+  { name: 'Iced Coffee', price: 80, image: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpY2VkJTIwY29mZmVlfGVufDB8fHx8MTc1NzY2ODkxOXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'iced coffee' },
   { name: 'Fries', price: 40, image: 'https://picsum.photos/seed/fries/200/200', dataAiHint: 'fries' },
 ];
 
