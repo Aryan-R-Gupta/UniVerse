@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -12,7 +13,7 @@ function AppSidebarContent() {
     return (
         <>
             <div className="flex h-16 items-center border-b px-6">
-              <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
+              <Link href="/" className="flex items-center gap-2 font-semibold">
                 <GraduationCap className="h-6 w-6 text-primary" />
                 <span className="">UniVerse</span>
               </Link>
