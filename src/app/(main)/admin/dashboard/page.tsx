@@ -44,14 +44,29 @@ async function getFeedback(): Promise<Feedback[]> {
   return feedbackList;
 }
 
+async function getSupportTickets(): Promise<SupportTicket[]> {
+  const db = getFirestore(app);
+  const ticketsCol = collection(db, 'support-tickets');
+  const q = query(ticketsCol, orderBy('createdAt', 'desc'), limit(5));
+  const ticketsSnapshot = await getDocs(q);
+  const ticketsList = ticketsSnapshot.docs.map(doc => {
+    const data = doc.data();
+    const createdAt = data.createdAt as Timestamp;
+    return {
+      id: doc.id,
+      subject: data.subject,
+      user: data.userEmail, // Assuming the field is userEmail in Firestore
+      status: data.status,
+      createdAt: createdAt ? formatDistanceToNow(createdAt.toDate(), { addSuffix: true }) : 'Just now',
+    };
+  });
+  return ticketsList;
+}
 
-const mockSupportTickets = [
-    { id: 1, subject: "Can't register for event", user: "payal.soni@universe.edu", status: "Open", createdAt: "1 day ago" },
-    { id: 2, subject: "Payment failed for canteen", user: "kanksha.d@universe.edu", status: "Closed", createdAt: "4 days ago" },
-];
 
 export default async function AdminDashboardPage() {
   const latestFeedback = await getFeedback();
+  const supportTickets = await getSupportTickets();
 
   return (
     <div className="space-y-8">
@@ -142,10 +157,10 @@ export default async function AdminDashboardPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {mockSupportTickets.map(ticket => (
+                        {supportTickets.map(ticket => (
                             <TableRow key={ticket.id}>
                                 <TableCell className="font-medium truncate max-w-40">{ticket.subject}</TableCell>
-                                <TableCell><Badge variant={ticket.status === 'Open' ? 'destructive' : 'default'}>{ticket.status}</Badge></TableCell>
+                                <TableCell><Badge variant={ticket.status === 'open' ? 'destructive' : 'default'}>{ticket.status}</Badge></TableCell>
                                 <TableCell className="text-right">{ticket.user}</TableCell>
                             </TableRow>
                         ))}
