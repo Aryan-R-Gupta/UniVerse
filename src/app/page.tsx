@@ -27,7 +27,7 @@ const testimonials = [
       quote: "Joined 2 clubs in week 1 — game changer!",
       name: "Anika S.",
       title: "3rd Year, CS",
-      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHdvbWVufGVufDB8fHx8fDE3NTc2OTQ2MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHdvbWufGVufDB8fHx8fDE3NTc2OTQ2MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       dataAiHint: "student avatar"
     },
     {
