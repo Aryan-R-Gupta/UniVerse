@@ -1,8 +1,7 @@
 
 'use client';
-import { useActionState, useEffect, useRef } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { useState } from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,52 +11,20 @@ import Image from "next/image";
 import { placeOrder, type OrderState } from './actions';
 import { useToast } from '@/hooks/use-toast';
 
+type CanteenItem = {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  dataAiHint: string;
+};
+
 type CartItem = {
   id: number;
   name: string;
   price: number;
   quantity: number;
 };
-
-function CanteenItemCard({ item, cart, addToCart }: { item: { id: number; name: string; price: number; image: string; dataAiHint: string }, cart: CartItem[], addToCart: (item: any) => void }) {
-  const cartItem = cart.find(ci => ci.id === item.id);
-  const quantity = cartItem ? cartItem.quantity : 0;
-
-  const handleUpdateQuantity = (newQuantity: number) => {
-    addToCart({ ...item, quantity: newQuantity });
-  };
-  
-  const handleInitialAdd = () => {
-    handleUpdateQuantity(1);
-  };
-
-  return (
-    <Card className="overflow-hidden">
-      <Image src={item.image} alt={item.name} width={200} height={200} className="w-full h-32 object-cover" data-ai-hint={item.dataAiHint} />
-      <CardContent className="p-4">
-        <h3 className="font-semibold truncate">{item.name}</h3>
-        <p className="text-muted-foreground">₹{item.price}</p>
-      </CardContent>
-      <CardFooter className="p-2">
-        {quantity > 0 ? (
-          <div className="flex items-center justify-between w-full">
-            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleUpdateQuantity(quantity - 1)}>
-              <Minus className="h-4 w-4" />
-            </Button>
-            <span className="font-bold text-lg">{quantity}</span>
-            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => handleUpdateQuantity(quantity + 1)}>
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-        ) : (
-          <Button className="w-full" variant="outline" onClick={handleInitialAdd}>
-            Add
-          </Button>
-        )}
-      </CardFooter>
-    </Card>
-  );
-}
 
 function SubmitButton() {
     const { pending, data } = useFormStatus();
@@ -77,7 +44,39 @@ function SubmitButton() {
                 </>
             )}
         </Button>
-    )
+    );
+}
+
+function CanteenItemCard({ item, cart, updateCart }: { item: CanteenItem, cart: CartItem[], updateCart: (item: CanteenItem, quantity: number) => void }) {
+  const cartItem = cart.find(ci => ci.id === item.id);
+  const quantity = cartItem?.quantity ?? 0;
+
+  return (
+    <Card className="overflow-hidden">
+      <Image src={item.image} alt={item.name} width={200} height={200} className="w-full h-32 object-cover" data-ai-hint={item.dataAiHint} />
+      <CardContent className="p-4">
+        <h3 className="font-semibold truncate">{item.name}</h3>
+        <p className="text-muted-foreground">₹{item.price}</p>
+      </CardContent>
+      <CardFooter className="p-2">
+        {quantity > 0 ? (
+          <div className="flex items-center justify-between w-full">
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => updateCart(item, quantity - 1)}>
+              <Minus className="h-4 w-4" />
+            </Button>
+            <span className="font-bold text-lg">{quantity}</span>
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => updateCart(item, quantity + 1)}>
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : (
+          <Button className="w-full" variant="outline" onClick={() => updateCart(item, 1)}>
+            Add
+          </Button>
+        )}
+      </CardFooter>
+    </Card>
+  );
 }
 
 
@@ -89,19 +88,35 @@ export default function CanteenPage() {
   const initialState: OrderState = { message: '', success: false };
   const [state, dispatch] = useActionState(placeOrder, initialState);
   
-  const handleAddToCart = (itemToAdd: CartItem) => {
+  const handleUpdateCart = (itemToUpdate: CanteenItem, newQuantity: number) => {
     setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.id === itemToAdd.id);
-      if (itemToAdd.quantity === 0) {
-        return prevCart.filter(item => item.id !== itemToAdd.id);
+      const existingItemIndex = prevCart.findIndex(item => item.id === itemToUpdate.id);
+
+      // Remove item if quantity is 0 or less
+      if (newQuantity <= 0) {
+        if (existingItemIndex > -1) {
+          const updatedCart = [...prevCart];
+          updatedCart.splice(existingItemIndex, 1);
+          return updatedCart;
+        }
+        return prevCart;
       }
-      if (existingItem) {
-        return prevCart.map(item =>
-          item.id === itemToAdd.id ? { ...item, quantity: itemToAdd.quantity } : item
-        );
-      } else {
-        return [...prevCart, itemToAdd];
+
+      // Update quantity if item exists
+      if (existingItemIndex > -1) {
+        const updatedCart = [...prevCart];
+        updatedCart[existingItemIndex] = { ...updatedCart[existingItemIndex], quantity: newQuantity };
+        return updatedCart;
       }
+      
+      // Add new item if it doesn't exist
+      const newItem: CartItem = {
+          id: itemToUpdate.id,
+          name: itemToUpdate.name,
+          price: itemToUpdate.price,
+          quantity: newQuantity,
+      };
+      return [...prevCart, newItem];
     });
   };
 
@@ -127,6 +142,12 @@ export default function CanteenPage() {
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
   const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
+  const renderCanteenItems = (items: CanteenItem[]) => (
+     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {items.map(item => <CanteenItemCard key={item.id} item={item} cart={cart} updateCart={handleUpdateCart} />)}
+      </div>
+  );
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Canteen</h1>
@@ -137,19 +158,13 @@ export default function CanteenPage() {
           <TabsTrigger value="meals">Meals</TabsTrigger>
         </TabsList>
         <TabsContent value="snacks">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {allCanteenItems.snacks.map(item => <CanteenItemCard key={item.id} item={item} cart={cart} addToCart={handleAddToCart} />)}
-          </div>
+          {renderCanteenItems(allCanteenItems.snacks)}
         </TabsContent>
         <TabsContent value="drinks">
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {allCanteenItems.drinks.map(item => <CanteenItemCard key={item.id} item={item} cart={cart} addToCart={handleAddToCart} />)}
-          </div>
+           {renderCanteenItems(allCanteenItems.drinks)}
         </TabsContent>
         <TabsContent value="meals">
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {allCanteenItems.meals.map(item => <CanteenItemCard key={item.id} item={item} cart={cart} addToCart={handleAddToCart} />)}
-          </div>
+           {renderCanteenItems(allCanteenItems.meals)}
         </TabsContent>
       </Tabs>
 
