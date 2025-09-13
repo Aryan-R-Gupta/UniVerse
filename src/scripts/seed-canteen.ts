@@ -1,6 +1,6 @@
 
 // To run this script, use the following command in your terminal:
-// npx tsx src/scripts/seed-canteen.ts
+// npm run seed:canteen
 
 import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
