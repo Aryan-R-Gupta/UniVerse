@@ -46,8 +46,8 @@ async function getSalesData(): Promise<SalesData[]> {
 async function getTopItems(): Promise<TopItem[]> {
   const db = getFirestore(app);
   const itemsCol = collection(db, 'canteen-items');
-  // Example: fetching top 4 items by total revenue
-  const q = query(itemsCol, orderBy('totalRevenue', 'desc'), limit(4));
+  // Fetching top 4 items by items sold
+  const q = query(itemsCol, orderBy('itemsSold', 'desc'), limit(4));
   const itemsSnapshot = await getDocs(q);
   const itemsList = itemsSnapshot.docs.map(doc => ({
     id: doc.id,
@@ -111,7 +111,7 @@ export default function CanteenAnalyticsPage() {
        <Card>
             <CardHeader>
                 <CardTitle>Top Selling Items</CardTitle>
-                <CardDescription>Most popular items by revenue.</CardDescription>
+                <CardDescription>Most popular items by quantity sold.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>
