@@ -12,6 +12,7 @@ import { getFirestore, collection, getDocs, query, orderBy, limit, where } from 
 import { app } from '@/lib/firebase';
 import { format } from 'date-fns';
 import { Skeleton } from "@/components/ui/skeleton";
+import { events as staticEvents } from "@/lib/data";
 
 type RegistrationData = {
   date: string;
@@ -68,24 +69,22 @@ async function getRegistrationData(): Promise<RegistrationData[]> {
 
 async function getEventPerformance(): Promise<EventPerformance[]> {
   const db = getFirestore(app);
-  const eventsCol = collection(db, 'events'); // Assuming an 'events' collection
   const registrationsCol = collection(db, 'event-registrations');
 
-  const eventsSnapshot = await getDocs(query(eventsCol, orderBy('date', 'desc'), limit(4)));
   const performanceList: EventPerformance[] = [];
 
-  for (const eventDoc of eventsSnapshot.docs) {
-    const eventData = eventDoc.data();
-    const eventId = eventDoc.id;
+  // Use the static events data as the source of truth for events
+  const recentEvents = staticEvents.slice(0, 4);
 
-    const registrationsQuery = query(registrationsCol, where('eventId', '==', eventId));
+  for (const event of recentEvents) {
+    const registrationsQuery = query(registrationsCol, where('eventId', '==', event.id));
     const registrationsSnapshot = await getDocs(registrationsQuery);
     const registrations = registrationsSnapshot.size;
 
     performanceList.push({
-      id: eventId,
-      name: eventData.title,
-      category: eventData.category,
+      id: String(event.id),
+      name: event.title,
+      category: event.category,
       registrations: registrations,
       // Mocking attendance and feedback for demonstration
       attendance: Math.floor(registrations * (Math.random() * (0.9 - 0.7) + 0.7)),
