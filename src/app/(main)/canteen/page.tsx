@@ -60,9 +60,11 @@ function CanteenItemCard({ item, cart, addToCart }: { item: { id: number; name: 
 }
 
 function SubmitButton() {
-    const { pending } = useFormStatus();
+    const { pending, data } = useFormStatus();
+    const cartIsEmpty = data?.get('cart') === '[]';
+
     return (
-        <Button type="submit" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" disabled={pending || useFormStatus().data?.get('cart') === '[]'}>
+        <Button type="submit" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" disabled={pending || cartIsEmpty}>
             {pending ? (
                 <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
