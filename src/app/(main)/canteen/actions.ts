@@ -31,57 +31,76 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
     return { message: 'Cart data is missing.', success: false };
   }
 
+  let validatedFields;
   try {
     const cart = JSON.parse(cartString);
     const totalPrice = JSON.parse(totalPriceString);
-
-    const validatedFields = PlaceOrderSchema.safeParse({ cart, totalPrice });
+    validatedFields = PlaceOrderSchema.safeParse({ cart, totalPrice });
 
     if (!validatedFields.success) {
+      console.error(validatedFields.error);
       return {
         message: 'Validation failed. Please check your cart.',
         success: false,
       };
     }
+  } catch (e) {
+    console.error("Failed to parse cart data", e);
+    return { message: 'Invalid cart format.', success: false };
+  }
 
-    const { cart: orderItems, totalPrice: finalPrice } = validatedFields.data;
-    const db = getFirestore(app);
+  const { cart: orderItems, totalPrice: finalPrice } = validatedFields.data;
+  const db = getFirestore(app);
 
+  try {
     await runTransaction(db, async (transaction) => {
-        // 1. Add the order to the 'canteen-orders' collection
-        const ordersCol = collection(db, 'canteen-orders');
-        addDoc(ordersCol, {
-            userEmail: userProfileData.email,
-            items: orderItems,
-            totalPrice: finalPrice,
-            createdAt: serverTimestamp(),
-        });
-    
-        // 2. Add the total sale to the 'canteen-sales' collection for analytics
-        const salesCol = collection(db, 'canteen-sales');
-        addDoc(salesCol, {
-            sales: finalPrice,
-            date: serverTimestamp(),
-            itemCount: orderItems.reduce((acc, item) => acc + item.quantity, 0)
-        });
+      const ordersCol = collection(db, 'canteen-orders');
+      const salesCol = collection(db, 'canteen-sales');
+      
+      // 1. Create a new document reference for the order and set it within the transaction
+      const newOrderRef = doc(ordersCol);
+      transaction.set(newOrderRef, {
+        userEmail: userProfileData.email,
+        items: orderItems,
+        totalPrice: finalPrice,
+        createdAt: serverTimestamp(),
+      });
+  
+      // 2. Create a new document reference for the sales record and set it
+      const newSaleRef = doc(salesCol);
+      transaction.set(newSaleRef, {
+        sales: finalPrice,
+        date: serverTimestamp(),
+        itemCount: orderItems.reduce((acc, item) => acc + item.quantity, 0)
+      });
 
-        // 3. Update the total revenue and items sold for each item in 'canteen-items'
-        for (const item of orderItems) {
-            const itemRef = doc(db, 'canteen-items', `item-${item.id}`);
-            const itemDoc = await transaction.get(itemRef);
+      // 3. Update the total revenue and items sold for each item
+      for (const item of orderItems) {
+        const itemRef = doc(db, 'canteen-items', `item-${item.id}`);
+        
+        // You must read the document inside the transaction before you can write to it.
+        const itemDoc = await transaction.get(itemRef);
 
-            if (itemDoc.exists()) {
-                const currentRevenue = itemDoc.data().totalRevenue || 0;
-                const currentItemsSold = itemDoc.data().itemsSold || 0;
-
-                transaction.update(itemRef, {
-                    totalRevenue: currentRevenue + (item.price * item.quantity),
-                    itemsSold: currentItemsSold + item.quantity
-                });
-            } else {
-                console.warn(`Canteen item with ID item-${item.id} not found.`);
-            }
+        if (!itemDoc.exists()) {
+          // If the item doesn't exist in analytics, create it.
+          transaction.set(itemRef, {
+            name: item.name,
+            price: item.price,
+            itemsSold: item.quantity,
+            totalRevenue: item.price * item.quantity,
+            // Assuming category can be derived or is not strictly needed here for the transaction
+          });
+        } else {
+          // If it exists, update it.
+          const currentRevenue = itemDoc.data().totalRevenue || 0;
+          const currentItemsSold = itemDoc.data().itemsSold || 0;
+          
+          transaction.update(itemRef, {
+            totalRevenue: currentRevenue + (item.price * item.quantity),
+            itemsSold: currentItemsSold + item.quantity,
+          });
         }
+      }
     });
 
     return {
