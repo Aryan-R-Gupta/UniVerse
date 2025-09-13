@@ -38,6 +38,7 @@ type UserBooking = {
   resourceName: string;
   timeSlot: string;
   status: string;
+  bookedAt: Timestamp;
 };
 
 async function getUserActivity(userEmail: string) {
@@ -47,8 +48,7 @@ async function getUserActivity(userEmail: string) {
   const eventsQuery = query(
     collection(db, 'event-registrations'), 
     where('email', '==', userEmail),
-    // orderBy('registeredAt', 'desc'), // This requires a composite index. We will sort in-memory instead.
-    limit(5) // Fetch a bit more to sort from
+    limit(5)
   );
   const eventsSnapshot = await getDocs(eventsQuery);
   const registeredEvents: RegisteredEvent[] = eventsSnapshot.docs.map(doc => {
@@ -71,7 +71,6 @@ async function getUserActivity(userEmail: string) {
   const ordersQuery = query(
     collection(db, 'canteen-orders'),
     where('userEmail', '==', userEmail),
-    // orderBy('createdAt', 'desc'), // This was causing the index error
     limit(5)
   );
   const ordersSnapshot = await getDocs(ordersQuery);
@@ -88,16 +87,19 @@ async function getUserActivity(userEmail: string) {
   const bookingsQuery = query(
     collection(db, 'resource-bookings'),
     where('userEmail', '==', userEmail),
-    orderBy('bookedAt', 'desc'),
-    limit(2)
+    limit(5)
   );
   const bookingsSnapshot = await getDocs(bookingsQuery);
-  const userBookings: UserBooking[] = bookingsSnapshot.docs.map(doc => ({
+  const userBookingsData: UserBooking[] = bookingsSnapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
   } as UserBooking));
 
-  return { registeredEvents: sortedEvents, recentOrders: sortedOrders, userBookings };
+  // Sort bookings by date descending and take the latest 2
+  const sortedBookings = userBookingsData.sort((a, b) => b.bookedAt.toDate().getTime() - a.bookedAt.toDate().getTime()).slice(0, 2);
+
+
+  return { registeredEvents: sortedEvents, recentOrders: sortedOrders, userBookings: sortedBookings };
 }
 
 
