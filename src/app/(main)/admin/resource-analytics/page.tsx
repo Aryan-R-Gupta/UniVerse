@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
 import { app } from "@/lib/firebase";
 import { Skeleton } from "@/components/ui/skeleton";
+import { resources as staticResources } from "@/lib/data";
 
 type BookingData = {
   resource: string;
@@ -43,38 +44,47 @@ async function getBookingDistribution(): Promise<BookingData[]> {
 
 async function getResourceUtilization(): Promise<ResourceUtilization[]> {
   const db = getFirestore(app);
-  const resourcesCol = collection(db, 'resources');
   const bookingsCol = collection(db, 'resource-bookings');
-  
-  const resourcesSnapshot = await getDocs(resourcesCol);
-  
-  const utilizationByCategory: { [key: string]: { total: number; booked: number } } = {};
 
-  for (const resourceDoc of resourcesSnapshot.docs) {
-    const resourceData = resourceDoc.data();
-    const category = resourceData.category || 'Other'; // e.g., Study Rooms, Labs
-
-    if (!utilizationByCategory[category]) {
-      utilizationByCategory[category] = { total: 0, booked: 0 };
+  // Use the static resource data since there is no 'resources' collection
+  const resourcesByCategory: { [category: string]: { ids: string[], count: number } } = {};
+  staticResources.forEach(resource => {
+    // For simplicity, we'll derive the category from the name, e.g., "Study Room"
+    const category = resource.name.includes("Room") ? 'Study Rooms' 
+                   : resource.name.includes("Lab") ? 'Labs'
+                   : resource.name.includes("Library") ? 'Libraries'
+                   : resource.name.includes("Court") ? 'Sports Facilities'
+                   : 'Other';
+    if (!resourcesByCategory[category]) {
+      resourcesByCategory[category] = { ids: [], count: 0 };
     }
-    utilizationByCategory[category].total += 1;
+    resourcesByCategory[category].ids.push(resource.id.toString());
+    resourcesByCategory[category].count += 1;
+  });
+
+  const utilizationByCategory: { [key: string]: { total: number; booked: number } } = {};
+  for (const category in resourcesByCategory) {
+    utilizationByCategory[category] = { total: resourcesByCategory[category].count, booked: 0 };
   }
-  
+
+  // Fetch all confirmed bookings
   const bookingsSnapshot = await getDocs(query(bookingsCol, where('status', '==', 'Confirmed')));
 
-  for (const bookingDoc of bookingsSnapshot.docs) {
-      const resourceId = bookingDoc.data().resourceId;
-      // This is simplified. A real app would check booking times.
-      // We find the resource to get its category.
-      const resource = resourcesSnapshot.docs.find(d => d.id === resourceId)?.data();
-      if(resource) {
-        const category = resource.category || 'Other';
-         if (utilizationByCategory[category]) {
-            utilizationByCategory[category].booked += 1;
-        }
-      }
-  }
+  bookingsSnapshot.forEach(doc => {
+    const booking = doc.data();
+    const resourceId = booking.resourceId;
 
+    // Find which category this booked resource belongs to
+    for (const category in resourcesByCategory) {
+      if (resourcesByCategory[category].ids.includes(resourceId)) {
+        if (utilizationByCategory[category]) {
+          utilizationByCategory[category].booked += 1;
+        }
+        break; // Move to the next booking once category is found
+      }
+    }
+  });
+  
   return Object.entries(utilizationByCategory).map(([name, data], index) => ({
     id: String(index + 1),
     name,
@@ -155,18 +165,24 @@ export default function ResourceAnalyticsPage() {
                                     <TableCell className="text-right"><Skeleton className="h-5 w-1/2 ml-auto" /></TableCell>
                                 </TableRow>
                             ))
-                        ) : utilizationData.map(resource => (
-                            <TableRow key={resource.id}>
-                                <TableCell className="font-medium">{resource.name}</TableCell>
-                                <TableCell>{resource.booked} / {resource.total}</TableCell>
-                                <TableCell className="text-right space-y-2">
-                                    <div className="flex items-center justify-end gap-2">
-                                         <span>{resource.utilization}%</span>
-                                        <Progress value={resource.utilization} className="w-24"/>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        ) : utilizationData.length > 0 ? (
+                            utilizationData.map(resource => (
+                                <TableRow key={resource.id}>
+                                    <TableCell className="font-medium">{resource.name}</TableCell>
+                                    <TableCell>{resource.booked} / {resource.total}</TableCell>
+                                    <TableCell className="text-right space-y-2">
+                                        <div className="flex items-center justify-end gap-2">
+                                            <span>{resource.utilization}%</span>
+                                            <Progress value={resource.utilization} className="w-24"/>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                           <TableRow>
+                               <TableCell colSpan={3} className="text-center h-24">No utilization data available.</TableCell>
+                           </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </CardContent>
