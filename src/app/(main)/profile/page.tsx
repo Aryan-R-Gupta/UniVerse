@@ -23,6 +23,7 @@ type RegisteredEvent = {
   title: string;
   date: string;
   category: string;
+  registeredAt: Date;
 };
 
 type RecentOrder = {
@@ -45,8 +46,8 @@ async function getUserActivity(userEmail: string) {
   const eventsQuery = query(
     collection(db, 'event-registrations'), 
     where('email', '==', userEmail),
-    orderBy('registeredAt', 'desc'),
-    limit(2)
+    // orderBy('registeredAt', 'desc'), // This requires a composite index. We will sort in-memory instead.
+    limit(5) // Fetch a bit more to sort from
   );
   const eventsSnapshot = await getDocs(eventsQuery);
   const registeredEvents: RegisteredEvent[] = eventsSnapshot.docs.map(doc => {
@@ -57,8 +58,13 @@ async function getUserActivity(userEmail: string) {
       title: data.eventTitle,
       date: format(registeredAt, 'MMM d'),
       category: data.eventCategory,
+      registeredAt: registeredAt, // Keep the date object for sorting
     }
   });
+
+  // Sort events by date descending and take the latest 2
+  const sortedEvents = registeredEvents.sort((a, b) => b.registeredAt.getTime() - a.registeredAt.getTime()).slice(0, 2);
+
 
   // Fetch Recent Orders
   const ordersQuery = query(
@@ -87,7 +93,7 @@ async function getUserActivity(userEmail: string) {
     ...doc.data()
   } as UserBooking));
 
-  return { registeredEvents, recentOrders, userBookings };
+  return { registeredEvents: sortedEvents, recentOrders, userBookings };
 }
 
 
