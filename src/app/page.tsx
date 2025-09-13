@@ -142,7 +142,7 @@ export default function LandingPage() {
                     data-ai-hint="cute mascot character"
                   />
                   <Image
-                    src="https://images.unsplash.com/photo-1741636174186-3fffe1614c39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8Y29sbGVnZSUyMGV2ZW50c3xlbnwwfHx8fDE3NTc2NzEyMDd8MA&ixlib-rb-4.1.0&q=80&w=1080"
+                    src="https://images.unsplash.com/photo-1741636174186-3fffe1614c39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8Y29sbGVnZSUyMGV2ZW50c3xlbnwwfHx8fDE3NTc2NzEyMDd8MA&ixlib=rb-4.1.0&q=80&w=1080"
                     alt="Floating mascot two"
                     width={150}
                     height={150}
@@ -150,7 +150,7 @@ export default function LandingPage() {
                     data-ai-hint="friendly robot mascot"
                   />
                  <Image
-                  src="https://images.unsplash.com/flagged/photo-1554473675-d0904f3cbf38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8Y29sbGVnZXxlbnwwfHx8fDE3NTc2NzA1MjF8MA&ixlib-rb-4.1.0&q=80&w=1080"
+                  src="https://images.unsplash.com/flagged/photo-1554473675-d0904f3cbf38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8Y29sbGVnZXxlbnwwfHx8fDE3NTc2NzA1MjF8MA&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="App Screenshot"
                   width={400}
                   height={500}
@@ -235,7 +235,7 @@ export default function LandingPage() {
 
       <footer className="w-full py-6 px-4 md:px-6 border-t bg-muted/50 backdrop-blur-sm">
         <div className="container flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">&copy; 2024 UniVerse. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">&copy; 2025 UniVerse. All rights reserved.</p>
           <Link href="/" className="flex items-center justify-center gap-2">
             <GraduationCap className="h-6 w-6 text-primary" />
             <span className="font-bold text-lg text-foreground">UniVerse</span>
