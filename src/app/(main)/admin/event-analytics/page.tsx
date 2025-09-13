@@ -24,8 +24,6 @@ type EventPerformance = {
   name: string;
   category: string;
   registrations: number;
-  attendance: number; // For simplicity, we'll make attendance a random percentage of registrations
-  feedback: number; // Mocked for now
 };
 
 async function getRegistrationData(): Promise<RegistrationData[]> {
@@ -86,9 +84,6 @@ async function getEventPerformance(): Promise<EventPerformance[]> {
       name: event.title,
       category: event.category,
       registrations: registrations,
-      // Mocking attendance and feedback for demonstration
-      attendance: Math.floor(registrations * (Math.random() * (0.9 - 0.7) + 0.7)),
-      feedback: parseFloat((Math.random() * (5 - 4.2) + 4.2).toFixed(1)),
     });
   }
 
@@ -176,8 +171,6 @@ export default function EventAnalyticsPage() {
                             <TableHead>Event Name</TableHead>
                             <TableHead>Category</TableHead>
                             <TableHead className="text-right">Registrations</TableHead>
-                            <TableHead className="text-right">Attendance</TableHead>
-                            <TableHead className="text-right">Feedback (/5)</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -187,17 +180,13 @@ export default function EventAnalyticsPage() {
                                   <TableCell><Skeleton className="h-5 w-3/4" /></TableCell>
                                   <TableCell><Skeleton className="h-5 w-1/2" /></TableCell>
                                   <TableCell className="text-right"><Skeleton className="h-5 w-1/4 ml-auto" /></TableCell>
-                                  <TableCell className="text-right"><Skeleton className="h-5 w-1/4 ml-auto" /></TableCell>
-                                  <TableCell className="text-right"><Skeleton className="h-5 w-1/4 ml-auto" /></TableCell>
                               </TableRow>
                           ))
                         ) : eventPerformance.map(event => (
                             <TableRow key={event.id}>
                                 <TableCell className="font-medium">{event.name}</TableCell>
                                 <TableCell><Badge variant="outline">{event.category}</Badge></TableCell>
-                                <TableCell className="text-right">{event.registrations}</TableCell>
-                                <TableCell className="text-right">{event.attendance}</TableCell>
-                                <TableCell className="text-right font-medium">{event.feedback}</TableCell>
+                                <TableCell className="text-right font-medium">{event.registrations}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
