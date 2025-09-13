@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import Link from "next/link";
@@ -10,6 +11,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 function AppSidebarContent() {
+    "use client";
     const pathname = usePathname();
     const [navItems, setNavItems] = useState<NavItem[]>(studentNavItems);
     const [userType, setUserType] = useState('Student');
