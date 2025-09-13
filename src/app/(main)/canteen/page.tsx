@@ -62,7 +62,7 @@ function CanteenItemCard({ item, cart, addToCart }: { item: { id: number; name: 
 function SubmitButton() {
     const { pending } = useFormStatus();
     return (
-        <Button type="submit" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" disabled={pending}>
+        <Button type="submit" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" disabled={pending || useFormStatus().data?.get('cart') === '[]'}>
             {pending ? (
                 <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -84,7 +84,7 @@ export default function CanteenPage() {
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
 
-  const initialState: OrderState = { message: null, errors: null };
+  const initialState: OrderState = { message: '', success: false };
   const [state, dispatch] = useActionState(placeOrder, initialState);
   
   const handleAddToCart = (itemToAdd: CartItem) => {
@@ -105,19 +105,19 @@ export default function CanteenPage() {
 
   useEffect(() => {
     if (state.message) {
-      if (state.errors) {
-        toast({
-          variant: 'destructive',
-          title: 'Error placing order',
-          description: state.message,
-        });
-      } else {
+      if (state.success) {
         toast({
           title: 'Order Placed!',
           description: state.message,
         });
         setCart([]); // Clear the cart on successful order
         formRef.current?.reset();
+      } else {
+         toast({
+          variant: 'destructive',
+          title: 'Error Placing Order',
+          description: state.message,
+        });
       }
     }
   }, [state, toast]);
