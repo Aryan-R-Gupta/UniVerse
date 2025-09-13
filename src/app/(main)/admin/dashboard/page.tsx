@@ -141,6 +141,11 @@ export default async function AdminDashboardPage() {
                     </TableBody>
                 </Table>
             </CardContent>
+            <CardFooter>
+              <Button asChild className="w-full">
+                  <Link href="/admin/feedback-hub">View All Feedback</Link>
+              </Button>
+            </CardFooter>
         </Card>
          <Card>
             <CardHeader>
@@ -167,6 +172,11 @@ export default async function AdminDashboardPage() {
                     </TableBody>
                 </Table>
             </CardContent>
+            <CardFooter>
+              <Button asChild className="w-full">
+                  <Link href="/admin/support-tickets">View All Tickets</Link>
+              </Button>
+            </CardFooter>
         </Card>
       </section>
       
