@@ -13,7 +13,7 @@ import { generatePersona } from './actions';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { getFirestore, collection, query, where, getDocs, orderBy, limit, Timestamp } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -47,8 +47,7 @@ async function getUserActivity(userEmail: string) {
   // Fetch Registered Events
   const eventsQuery = query(
     collection(db, 'event-registrations'), 
-    where('email', '==', userEmail),
-    limit(5)
+    where('email', '==', userEmail)
   );
   const eventsSnapshot = await getDocs(eventsQuery);
   const registeredEvents: RegisteredEvent[] = eventsSnapshot.docs.map(doc => {
@@ -70,8 +69,7 @@ async function getUserActivity(userEmail: string) {
   // Fetch Recent Orders
   const ordersQuery = query(
     collection(db, 'canteen-orders'),
-    where('userEmail', '==', userEmail),
-    limit(5)
+    where('userEmail', '==', userEmail)
   );
   const ordersSnapshot = await getDocs(ordersQuery);
   const recentOrdersData: RecentOrder[] = ordersSnapshot.docs.map(doc => ({
@@ -86,8 +84,7 @@ async function getUserActivity(userEmail: string) {
   // Fetch Active Bookings
   const bookingsQuery = query(
     collection(db, 'resource-bookings'),
-    where('userEmail', '==', userEmail),
-    limit(5)
+    where('userEmail', '==', userEmail)
   );
   const bookingsSnapshot = await getDocs(bookingsQuery);
   const userBookingsData: UserBooking[] = bookingsSnapshot.docs.map(doc => ({
@@ -149,7 +146,6 @@ export default function ProfilePage() {
         ...prev,
         name: formData.get('name') as string,
         studentId: formData.get('studentId') as string,
-        email: formData.get('email') as string,
         course: formData.get('course') as string,
         year: Number(formData.get('year') as string),
     }));
@@ -198,10 +194,6 @@ export default function ProfilePage() {
                             <div className="grid grid-cols-4 items-center gap-4">
                                 <Label htmlFor="studentId" className="text-right">Student ID</Label>
                                 <Input id="studentId" name="studentId" defaultValue={profile.studentId} className="col-span-3" />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="email" className="text-right">Email</Label>
-                                <Input id="email" name="email" type="email" defaultValue={profile.email} className="col-span-3" />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
                                 <Label htmlFor="course" className="text-right">Course</Label>
@@ -336,3 +328,4 @@ export default function ProfilePage() {
     
 
     
+
