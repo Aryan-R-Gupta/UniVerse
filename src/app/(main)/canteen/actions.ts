@@ -1,32 +1,38 @@
-
 'use server';
 
 import { z } from 'zod';
-import { getFirestore, collection, addDoc, serverTimestamp, runTransaction, doc } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  serverTimestamp,
+  runTransaction,
+  doc,
+} from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { userProfileData } from '@/lib/data';
 
+// Coerce numeric fields because client often sends strings
 const CartItemSchema = z.object({
-  id: z.number(),
+  id: z.coerce.number(),
   name: z.string(),
-  price: z.number(),
-  quantity: z.number(),
+  price: z.coerce.number(),
+  quantity: z.coerce.number(),
 });
 
 const PlaceOrderSchema = z.object({
   cart: z.array(CartItemSchema),
-  totalPrice: z.number(),
+  totalPrice: z.coerce.number(),
 });
 
 export type OrderState = {
-    message: string;
-    success: boolean;
-}
+  message: string;
+  success: boolean;
+};
 
 export async function placeOrder(prevState: OrderState, formData: FormData): Promise<OrderState> {
-  const cartString = formData.get('cart') as string;
-  const totalPriceString = formData.get('totalPrice') as string;
-  
+  const cartString = formData.get('cart') as string | null;
+  const totalPriceString = formData.get('totalPrice') as string | null;
+
   if (!cartString || !totalPriceString) {
     return { message: 'Cart data is missing.', success: false };
   }
@@ -38,65 +44,68 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
     validatedFields = PlaceOrderSchema.safeParse({ cart, totalPrice });
 
     if (!validatedFields.success) {
-      console.error(validatedFields.error);
+      console.error('Zod validation failed:', validatedFields.error.format ? validatedFields.error.format() : validatedFields.error);
       return {
         message: 'Validation failed. Please check your cart.',
         success: false,
       };
     }
   } catch (e) {
-    console.error("Failed to parse cart data", e);
+    console.error('Failed to parse cart data', e);
     return { message: 'Invalid cart format.', success: false };
   }
 
   const { cart: orderItems, totalPrice: finalPrice } = validatedFields.data;
   const db = getFirestore(app);
 
+  // Safety: ensure we have an email (or pass it explicitly from client)
+  const userEmail = userProfileData?.email ?? null;
+  if (!userEmail) {
+    console.warn('No user email available in server context. Consider passing it in form data or pulling from session.');
+  }
+
   try {
     await runTransaction(db, async (transaction) => {
-      const ordersCol = collection(db, 'canteen-orders');
-      const salesCol = collection(db, 'canteen-sales');
-      
-      // 1. Create a new document reference for the order and set it within the transaction
-      const newOrderRef = doc(ordersCol);
+      const ordersColRef = collection(db, 'canteen-orders');
+      const salesColRef = collection(db, 'canteen-sales');
+
+      // Create explicit doc IDs using crypto.randomUUID()
+      const orderId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+      const saleId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+
+      const newOrderRef = doc(ordersColRef, orderId);
       transaction.set(newOrderRef, {
-        userEmail: userProfileData.email,
+        userEmail,
         items: orderItems,
         totalPrice: finalPrice,
         createdAt: serverTimestamp(),
-      });
-  
-      // 2. Create a new document reference for the sales record and set it
-      const newSaleRef = doc(salesCol);
+      } as Record<string, any>);
+
+      const newSaleRef = doc(salesColRef, saleId);
       transaction.set(newSaleRef, {
         sales: finalPrice,
         date: serverTimestamp(),
-        itemCount: orderItems.reduce((acc, item) => acc + item.quantity, 0)
-      });
+        itemCount: orderItems.reduce((acc, item) => acc + item.quantity, 0),
+      } as Record<string, any>);
 
-      // 3. Update the total revenue and items sold for each item
       for (const item of orderItems) {
         const itemRef = doc(db, 'canteen-items', `item-${item.id}`);
-        
-        // You must read the document inside the transaction before you can write to it.
-        const itemDoc = await transaction.get(itemRef);
 
+        const itemDoc = await transaction.get(itemRef);
         if (!itemDoc.exists()) {
-          // If the item doesn't exist in analytics, create it.
           transaction.set(itemRef, {
             name: item.name,
             price: item.price,
             itemsSold: item.quantity,
             totalRevenue: item.price * item.quantity,
-            // Assuming category can be derived or is not strictly needed here for the transaction
-          });
+          } as Record<string, any>);
         } else {
-          // If it exists, update it.
-          const currentRevenue = itemDoc.data().totalRevenue || 0;
-          const currentItemsSold = itemDoc.data().itemsSold || 0;
-          
+          const data = itemDoc.data() || {};
+          const currentRevenue = typeof data.totalRevenue === 'number' ? data.totalRevenue : 0;
+          const currentItemsSold = typeof data.itemsSold === 'number' ? data.itemsSold : 0;
+
           transaction.update(itemRef, {
-            totalRevenue: currentRevenue + (item.price * item.quantity),
+            totalRevenue: currentRevenue + item.price * item.quantity,
             itemsSold: currentItemsSold + item.quantity,
           });
         }
@@ -107,9 +116,9 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
       message: 'Order placed successfully! Your food is being prepared.',
       success: true,
     };
-
-  } catch (error) {
-    console.error('Error placing order:', error);
+  } catch (error: any) {
+    // Log full error for debugging
+    console.error('Error placing order:', error, error?.message, JSON.stringify(error, Object.getOwnPropertyNames(error)));
     return {
       message: 'Failed to place your order. Please try again.',
       success: false,
