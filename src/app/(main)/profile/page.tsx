@@ -30,6 +30,7 @@ type RecentOrder = {
   id: string;
   items: { name: string; quantity: number, price: number }[];
   totalPrice: number;
+  createdAt: Timestamp;
 };
 
 type UserBooking = {
@@ -70,14 +71,17 @@ async function getUserActivity(userEmail: string) {
   const ordersQuery = query(
     collection(db, 'canteen-orders'),
     where('userEmail', '==', userEmail),
-    orderBy('createdAt', 'desc'),
-    limit(2)
+    // orderBy('createdAt', 'desc'), // Requires composite index
+    limit(5)
   );
   const ordersSnapshot = await getDocs(ordersQuery);
-  const recentOrders: RecentOrder[] = ordersSnapshot.docs.map(doc => ({
+  const recentOrdersData: RecentOrder[] = ordersSnapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
   } as RecentOrder));
+
+  // Sort orders by date descending and take the latest 2
+  const sortedOrders = recentOrdersData.sort((a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()).slice(0, 2);
 
 
   // Fetch Active Bookings
@@ -93,7 +97,7 @@ async function getUserActivity(userEmail: string) {
     ...doc.data()
   } as UserBooking));
 
-  return { registeredEvents: sortedEvents, recentOrders, userBookings };
+  return { registeredEvents: sortedEvents, recentOrders: sortedOrders, userBookings };
 }
 
 
