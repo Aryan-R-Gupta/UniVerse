@@ -1,32 +1,17 @@
 # UniVerse: Your All-in-One Campus Companion
 
-UniVerse is a modern, unified web application designed to streamline campus life for students, teachers, and administrators. It integrates everything from academic schedules and resource booking to social events and canteen ordering into a single, easy-to-use platform. Powered by AI, UniVerse is more than just a utility—it's a smart companion for your university journey.
+UniVerse is a modern, AI-powered web application designed to streamline campus life. Built with Next.js and Google's Genkit, it integrates academic schedules, resource booking, canteen ordering, and campus events into a single, intuitive platform for students, teachers, and administrators.
 
 ![UniVerse Landing Page](https://images.unsplash.com/flagged/photo-1554473675-d0904f3cbf38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8Y29sbGVnZXxlbnwwfHx8fDE3NTc2NzA1MjF8MA&ixlib=rb-4.1.0&q=80&w=1080)
 
-## ✨ Core Features
+## ✨ Key Features
 
-UniVerse is packed with features designed to make campus life simpler, more connected, and more engaging.
-
-### For Students & Faculty
-
-*   **Unified Dashboard**: A central hub to see your next class, upcoming events, and quick actions at a glance.
-*   **AI-Powered Navigation**: Lost on campus? Our AI guide can provide you with step-by-step directions to any location, including estimated time and distance.
-*   **AI Campus Persona**: Discover your unique campus identity! Based on your activity—from the events you join to the food you order—our AI generates a fun, creative persona for you.
-*   **Canteen Ordering**: Browse the canteen menu, add items to your cart, and place your order directly from the app.
-*   **Event Discovery & Registration**: Find out what's happening on campus, filter events by category, and register for workshops, cultural fests, and more with a single click.
-*   **Resource Booking**: Need a study room or lab equipment? Easily view availability and book resources in real-time.
-*   **Timetable Management**: A clear, day-by-day view of your class schedule.
-*   **Feedback & Support**: A direct line to the administration for submitting feedback or raising support tickets.
-
-### For Administrators
-
-*   **Live Analytics Dashboards**: Get a bird's-eye view of campus operations with dedicated analytics for:
-    *   **Canteen Sales**: Track sales trends, top-selling items, and revenue.
-    *   **Event Performance**: Analyze registration trends and event popularity.
-    *   **Resource Utilization**: Monitor booking rates and resource usage across campus.
-*   **Content Management**: Publish campus-wide alerts and manage event listings.
-*   **Feedback & Support Hub**: View and manage all user-submitted feedback and support tickets in one place.
+*   **AI-Powered Campus Life**: Get smart directions with AI navigation, discover a unique "Campus Persona" based on your activity, and receive intelligent recommendations.
+*   **Unified Dashboard**: A central hub for timetables, upcoming events, and quick actions.
+*   **Effortless Ordering & Booking**: Pre-order meals from the canteen and book campus resources like study rooms in real-time.
+*   **Event Discovery**: Find and register for campus events, from workshops to cultural festivals.
+*   **Administrator Analytics**: Live dashboards for canteen sales, event registrations, and resource utilization.
+*   **Feedback & Support**: A direct line for users to submit feedback and support tickets.
 
 ## 🚀 Tech Stack
 
