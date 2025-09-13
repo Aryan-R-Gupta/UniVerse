@@ -1,24 +1,36 @@
 
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { GraduationCap } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function StudentLoginPage() {
   const router = useRouter();
+  const { toast } = useToast();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    // Set user type in localStorage to be used by the sidebar
-    if (typeof window !== 'undefined') {
-        localStorage.setItem('userType', 'Student');
-        window.dispatchEvent(new Event('storage'));
+    if (email === 'kanksha@university.edu' && password === 'pass123') {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('userType', 'Student');
+            window.dispatchEvent(new Event('storage'));
+        }
+        router.push('/dashboard');
+    } else {
+        toast({
+            variant: 'destructive',
+            title: 'Login Failed',
+            description: 'Invalid email or password.',
+        });
     }
-    router.push('/dashboard');
   };
 
   return (
@@ -35,12 +47,12 @@ export default function StudentLoginPage() {
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" placeholder="Enter your username" />
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" placeholder="kanksha@university.edu" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" placeholder="Enter your password" />
+              <Input id="password" type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
           </CardContent>
           <CardFooter>
@@ -53,5 +65,3 @@ export default function StudentLoginPage() {
     </div>
   );
 }
-
-    
