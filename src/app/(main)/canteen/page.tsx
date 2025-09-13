@@ -27,11 +27,10 @@ type CartItem = {
 };
 
 function SubmitButton() {
-    const { pending, data } = useFormStatus();
-    const cartIsEmpty = data?.get('cart') === '[]';
-
+    const { pending } = useFormStatus();
+    
     return (
-        <Button type="submit" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" disabled={pending || cartIsEmpty}>
+        <Button type="submit" variant="secondary" className="bg-primary-foreground text-primary hover:bg-primary-foreground/90" disabled={pending}>
             {pending ? (
                 <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -90,26 +89,20 @@ export default function CanteenPage() {
   
   const handleUpdateCart = (itemToUpdate: CanteenItem, newQuantity: number) => {
     setCart(currentCart => {
-      const existingItemIndex = currentCart.findIndex(item => item.id === itemToUpdate.id);
+      const existingItem = currentCart.find(item => item.id === itemToUpdate.id);
   
-      // If quantity is zero or less, remove the item
       if (newQuantity <= 0) {
-        if (existingItemIndex !== -1) {
-          return currentCart.filter(item => item.id !== itemToUpdate.id);
-        }
-        return currentCart; // Item not in cart, do nothing
+        // Remove item from cart
+        return currentCart.filter(item => item.id !== itemToUpdate.id);
       }
   
-      // If item exists in cart, update its quantity
-      if (existingItemIndex !== -1) {
-        const updatedCart = [...currentCart];
-        updatedCart[existingItemIndex] = {
-          ...updatedCart[existingItemIndex],
-          quantity: newQuantity,
-        };
-        return updatedCart;
+      if (existingItem) {
+        // Update quantity of existing item
+        return currentCart.map(item =>
+          item.id === itemToUpdate.id ? { ...item, quantity: newQuantity } : item
+        );
       } else {
-        // If item doesn't exist, add it to the cart
+        // Add new item to cart
         const newItem: CartItem = {
           id: itemToUpdate.id,
           name: itemToUpdate.name,
@@ -142,6 +135,7 @@ export default function CanteenPage() {
 
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
   const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  const cartIsEmpty = cart.length === 0;
 
   const renderCanteenItems = (items: CanteenItem[]) => (
      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -169,7 +163,7 @@ export default function CanteenPage() {
         </TabsContent>
       </Tabs>
 
-      {totalItems > 0 && (
+      {!cartIsEmpty && (
         <div className="fixed bottom-16 md:bottom-0 left-0 right-0 md:relative p-4">
           <div className="md:max-w-4xl mx-auto">
             <Card className="bg-primary text-primary-foreground shadow-2xl">
@@ -191,3 +185,5 @@ export default function CanteenPage() {
     </div>
   );
 }
+
+    

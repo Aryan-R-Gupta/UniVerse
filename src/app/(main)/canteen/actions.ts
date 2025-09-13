@@ -66,12 +66,16 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
   }
 
   try {
-    await runTransaction(db, async (transaction) => {
-      const ordersColRef = collection(db, 'canteen-orders');
-      const salesColRef = collection(db, 'canteen-sales');
+    // Define all document references *before* the transaction
+    const newOrderRef = doc(collection(db, 'canteen-orders'));
+    const newSaleRef = doc(collection(db, 'canteen-sales'));
+    const itemRefs = orderItems.map(item => doc(db, 'canteen-items', `item-${item.id}`));
 
-      // 1. Create a new order document
-      const newOrderRef = doc(ordersColRef);
+    await runTransaction(db, async (transaction) => {
+      // 1. Get all item documents that need updating
+      const itemDocs = await Promise.all(itemRefs.map(ref => transaction.get(ref)));
+
+      // 2. Set the new order document
       transaction.set(newOrderRef, {
         userEmail,
         items: orderItems,
@@ -79,8 +83,7 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
         createdAt: serverTimestamp(),
       });
 
-      // 2. Create a new sales analytics document
-      const newSaleRef = doc(salesColRef);
+      // 3. Set the new sales analytics document
       transaction.set(newSaleRef, {
         orderId: newOrderRef.id,
         sales: finalPrice,
@@ -88,10 +91,10 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
         itemCount: orderItems.reduce((acc, item) => acc + item.quantity, 0),
       });
 
-      // 3. Update total sales for each item
-      for (const item of orderItems) {
-        const itemRef = doc(db, 'canteen-items', `item-${item.id}`);
-        const itemDoc = await transaction.get(itemRef);
+      // 4. Update total sales for each item
+      orderItems.forEach((item, index) => {
+        const itemDoc = itemDocs[index];
+        const itemRef = itemRefs[index];
 
         if (!itemDoc.exists()) {
           // If the item doesn't exist in our analytics collection, create it.
@@ -112,7 +115,7 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
             itemsSold: currentItemsSold + item.quantity,
           });
         }
-      }
+      });
     });
 
     return {
@@ -127,3 +130,5 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
     };
   }
 }
+
+    
