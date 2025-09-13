@@ -46,44 +46,45 @@ async function getResourceUtilization(): Promise<ResourceUtilization[]> {
   const db = getFirestore(app);
   const bookingsCol = collection(db, 'resource-bookings');
 
-  // Use the static resource data since there is no 'resources' collection
-  const resourcesByCategory: { [category: string]: { ids: string[], count: number } } = {};
+  // Use the static resource data to define categories and total counts
+  const resourcesByCategory: { [category: string]: { ids: Set<string>; count: number } } = {};
   staticResources.forEach(resource => {
-    // For simplicity, we'll derive the category from the name, e.g., "Study Room"
     const category = resource.name.includes("Room") ? 'Study Rooms' 
                    : resource.name.includes("Lab") ? 'Labs'
                    : resource.name.includes("Library") ? 'Libraries'
                    : resource.name.includes("Court") ? 'Sports Facilities'
                    : 'Other';
     if (!resourcesByCategory[category]) {
-      resourcesByCategory[category] = { ids: [], count: 0 };
+      resourcesByCategory[category] = { ids: new Set(), count: 0 };
     }
-    resourcesByCategory[category].ids.push(resource.id.toString());
-    resourcesByCategory[category].count += 1;
+    resourcesByCategory[category].ids.add(resource.id.toString());
+    resourcesByCategory[category].count++;
+  });
+
+  // Fetch all confirmed bookings to find out which unique resources are booked
+  const bookingsSnapshot = await getDocs(query(bookingsCol, where('status', '==', 'Confirmed')));
+  
+  const bookedResourceIds = new Set<string>();
+  bookingsSnapshot.forEach(doc => {
+    bookedResourceIds.add(doc.data().resourceId);
   });
 
   const utilizationByCategory: { [key: string]: { total: number; booked: number } } = {};
   for (const category in resourcesByCategory) {
-    utilizationByCategory[category] = { total: resourcesByCategory[category].count, booked: 0 };
-  }
-
-  // Fetch all confirmed bookings
-  const bookingsSnapshot = await getDocs(query(bookingsCol, where('status', '==', 'Confirmed')));
-
-  bookingsSnapshot.forEach(doc => {
-    const booking = doc.data();
-    const resourceId = booking.resourceId;
-
-    // Find which category this booked resource belongs to
-    for (const category in resourcesByCategory) {
-      if (resourcesByCategory[category].ids.includes(resourceId)) {
-        if (utilizationByCategory[category]) {
-          utilizationByCategory[category].booked += 1;
+    const categoryInfo = resourcesByCategory[category];
+    let bookedCount = 0;
+    // Count how many unique booked resource IDs belong to this category
+    bookedResourceIds.forEach(bookedId => {
+        if (categoryInfo.ids.has(bookedId)) {
+            bookedCount++;
         }
-        break; // Move to the next booking once category is found
-      }
-    }
-  });
+    });
+
+    utilizationByCategory[category] = { 
+        total: categoryInfo.count, 
+        booked: bookedCount 
+    };
+  }
   
   return Object.entries(utilizationByCategory).map(([name, data], index) => ({
     id: String(index + 1),
