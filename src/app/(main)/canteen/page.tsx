@@ -89,34 +89,35 @@ export default function CanteenPage() {
   const [state, dispatch] = useActionState(placeOrder, initialState);
   
   const handleUpdateCart = (itemToUpdate: CanteenItem, newQuantity: number) => {
-    setCart(prevCart => {
-      const existingItemIndex = prevCart.findIndex(item => item.id === itemToUpdate.id);
-
-      // Remove item if quantity is 0 or less
+    setCart(currentCart => {
+      const existingItemIndex = currentCart.findIndex(item => item.id === itemToUpdate.id);
+  
+      // If quantity is zero or less, remove the item
       if (newQuantity <= 0) {
-        if (existingItemIndex > -1) {
-          const updatedCart = [...prevCart];
-          updatedCart.splice(existingItemIndex, 1);
-          return updatedCart;
+        if (existingItemIndex !== -1) {
+          return currentCart.filter(item => item.id !== itemToUpdate.id);
         }
-        return prevCart;
+        return currentCart; // Item not in cart, do nothing
       }
-
-      // Update quantity if item exists
-      if (existingItemIndex > -1) {
-        const updatedCart = [...prevCart];
-        updatedCart[existingItemIndex] = { ...updatedCart[existingItemIndex], quantity: newQuantity };
+  
+      // If item exists in cart, update its quantity
+      if (existingItemIndex !== -1) {
+        const updatedCart = [...currentCart];
+        updatedCart[existingItemIndex] = {
+          ...updatedCart[existingItemIndex],
+          quantity: newQuantity,
+        };
         return updatedCart;
-      }
-      
-      // Add new item if it doesn't exist
-      const newItem: CartItem = {
+      } else {
+        // If item doesn't exist, add it to the cart
+        const newItem: CartItem = {
           id: itemToUpdate.id,
           name: itemToUpdate.name,
           price: itemToUpdate.price,
           quantity: newQuantity,
-      };
-      return [...prevCart, newItem];
+        };
+        return [...currentCart, newItem];
+      }
     });
   };
 

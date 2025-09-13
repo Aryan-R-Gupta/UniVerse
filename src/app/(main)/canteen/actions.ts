@@ -1,3 +1,4 @@
+
 'use server';
 
 import { z } from 'zod';
@@ -58,10 +59,10 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
   const { cart: orderItems, totalPrice: finalPrice } = validatedFields.data;
   const db = getFirestore(app);
 
-  // Safety: ensure we have an email (or pass it explicitly from client)
   const userEmail = userProfileData?.email ?? null;
   if (!userEmail) {
-    console.warn('No user email available in server context. Consider passing it in form data or pulling from session.');
+    console.warn('No user email available in server context.');
+    return { message: 'User not authenticated.', success: false };
   }
 
   try {
@@ -69,43 +70,45 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
       const ordersColRef = collection(db, 'canteen-orders');
       const salesColRef = collection(db, 'canteen-sales');
 
-      // Create explicit doc IDs using crypto.randomUUID()
-      const orderId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
-      const saleId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
-
-      const newOrderRef = doc(ordersColRef, orderId);
+      // 1. Create a new order document
+      const newOrderRef = doc(ordersColRef);
       transaction.set(newOrderRef, {
         userEmail,
         items: orderItems,
         totalPrice: finalPrice,
         createdAt: serverTimestamp(),
-      } as Record<string, any>);
+      });
 
-      const newSaleRef = doc(salesColRef, saleId);
+      // 2. Create a new sales analytics document
+      const newSaleRef = doc(salesColRef);
       transaction.set(newSaleRef, {
+        orderId: newOrderRef.id,
         sales: finalPrice,
         date: serverTimestamp(),
         itemCount: orderItems.reduce((acc, item) => acc + item.quantity, 0),
-      } as Record<string, any>);
+      });
 
+      // 3. Update total sales for each item
       for (const item of orderItems) {
         const itemRef = doc(db, 'canteen-items', `item-${item.id}`);
-
         const itemDoc = await transaction.get(itemRef);
+
         if (!itemDoc.exists()) {
+          // If the item doesn't exist in our analytics collection, create it.
+          // This case should ideally be handled by a seeding script, but we add it for robustness.
           transaction.set(itemRef, {
             name: item.name,
             price: item.price,
             itemsSold: item.quantity,
             totalRevenue: item.price * item.quantity,
-          } as Record<string, any>);
+          });
         } else {
-          const data = itemDoc.data() || {};
-          const currentRevenue = typeof data.totalRevenue === 'number' ? data.totalRevenue : 0;
-          const currentItemsSold = typeof data.itemsSold === 'number' ? data.itemsSold : 0;
-
+          // If the item exists, update its sales figures
+          const currentRevenue = itemDoc.data().totalRevenue || 0;
+          const currentItemsSold = itemDoc.data().itemsSold || 0;
+          
           transaction.update(itemRef, {
-            totalRevenue: currentRevenue + item.price * item.quantity,
+            totalRevenue: currentRevenue + (item.price * item.quantity),
             itemsSold: currentItemsSold + item.quantity,
           });
         }
@@ -117,8 +120,7 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
       success: true,
     };
   } catch (error: any) {
-    // Log full error for debugging
-    console.error('Error placing order:', error, error?.message, JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    console.error('Error placing order in transaction:', error);
     return {
       message: 'Failed to place your order. Please try again.',
       success: false,
