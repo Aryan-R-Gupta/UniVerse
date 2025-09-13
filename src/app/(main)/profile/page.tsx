@@ -71,7 +71,7 @@ async function getUserActivity(userEmail: string) {
   const ordersQuery = query(
     collection(db, 'canteen-orders'),
     where('userEmail', '==', userEmail),
-    // orderBy('createdAt', 'desc'), // Requires composite index
+    // orderBy('createdAt', 'desc'), // This was causing the index error
     limit(5)
   );
   const ordersSnapshot = await getDocs(ordersQuery);
@@ -330,5 +330,7 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
 
     
