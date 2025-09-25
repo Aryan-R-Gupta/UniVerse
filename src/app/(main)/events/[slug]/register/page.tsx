@@ -23,7 +23,7 @@ function SubmitButton() {
 }
 
 export default function EventRegistrationPage({ params }: { params: { slug: string } }) {
-  const slug = params.slug;
+  const { slug } = params;
   const event = events.find(e => e.slug === slug);
   const { toast } = useToast();
   const router = useRouter();
