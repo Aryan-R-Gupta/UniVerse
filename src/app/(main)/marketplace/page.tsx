@@ -10,7 +10,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
-import { PlusCircle, Loader2, Tag, Mail, ShoppingBag, Trash2, Pencil } from 'lucide-react';
+import { PlusCircle, Loader2, Tag, Mail, ShoppingBag, Trash2, Pencil, Search } from 'lucide-react';
 import { getFirestore, collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { listItem, updateItem, deleteItem, type ListItemState } from './actions';
@@ -107,6 +107,8 @@ export default function MarketplacePage() {
   const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [currentItem, setCurrentItem] = useState<MarketplaceItem | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   const { toast } = useToast();
   const listFormRef = useRef<HTMLFormElement>(null);
@@ -214,6 +216,14 @@ export default function MarketplacePage() {
     )
   }
 
+  const filteredItems = items.filter(item => {
+    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+    const matchesSearch = searchTerm === '' || 
+                          item.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          item.description.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -241,6 +251,36 @@ export default function MarketplacePage() {
         </Dialog>
       </div>
 
+       <div className="space-y-4">
+        <div className="relative">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search for items..."
+            className="pl-8"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-2">
+           <Button
+            variant={selectedCategory === 'all' ? 'default' : 'outline'}
+            onClick={() => setSelectedCategory('all')}
+          >
+            All
+          </Button>
+          {marketplaceCategories.map(cat => (
+            <Button
+              key={cat.id}
+              variant={selectedCategory === cat.id ? 'default' : 'outline'}
+              onClick={() => setSelectedCategory(cat.id)}
+              className="shrink-0"
+            >
+              {cat.name}
+            </Button>
+          ))}
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? (
           Array.from({ length: 6 }).map((_, i) => (
@@ -256,8 +296,8 @@ export default function MarketplacePage() {
               <CardFooter><Skeleton className="h-10 w-full" /></CardFooter>
             </Card>
           ))
-        ) : items.length > 0 ? (
-          items.map(item => (
+        ) : filteredItems.length > 0 ? (
+          filteredItems.map(item => (
             <Card key={item.id} className="flex flex-col">
               <CardHeader>
                 <CardTitle className="truncate text-lg">{item.title}</CardTitle>
@@ -306,9 +346,9 @@ export default function MarketplacePage() {
         ) : (
           <div className="col-span-full text-center py-16">
             <ShoppingBag className="mx-auto h-12 w-12 text-muted-foreground" />
-            <h3 className="mt-4 text-lg font-semibold">Marketplace is Empty</h3>
+            <h3 className="mt-4 text-lg font-semibold">No Items Found</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              Be the first to list an item for sale!
+              Try adjusting your search or filter.
             </p>
           </div>
         )}
