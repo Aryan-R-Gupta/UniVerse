@@ -10,7 +10,7 @@ import { revalidatePath } from 'next/cache';
 const UploadNoteSchema = z.object({
   title: z.string().min(5, { message: 'Title must be at least 5 characters.' }),
   course: z.string().min(3, { message: 'Course name must be at least 3 characters.' }),
-  content: z.string().min(20, { message: 'Note content must be at least 20 characters.' }),
+  // Content validation is removed as we are now handling a file
 });
 
 export type UploadNoteState = {
@@ -18,7 +18,7 @@ export type UploadNoteState = {
     errors?: {
         title?: string[];
         course?: string[];
-        content?: string[];
+        file?: string[];
     } | null;
 }
 
@@ -26,7 +26,6 @@ export async function uploadNote(prevState: UploadNoteState, formData: FormData)
   const validatedFields = UploadNoteSchema.safeParse({
     title: formData.get('title'),
     course: formData.get('course'),
-    content: formData.get('content'),
   });
 
   if (!validatedFields.success) {
@@ -35,15 +34,32 @@ export async function uploadNote(prevState: UploadNoteState, formData: FormData)
       message: 'Validation failed. Please check your input.',
     };
   }
+  
+  const file = formData.get('file') as File | null;
+  if (!file || file.size === 0) {
+    return {
+        errors: { file: ['Please select a file to upload.'] },
+        message: 'File is required.'
+    }
+  }
 
-  const { title, course, content } = validatedFields.data;
+  // Basic check for PDF files, can be expanded
+  if (file.type !== 'application/pdf') {
+     return {
+        errors: { file: ['Only PDF files are currently supported.'] },
+        message: 'Invalid file type.'
+    }
+  }
+
+  const { title, course } = validatedFields.data;
   const db = getFirestore(app);
 
   try {
     await addDoc(collection(db, 'notes'), {
       title,
       course,
-      content,
+      fileName: file.name,
+      fileType: file.type,
       authorName: userProfileData.name,
       authorEmail: userProfileData.email,
       createdAt: serverTimestamp(),

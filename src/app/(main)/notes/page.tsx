@@ -8,9 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
-import { FileText, PlusCircle, Loader2, User, Book, Clock } from 'lucide-react';
+import { FileText, PlusCircle, Loader2, User, Book, Clock, Download } from 'lucide-react';
 import { getFirestore, collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { uploadNote, type UploadNoteState } from './actions';
@@ -20,8 +19,9 @@ import { formatDistanceToNow } from 'date-fns';
 type Note = {
   id: string;
   title: string;
-  content: string;
   course: string;
+  fileName: string;
+  fileType: string;
   authorName: string;
   createdAt: Date;
 };
@@ -36,8 +36,9 @@ async function getNotes(): Promise<Note[]> {
     return {
       id: doc.id,
       title: data.title,
-      content: data.content,
       course: data.course,
+      fileName: data.fileName,
+      fileType: data.fileType,
       authorName: data.authorName,
       createdAt: (data.createdAt as Timestamp)?.toDate() ?? new Date(),
     };
@@ -137,9 +138,9 @@ export default function NotesPage() {
                   {state.errors?.course && <p className="text-sm text-destructive">{state.errors.course[0]}</p>}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="content">Note Content</Label>
-                  <Textarea id="content" name="content" placeholder="Paste or write your note content here..." required rows={8}/>
-                   {state.errors?.content && <p className="text-sm text-destructive">{state.errors.content[0]}</p>}
+                  <Label htmlFor="file">Note File (PDF only)</Label>
+                  <Input id="file" name="file" type="file" required accept=".pdf" />
+                   {state.errors?.file && <p className="text-sm text-destructive">{state.errors.file[0]}</p>}
                 </div>
               </div>
               <DialogFooter>
@@ -180,25 +181,16 @@ export default function NotesPage() {
                     </CardDescription>
                 </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground line-clamp-3">{note.content}</p>
+                <p className="text-sm text-muted-foreground flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    {note.fileName}
+                </p>
               </CardContent>
               <CardFooter>
-                 <Dialog>
-                    <DialogTrigger asChild>
-                        <Button variant="secondary">View Full Note</Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-3xl h-5/6 flex flex-col">
-                        <DialogHeader>
-                            <DialogTitle>{note.title}</DialogTitle>
-                            <DialogDescription>
-                                For {note.course} by {note.authorName}
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="flex-1 overflow-y-auto pr-4 -mr-6">
-                            <p className="text-sm whitespace-pre-wrap">{note.content}</p>
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                 <Button variant="secondary" disabled>
+                    <Download className="mr-2 h-4 w-4" />
+                    Download (coming soon)
+                </Button>
               </CardFooter>
             </Card>
           ))
