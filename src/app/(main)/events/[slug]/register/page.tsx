@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect, use } from 'react';
 import { useFormStatus } from 'react-dom';
 import { events } from '@/lib/data';
 import { notFound, useRouter } from 'next/navigation';
@@ -10,7 +10,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { registerForEvent, type RegistrationState } from './actions';
-import { useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 function SubmitButton() {
@@ -22,7 +21,8 @@ function SubmitButton() {
   );
 }
 
-export default function EventRegistrationPage({ params: { slug } }: { params: { slug: string } }) {
+export default function EventRegistrationPage({ params }: { params: { slug: string } }) {
+  const { slug } = use(Promise.resolve(params));
   const event = events.find(e => e.slug === slug);
   const { toast } = useToast();
   const router = useRouter();
