@@ -38,9 +38,9 @@ type FoundItem = {
 async function getFoundItems(): Promise<FoundItem[]> {
   const db = getFirestore(app);
   const itemsCol = collection(db, 'lost-and-found-items');
-  const q = query(itemsCol, where('status', '==', 'found'), orderBy('reportedAt', 'desc'));
+  const q = query(itemsCol, where('status', '==', 'found'));
   const itemsSnapshot = await getDocs(q);
-  return itemsSnapshot.docs.map(doc => {
+  const itemsList = itemsSnapshot.docs.map(doc => {
     const data = doc.data();
     return {
       id: doc.id,
@@ -51,6 +51,8 @@ async function getFoundItems(): Promise<FoundItem[]> {
       reportedAt: (data.reportedAt as Timestamp)?.toDate() ?? new Date(),
     };
   });
+  // Sort on the client-side
+  return itemsList.sort((a, b) => b.reportedAt.getTime() - a.reportedAt.getTime());
 }
 
 function ReportSubmitButton({ pendingText }: { pendingText: string }) {
@@ -149,13 +151,13 @@ export default function LostAndFoundPage() {
     }
   };
 
-  useEffect(() => handleState(lostState, lostFormRef), [lostState]);
-  useEffect(() => handleState(foundState, foundFormRef), [foundState]);
+  useEffect(() => handleState(lostState, lostFormRef), [lostState, toast]);
+  useEffect(() => handleState(foundState, foundFormRef), [foundState, toast]);
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Lost & Found</h1>
+        <h1 className="text-3xl font-bold">Lost &amp; Found</h1>
         <p className="text-muted-foreground">Report lost items or post items you've found on campus.</p>
       </div>
       
