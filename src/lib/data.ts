@@ -1,7 +1,7 @@
 
 
 import type { LucideIcon } from 'lucide-react';
-import { BookMarked, CalendarDays, Home, Utensils, PartyPopper, User, Library, Salad, Search, Book, Navigation, Bell, TestTube, Dribbble, Compass, MessageSquare, HelpCircle, Shield, BarChart2, BookOpen, Utensils as UtensilsIcon, QrCode, BookCopy, MessagesSquare, ShoppingBag, FileText } from 'lucide-react';
+import { BookMarked, CalendarDays, Home, Utensils, PartyPopper, User, Library, Salad, Search, Book, Navigation, Bell, TestTube, Dribbble, Compass, MessageSquare, HelpCircle, Shield, BarChart2, BookOpen, Utensils as UtensilsIcon, QrCode, BookCopy, MessagesSquare, ShoppingBag, FileText, HandHeart } from 'lucide-react';
 
 export type NavItem = {
   title: string;
@@ -60,6 +60,11 @@ export const adminNavItems: NavItem[] = [
   { title: 'Support Tickets', href: '/admin/support-tickets', icon: HelpCircle },
   { title: 'Profile', href: '/profile', icon: User },
 ];
+
+// Add Volunteer to student and teacher navs
+studentNavItems.splice(4, 0, { title: 'Volunteer', href: '/events?category=Volunteer', icon: HandHeart });
+teacherNavItems.splice(4, 0, { title: 'Volunteer', href: '/events?category=Volunteer', icon: HandHeart });
+
 
 export const navItems: NavItem[] = studentNavItems;
 
@@ -125,8 +130,8 @@ export const allCanteenItems = {
     { id: 9, name: 'Vada Pav', price: 15, image: 'https://images.unsplash.com/photo-1750767397012-3413ba4fdbc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8dmFkYSUyMHBhdnxlbnwwfHx8fDE3NTc2NjcxMzZ8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'vada pav' },
     { id: 10, name: 'Idli', price: 30, image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpZGxpfGVufDB8fHx8fDE3NTc2NjcxNTh8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'idli' },
     { id: 11, name: 'Medu Vada', price: 35, image: 'https://images.unsplash.com/photo-1730191843435-073792ba22bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2YWRhfGVufDB8fHx8fDE3NTc2NjcyNjF8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'medu vada' },
-    { id: 12, name: 'Pizza', price: 120, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwaXp6YXxlbnwwfHx8fDE3NTc2NjczNjN8MA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'pizza' },
-    { id: 13, name: 'Burger', price: 70, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXJnZXJ8ZW58MHx8fHwxNzU3NjY3Mzc4fDA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'burger' },
+    { id: 12, name: 'Pizza', price: 120, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwaXp6YXxlbnwwfHx8fDE3NTc2NjczNjN8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'pizza' },
+    { id: 13, name: 'Burger', price: 70, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXJnZXJ8ZW58MHx8fHwxNzU3NjY3Mzc4fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'burger' },
   ],
   drinks: [
     { id: 3, name: 'Cold Coffee', price: 50, image: 'https://images.unsplash.com/photo-1530373239216-42518e6b4063?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb2xkJTIwY29mZmVlfGVufDB8fHx8MTc1NzY2NzUwOXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'cold coffee' },
@@ -143,6 +148,8 @@ export const events = [
   { id: 2, title: 'Encore - Music Fest', slug: 'encore-music-fest', category: 'Cultural', date: 'Dec 18', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtdXNpYyUyMGZlc3R8ZW58MHx8fHwxNzU3NjY5NTM2fDA&ixlibrb-4.1.0&q=80&w=1080', dataAiHint: 'music festival' },
   { id: 3, title: 'Hackathon 5.0', slug: 'hackathon-5-0', category: 'Tech', date: 'Dec 20', image: 'https://images.unsplash.com/photo-1637073849667-91120a924221?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoYWNrYXRob258ZW58MHx8fHwxNzU3NjY5NDQ5fDA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'hackathon event' },
   { id: 4, title: 'University Soccer League', slug: 'university-soccer-league', category: 'Sports', date: 'Dec 22', image: 'https://images.unsplash.com/photo-1583027383321-51847ab7ada0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8U29jY2VyJTIwTGVhZ3VlfGVufDB8fHx8MTc1NzY2OTU1OHww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'soccer match' },
+  { id: 5, title: 'Beach Cleanup Drive', slug: 'beach-cleanup-drive', category: 'Volunteer', date: 'Dec 25', image: 'https://images.unsplash.com/photo-1617936314293-2d2780b6c165?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiZWFjaCUyMGNsZWFudXB8ZW58MHx8fHwxNzU3NzAyMjMxfDA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'beach cleanup' },
+  { id: 6, title: 'Teach for a Day', slug: 'teach-for-a-day', category: 'Volunteer', date: 'Dec 28', image: 'https://images.unsplash.com/photo-1590013054491-49594b3114d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx0ZWFjaGluZyUyMGNoaWxkcmVufGVufDB8fHx8MTc1NzcwMjI1N3ww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'teaching children' },
 ];
 
 export const resources = [

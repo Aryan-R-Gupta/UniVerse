@@ -1,30 +1,38 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { events } from "@/lib/data";
 import Image from "next/image";
 
-type Category = 'All' | 'Workshops' | 'Cultural' | 'Tech' | 'Sports';
+type Category = 'All' | 'Workshops' | 'Cultural' | 'Tech' | 'Sports' | 'Volunteer';
 
 export default function EventsPage() {
-  const [filter, setFilter] = useState<Category>('All');
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get('category') as Category || 'All';
+  const [filter, setFilter] = useState<Category>(initialCategory);
+
+  useEffect(() => {
+    setFilter(initialCategory);
+  }, [initialCategory]);
+
 
   const filteredEvents = filter === 'All' ? events : events.filter(e => e.category === filter);
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Events</h1>
+        <h1 className="text-3xl font-bold">Events & Volunteering</h1>
         <p className="text-muted-foreground">Discover what's happening on campus.</p>
       </div>
 
       <div className="flex space-x-2 overflow-x-auto pb-2">
-        {(['All', 'Workshops', 'Cultural', 'Tech', 'Sports'] as Category[]).map(category => (
+        {(['All', 'Workshops', 'Cultural', 'Tech', 'Sports', 'Volunteer'] as Category[]).map(category => (
           <Button
             key={category}
             variant={filter === category ? 'default' : 'outline'}
