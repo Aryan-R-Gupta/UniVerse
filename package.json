@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed:canteen": "tsx src/scripts/seed-canteen.ts"
+    "seed:canteen": "tsx src/scripts/seed-canteen.ts",
+    "postinstall": "patch-package && npm run seed:canteen"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.14.1",
