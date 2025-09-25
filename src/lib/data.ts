@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { BookMarked, CalendarDays, Home, Utensils, PartyPopper, User, Library, Salad, Search, Book, Navigation, Bell, TestTube, Dribbble, Compass, MessageSquare, HelpCircle, Shield, BarChart2, BookOpen, Utensils as UtensilsIcon, QrCode, BookCopy, MessagesSquare } from 'lucide-react';
+import { BookMarked, CalendarDays, Home, Utensils, PartyPopper, User, Library, Salad, Search, Book, Navigation, Bell, TestTube, Dribbble, Compass, MessageSquare, HelpCircle, Shield, BarChart2, BookOpen, Utensils as UtensilsIcon, QrCode, BookCopy, MessagesSquare, ShoppingBag } from 'lucide-react';
 
 export type NavItem = {
   title: string;
@@ -13,6 +13,7 @@ export const studentNavItems: NavItem[] = [
   { title: 'Timetable', href: '/timetable', icon: CalendarDays },
   { title: 'Canteen', href: '/canteen', icon: Utensils },
   { title: 'Events', href: '/events', icon: PartyPopper },
+  { title: 'Marketplace', href: '/marketplace', icon: ShoppingBag },
   { title: 'Book Exchange', href: '/book-exchange', icon: BookCopy },
   { title: 'Forum', href: '/forum', icon: MessagesSquare },
   { title: 'Navigate', href: '/navigation', icon: Compass },
@@ -26,6 +27,7 @@ export const teacherNavItems: NavItem[] = [
   { title: 'Timetable', href: '/timetable', icon: CalendarDays },
   { title: 'Canteen', href: '/canteen', icon: Utensils },
   { title: 'Events', href: '/events', icon: PartyPopper },
+  { title: 'Marketplace', href: '/marketplace', icon: ShoppingBag },
   { title: 'Book Exchange', href: '/book-exchange', icon: BookCopy },
   { title: 'Forum', href: '/forum', icon: MessagesSquare },
   { title: 'Resources', href: '/resources', icon: BookMarked },
@@ -41,6 +43,7 @@ export const adminNavItems: NavItem[] = [
   { title: 'Resource Analytics', href: '/admin/resource-analytics', icon: BookOpen },
   { title: 'Event Analytics', href: '/admin/event-analytics', icon: BarChart2 },
   { title: 'Event Check-in', href: '/admin/event-check-in', icon: QrCode },
+  { title: 'Marketplace', href: '/marketplace', icon: ShoppingBag },
   { title: 'Forum', href: '/forum', icon: MessagesSquare },
   { title: 'Canteen', href: '/canteen', icon: Utensils },
   { title: 'Events', href: '/events', icon: PartyPopper },
@@ -109,7 +112,7 @@ export const allCanteenItems = {
     { id: 1, name: 'Samosa', price: 15, image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzYW1vc2F8ZW58MHx8fHwxNzU3NjY2NTA1fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'samosa' },
     { id: 2, name: 'Chaat', price: 20, image: 'https://images.unsplash.com/photo-1546069901-d5bfd2cbfb1f?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', dataAiHint: 'aesthetic college canteen' },
     { id: 7, name: 'Noodles', price: 40, image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxub29kbGVzfGVufDB8fHx8MTc1NzY2NzAxOXww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'noodles' },
-    { id: 8, name: 'Fried Rice', price: 50, image: 'https://images.unsplash.com/photo-1596560548464-f010549b84d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcmllZCUyMHJpY2V8ZW58MHx8fHwxNzU3NjY3MDY3fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'fried rice' },
+    { id: 8, name: 'Fried Rice', price: 50, image: 'https://images.unsplash.com/photo-1596560548464-f010549b84d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcmllZCUyMHJpY2V8ZW58MHx8fHwxNzU3NjY3MDY3fDA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'fried rice' },
     { id: 9, name: 'Vada Pav', price: 15, image: 'https://images.unsplash.com/photo-1750767397012-3413ba4fdbc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8dmFkYSUyMHBhdnxlbnwwfHx8fDE3NTc2NjcxMzZ8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'vada pav' },
     { id: 10, name: 'Idli', price: 30, image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpZGxpfGVufDB8fHx8MTc1NzY2NzE1OHww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'idli' },
     { id: 11, name: 'Medu Vada', price: 35, image: 'https://images.unsplash.com/photo-1730191843435-073792ba22bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2YWRhfGVufDB8fHx8MTc1NzY2NzI2MXww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'medu vada' },
@@ -122,7 +125,7 @@ export const allCanteenItems = {
   ],
   meals: [
     { id: 5, name: 'Veg Thali', price: 120, image: 'https://images.unsplash.com/photo-1680359873864-43e89bf248ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8dmVnJTIwdGhhYWxpfGVufDB8fHx8MTc1NzY2NzYzN3ww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'veg thali' },
-    { id: 6, name: 'Non veg thaali', price: 160, image: 'https://images.unsplash.com/photo-1723066217456-cf0b10ceda2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8Y2hpY2tlbiUyMHRoYWFsaXxlbnwwfHx8fDE3NTc2NzIyMjV8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'non-veg thali' },
+    { id: 6, name: 'Non veg thaali', price: 160, image: 'https://images.unsplash.com/photo-1723066217456-cf0b10ceda2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8Y2hpY2tlbiUyMHRoYWFsaXxlbnwwfHx8fDE3NTc2NzIyMjV8MA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'non-veg thali' },
   ]
 }
 
