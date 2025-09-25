@@ -17,6 +17,7 @@ import { getFirestore, collection, query, where, getDocs, Timestamp } from 'fire
 import { app } from '@/lib/firebase';
 import { format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
+import Link from 'next/link';
 
 type RegisteredEvent = {
   id: string;
@@ -261,13 +262,15 @@ export default function ProfilePage() {
               ) : activity.registeredEvents.length > 0 ? (
                 <div className="space-y-2">
                     {activity.registeredEvents.map(event => (
-                    <div key={event.id} className="flex justify-between items-center p-2 rounded-md bg-muted/50">
-                        <div>
-                        <p className="font-medium">{event.title}</p>
-                        <p className="text-sm text-muted-foreground">{event.date}</p>
-                        </div>
-                        <Badge variant="outline">{event.category}</Badge>
-                    </div>
+                    <Link href={`/events/ticket/${event.id}`} key={event.id} className="block hover:bg-muted/80 rounded-md transition-colors">
+                      <div className="flex justify-between items-center p-2 rounded-md bg-muted/50">
+                          <div>
+                          <p className="font-medium">{event.title}</p>
+                          <p className="text-sm text-muted-foreground">{event.date}</p>
+                          </div>
+                          <Badge variant="outline">{event.category}</Badge>
+                      </div>
+                    </Link>
                     ))}
                 </div>
               ) : <p className="text-sm text-muted-foreground p-2">No registered events.</p>}
@@ -326,6 +329,3 @@ export default function ProfilePage() {
 }
 
     
-
-    
-
