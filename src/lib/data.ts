@@ -1,4 +1,5 @@
 
+
 import type { LucideIcon } from 'lucide-react';
 import { BookMarked, CalendarDays, Home, Utensils, PartyPopper, User, Library, Salad, Search, Book, Navigation, Bell, TestTube, Dribbble, Compass, MessageSquare, HelpCircle, Shield, BarChart2, BookOpen, Utensils as UtensilsIcon, QrCode, BookCopy, MessagesSquare, ShoppingBag } from 'lucide-react';
 
@@ -13,6 +14,7 @@ export const studentNavItems: NavItem[] = [
   { title: 'Timetable', href: '/timetable', icon: CalendarDays },
   { title: 'Canteen', href: '/canteen', icon: Utensils },
   { title: 'Events', href: '/events', icon: PartyPopper },
+  { title: 'Sports', href: '/sports', icon: Dribbble },
   { title: 'Marketplace', href: '/marketplace', icon: ShoppingBag },
   { title: 'Book Exchange', href: '/book-exchange', icon: BookCopy },
   { title: 'Forum', href: '/forum', icon: MessagesSquare },
@@ -28,6 +30,7 @@ export const teacherNavItems: NavItem[] = [
   { title: 'Timetable', href: '/timetable', icon: CalendarDays },
   { title: 'Canteen', href: '/canteen', icon: Utensils },
   { title: 'Events', href: '/events', icon: PartyPopper },
+  { title: 'Sports', href: '/sports', icon: Dribbble },
   { title: 'Marketplace', href: '/marketplace', icon: ShoppingBag },
   { title: 'Book Exchange', href: '/book-exchange', icon: BookCopy },
   { title: 'Forum', href: '/forum', icon: MessagesSquare },
@@ -45,6 +48,7 @@ export const adminNavItems: NavItem[] = [
   { title: 'Resource Analytics', href: '/admin/resource-analytics', icon: BookOpen },
   { title: 'Event Analytics', href: '/admin/event-analytics', icon: BarChart2 },
   { title: 'Event Check-in', href: '/admin/event-check-in', icon: QrCode },
+  { title: 'Sports', href: '/sports', icon: Dribbble },
   { title: 'Marketplace', href: '/marketplace', icon: ShoppingBag },
   { title: 'Forum', href: '/forum', icon: MessagesSquare },
   { title: 'Lost & Found', href: '/lost-and-found', icon: Search },
@@ -116,15 +120,15 @@ export const allCanteenItems = {
     { id: 2, name: 'Chaat', price: 20, image: 'https://images.unsplash.com/photo-1546069901-d5bfd2cbfb1f?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', dataAiHint: 'aesthetic college canteen' },
     { id: 7, name: 'Noodles', price: 40, image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxub29kbGVzfGVufDB8fHx8MTc1NzY2NzAxOXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'noodles' },
     { id: 8, name: 'Fried Rice', price: 50, image: 'https://images.unsplash.com/photo-1596560548464-f010549b84d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmcmllZCUyMHJpY2V8ZW58MHx8fHwxNzU3NjY3MDY3fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'fried rice' },
-    { id: 9, name: 'Vada Pav', price: 15, image: 'https://images.unsplash.com/photo-1750767397012-3413ba4fdbc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8dmFkYSUyMHBhdnxlbnwwfHx8fDE3NTc2NjcxMzZ8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'vada pav' },
+    { id: 9, name: 'Vada Pav', price: 15, image: 'https://images.unsplash.com/photo-1750767397012-3413ba4fdbc7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8dmFkYSUyMHBhdnxlbnwwfHx8fDE3NTc2NjcxMzZ8MA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'vada pav' },
     { id: 10, name: 'Idli', price: 30, image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpZGxpfGVufDB8fHx8MTc1NzY2NzE1OHww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'idli' },
-    { id: 11, name: 'Medu Vada', price: 35, image: 'https://images.unsplash.com/photo-1730191843435-073792ba22bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2YWRhfGVufDB8fHx8MTc1NzY2NzI2MXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'medu vada' },
+    { id: 11, name: 'Medu Vada', price: 35, image: 'https://images.unsplash.com/photo-1730191843435-073792ba22bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2YWRhfGVufDB8fHx8MTc1NzY2NzI2MXww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'medu vada' },
     { id: 12, name: 'Pizza', price: 120, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwaXp6YXxlbnwwfHx8fDE3NTc2NjczNjN8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'pizza' },
-    { id: 13, name: 'Burger', price: 70, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXJnZXJ8ZW58MHx8fHwxNzU3NjY3Mzc4fDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'burger' },
+    { id: 13, name: 'Burger', price: 70, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXJnZXJ8ZW58MHx8fHwxNzU3NjY3Mzc4fDA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'burger' },
   ],
   drinks: [
     { id: 3, name: 'Cold Coffee', price: 50, image: 'https://images.unsplash.com/photo-1530373239216-42518e6b4063?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb2xkJTIwY29mZmVlfGVufDB8fHx8MTc1NzY2NzUwOXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'cold coffee' },
-    { id: 4, name: 'Masala Chai', price: 15, image: 'https://images.unsplash.com/photo-1630748662359-40a2105640c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHhjaGFpfGVufDB8fHx8MTc1NzY2NzU1MXww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'masala chai' },
+    { id: 4, name: 'Masala Chai', price: 15, image: 'https://images.unsplash.com/photo-1630748662359-40a2105640c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHhjaGFpfGVufDB8fHx8MTc1NzY2NzU1MXww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'masala chai' },
   ],
   meals: [
     { id: 5, name: 'Veg Thali', price: 120, image: 'https://images.unsplash.com/photo-1680359873864-43e89bf248ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8dmVnJTIwdGhhYWxpfGVufDB8fHx8MTc1NzY2NzYzN3ww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'veg thali' },
@@ -169,3 +173,69 @@ export const userBookings = [
   { id: 1, resourceName: 'Study Room 1A', timeSlot: 'Today, 4:00 PM - 5:00 PM', status: 'Confirmed' },
   { id: 2, resourceName: 'Basketball Court', timeSlot: 'Today, 6:00 PM - 7:00 PM', status: 'Confirmed' },
 ];
+
+
+// Sports Data
+export type Fixture = {
+  id: number;
+  time: string;
+  status: 'live' | 'upcoming';
+  teamA: { name: string; score: number };
+  teamB: { name: string; score: number };
+};
+
+export type Standing = {
+  position: number;
+  teamName: string;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  points: number;
+};
+
+export type Sport = {
+    name: string;
+    fixtures: Fixture[];
+    standings: Standing[];
+}
+
+export const sportsData: { cricket: Sport, football: Sport, basketball: Sport } = {
+    cricket: {
+        name: 'Cricket',
+        fixtures: [
+            { id: 1, time: '3:00 PM Today', status: 'live', teamA: { name: 'CS Strikers', score: 145 }, teamB: { name: 'Mech Mavericks', score: 102 } },
+            { id: 2, time: '5:00 PM Today', status: 'upcoming', teamA: { name: 'Civil Challengers', score: 0 }, teamB: { name: 'ECE Eagles', score: 0 } },
+        ],
+        standings: [
+            { position: 1, teamName: 'CS Strikers', played: 5, won: 4, drawn: 0, lost: 1, points: 12 },
+            { position: 2, teamName: 'Mech Mavericks', played: 5, won: 3, drawn: 1, lost: 1, points: 10 },
+            { position: 3, teamName: 'ECE Eagles', played: 5, won: 2, drawn: 1, lost: 2, points: 7 },
+            { position: 4, teamName: 'Civil Challengers', played: 5, won: 0, drawn: 0, lost: 5, points: 0 },
+        ]
+    },
+    football: {
+        name: 'Football',
+        fixtures: [
+            { id: 1, time: '4:00 PM Today', status: 'live', teamA: { name: 'Business Blazers', score: 2 }, teamB: { name: 'Arts United', score: 1 } },
+        ],
+        standings: [
+            { position: 1, teamName: 'Business Blazers', played: 3, won: 3, drawn: 0, lost: 0, points: 9 },
+            { position: 2, teamName: 'Science FC', played: 3, won: 2, drawn: 0, lost: 1, points: 6 },
+            { position: 3, teamName: 'Arts United', played: 3, won: 1, drawn: 0, lost: 2, points: 3 },
+            { position: 4, teamName: 'Law Legends', played: 3, won: 0, drawn: 0, lost: 3, points: 0 },
+        ]
+    },
+    basketball: {
+        name: 'Basketball',
+        fixtures: [
+             { id: 1, time: '6:00 PM Today', status: 'upcoming', teamA: { name: 'Design Dunkers', score: 0 }, teamB: { name: 'Pharma Phenoms', score: 0 } },
+        ],
+        standings: [
+            { position: 1, teamName: 'Design Dunkers', played: 4, won: 4, drawn: 0, lost: 0, points: 12 },
+            { position: 2, teamName: 'Medical Monsters', played: 4, won: 2, drawn: 0, lost: 2, points: 6 },
+            { position: 3, teamName: 'Pharma Phenoms', played: 4, won: 2, drawn: 0, lost: 2, points: 6 },
+            { position: 4, teamName: 'Arch. All-Stars', played: 4, won: 0, drawn: 0, lost: 4, points: 0 },
+        ]
+    }
+};
