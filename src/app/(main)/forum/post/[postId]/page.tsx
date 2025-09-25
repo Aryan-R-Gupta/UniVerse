@@ -3,10 +3,10 @@
 
 import { useState, useEffect, useActionState, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
-import { doc, getDoc, getFirestore, collection, query, where, orderBy, Timestamp } from 'firebase/firestore';
+import { doc, getDoc, getFirestore, collection, query, where, orderBy, Timestamp, getDocs } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { notFound } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ThumbsUp, MessageCircle, Send, Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -62,8 +62,27 @@ function UpvoteButton({ initialUpvotes }: { initialUpvotes: number }) {
     const { pending } = useFormStatus();
     return (
         <Button variant="ghost" size="sm" className="flex items-center gap-1" type="submit" disabled={pending}>
-            <ThumbsUp className="h-4 w-4" /> 
-            {pending ? 'Upvoting...' : `${initialUpvotes} Upvotes`}
+            {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ThumbsUp className="h-4 w-4" /> }
+            {initialUpvotes} Upvotes
+        </Button>
+    )
+}
+
+function CommentSubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" disabled={pending}>
+            {pending ? (
+                <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Posting...
+                </>
+            ) : (
+                <>
+                    <Send className="mr-2 h-4 w-4" />
+                    Post Comment
+                </>
+            )}
         </Button>
     )
 }
@@ -79,13 +98,12 @@ export default function PostPage({ params }: { params: { postId: string } }) {
     const initialCommentState: AddCommentState = { message: null, errors: null };
     const [commentState, commentDispatch] = useActionState(addCommentWithPostId, initialCommentState);
     
-    const upvotePostWithId = upvotePost.bind(null, params.postId);
     const initialUpvoteState: UpvoteState = {};
-    const [upvoteState, upvoteDispatch] = useActionState(upvotePostWithId, initialUpvoteState);
+    const [upvoteState, upvoteDispatch] = useActionState(upvotePost, initialUpvoteState);
 
 
     async function fetchData() {
-        setLoading(true);
+        // No setLoading(true) here to avoid flickering on re-fetch
         try {
             const [postData, commentsData] = await Promise.all([
                 getPost(params.postId),
@@ -102,6 +120,7 @@ export default function PostPage({ params }: { params: { postId: string } }) {
     }
 
     useEffect(() => {
+        setLoading(true);
         fetchData();
     }, [params.postId]);
     
@@ -164,6 +183,7 @@ export default function PostPage({ params }: { params: { postId: string } }) {
                     <p className="whitespace-pre-wrap">{post.content}</p>
                      <div className="flex items-center gap-4 text-sm text-muted-foreground mt-6 border-t pt-4">
                         <form action={upvoteDispatch}>
+                            <input type="hidden" name="postId" value={post.id} />
                             <UpvoteButton initialUpvotes={post.upvotes} />
                         </form>
                          <span className="flex items-center gap-1">
@@ -187,7 +207,7 @@ export default function PostPage({ params }: { params: { postId: string } }) {
                             {commentState.errors?.comment && <p className="text-sm text-destructive">{commentState.errors.comment[0]}</p>}
                         </CardContent>
                         <CardFooter className="flex justify-end">
-                            <Button type="submit">Post Comment</Button>
+                            <CommentSubmitButton />
                         </CardFooter>
                     </form>
                 </Card>
@@ -212,4 +232,3 @@ export default function PostPage({ params }: { params: { postId: string } }) {
         </div>
     )
 }
-
