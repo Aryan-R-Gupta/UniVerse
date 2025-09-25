@@ -98,7 +98,7 @@ export default function BookExchangePage() {
 
 
   async function fetchBooks() {
-    // No need to set loading to true here, to avoid flashing on re-fetch
+    
     try {
       const booksData = await getBooks();
       setBooks(booksData);
@@ -121,8 +121,8 @@ export default function BookExchangePage() {
         toast({ variant: 'destructive', title: 'Error', description: listState.message });
       } else {
         toast({ title: 'Success', description: listState.message });
-        fetchBooks(); // Re-fetch books
-        dialogCloseRef.current?.click(); // Close dialog
+        fetchBooks(); 
+        dialogCloseRef.current?.click(); 
         formRef.current?.reset();
       }
     }
@@ -131,7 +131,7 @@ export default function BookExchangePage() {
   useEffect(() => {
     if (requestState.message && !requestState.error) {
         toast({ title: 'Success', description: requestState.message });
-        fetchBooks(); // Re-fetch books after a successful request
+        fetchBooks(); 
     } else if (requestState.error) {
         toast({ variant: 'destructive', title: 'Error', description: requestState.error });
     }

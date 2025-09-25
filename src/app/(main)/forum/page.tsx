@@ -121,7 +121,7 @@ export default function ForumPage() {
 
   useEffect(() => {
     if (upvoteState.message && !upvoteState.error) {
-        fetchPosts(); // Refetch posts to show new upvote count
+        fetchPosts(); 
     } else if (upvoteState.error) {
         toast({ variant: 'destructive', title: 'Error', description: upvoteState.error });
     }

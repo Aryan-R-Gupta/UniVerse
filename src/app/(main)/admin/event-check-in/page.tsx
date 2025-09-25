@@ -45,23 +45,25 @@ export default function EventCheckInPage() {
         await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
         setHasCameraPermission(true);
 
-        scannerRef.current = new QrScanner(
+        const qrScanner = new QrScanner(
           videoElem,
           result => {
-            scannerRef.current?.stop();
+            qrScanner.stop();
             handleScan(result.data);
           },
           {
             onDecodeError: error => {
-              // Can be noisy, so we don't toast every error
+              
             },
             highlightScanRegion: true,
             highlightCodeOutline: true,
           }
         );
 
+        scannerRef.current = qrScanner;
+
         if (isScanning) {
-          await scannerRef.current.start();
+          await qrScanner.start();
         }
       } catch (error: any) {
         console.error('Error accessing camera or starting scanner:', error);
@@ -79,12 +81,10 @@ export default function EventCheckInPage() {
     }
 
     return () => {
-      scannerRef.current?.destroy();
-      scannerRef.current = null;
-      if (videoElem.srcObject) {
-        const stream = videoElem.srcObject as MediaStream;
-        stream.getTracks().forEach(track => track.stop());
-      }
+        if (scannerRef.current) {
+            scannerRef.current.destroy();
+            scannerRef.current = null;
+        }
     };
   }, [isScanning, toast]);
 
@@ -128,14 +128,18 @@ export default function EventCheckInPage() {
     setIsScanning(true);
     setScanResult(null);
     setIsInvalid(false);
-    if(scannerRef.current) {
+    
+    if (scannerRef.current && videoRef.current) {
         scannerRef.current.start().catch(err => {
+            console.error("Failed to restart scanner", err);
             toast({
                 variant: 'destructive',
                 title: 'Scanner Error',
                 description: 'Could not restart the scanner.'
-            })
+            });
         });
+    } else {
+         
     }
   };
 

@@ -39,7 +39,7 @@ export function CampusAlert() {
         async function fetchAlert() {
             try {
                 const latestAlert = await getLatestAlert();
-                // Show only alerts from the last 24 hours
+                
                 if (latestAlert && (new Date().getTime() - latestAlert.createdAt.getTime()) < 24 * 60 * 60 * 1000) {
                     setAlert(latestAlert);
                 }
@@ -57,7 +57,7 @@ export function CampusAlert() {
     }
 
     if (!alert) {
-        return null; // Don't render anything if there's no recent alert
+        return null; 
     }
 
     return (

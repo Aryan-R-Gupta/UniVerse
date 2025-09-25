@@ -51,7 +51,7 @@ async function reportItem(status: 'lost' | 'found', prevState: ReportState, form
       reportedAt: serverTimestamp(),
     });
 
-    // Revalidate the page to show the new item in the feed if it was found
+    
     if (status === 'found') {
         revalidatePath('/lost-and-found');
     }

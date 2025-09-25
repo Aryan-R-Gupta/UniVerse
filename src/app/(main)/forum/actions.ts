@@ -102,7 +102,7 @@ export async function addComment(postId: string, prevState: AddCommentState, for
                 throw new Error("Post does not exist!");
             }
 
-            // 1. Add the new comment
+            
             const newCommentRef = doc(commentsCol);
             transaction.set(newCommentRef, {
                 postId,
@@ -112,7 +112,7 @@ export async function addComment(postId: string, prevState: AddCommentState, for
                 createdAt: serverTimestamp(),
             });
 
-            // 2. Update the comment count on the post
+            
             const newCommentCount = (postDoc.data().commentCount || 0) + 1;
             transaction.update(postRef, { commentCount: newCommentCount });
         });

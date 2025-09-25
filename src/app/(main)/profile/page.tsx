@@ -45,7 +45,7 @@ type UserBooking = {
 async function getUserActivity(userEmail: string) {
   const db = getFirestore(app);
   
-  // Fetch Registered Events
+  
   const eventsQuery = query(
     collection(db, 'event-registrations'), 
     where('email', '==', userEmail)
@@ -59,15 +59,15 @@ async function getUserActivity(userEmail: string) {
       title: data.eventTitle,
       date: format(registeredAt, 'MMM d'),
       category: data.eventCategory,
-      registeredAt: registeredAt, // Keep the date object for sorting
+      registeredAt: registeredAt, 
     }
   });
 
-  // Sort events by date descending and take the latest 2
+  
   const sortedEvents = registeredEvents.sort((a, b) => b.registeredAt.getTime() - a.registeredAt.getTime()).slice(0, 2);
 
 
-  // Fetch Recent Orders
+  
   const ordersQuery = query(
     collection(db, 'canteen-orders'),
     where('userEmail', '==', userEmail)
@@ -78,11 +78,11 @@ async function getUserActivity(userEmail: string) {
     ...doc.data()
   } as RecentOrder));
 
-  // Sort orders by date descending and take the latest 2
+  
   const sortedOrders = recentOrdersData.sort((a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()).slice(0, 2);
 
 
-  // Fetch Active Bookings
+  
   const bookingsQuery = query(
     collection(db, 'resource-bookings'),
     where('userEmail', '==', userEmail)
@@ -93,7 +93,7 @@ async function getUserActivity(userEmail: string) {
     ...doc.data()
   } as UserBooking));
 
-  // Sort bookings by date descending and take the latest 2
+  
   const sortedBookings = userBookingsData.sort((a, b) => b.bookedAt.toDate().getTime() - a.bookedAt.toDate().getTime()).slice(0, 2);
 
 
@@ -327,5 +327,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    

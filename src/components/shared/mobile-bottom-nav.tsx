@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 export function MobileBottomNav() {
   const pathname = usePathname();
-  // For mobile, we can show a standard set of important icons.
-  // Or we could adapt this based on userType from localStorage as well.
-  // Sticking to student items for now for simplicity on mobile.
+  
+  
+  
   const mainNavItems = studentNavItems.filter(item => ['Dashboard', 'Timetable', 'Canteen', 'Events', 'Profile'].includes(item.title));
 
 
@@ -34,5 +34,3 @@ export function MobileBottomNav() {
     </nav>
   );
 }
-
-    

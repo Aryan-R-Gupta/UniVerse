@@ -35,8 +35,8 @@ export async function uploadNote(prevState: UploadNoteState, formData: FormData)
   }
   
   const file = formData.get('file') as File | null;
-  // When a File object is passed via server action, it becomes a plain object.
-  // We need to check its properties carefully.
+  
+  
   if (!file || typeof file !== 'object' || !('size' in file) || file.size === 0) {
     return {
         errors: { file: ['Please select a file to upload.'] },

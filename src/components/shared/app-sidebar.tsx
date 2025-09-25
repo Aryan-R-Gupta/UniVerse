@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import Link from "next/link";
@@ -33,7 +32,7 @@ function AppSidebarContent() {
             }
         };
 
-        handleStorageChange(); // Initial check
+        handleStorageChange(); 
         window.addEventListener('storage', handleStorageChange);
 
         return () => {
@@ -97,5 +96,3 @@ export function AppSidebar() {
     </aside>
   );
 }
-
-    

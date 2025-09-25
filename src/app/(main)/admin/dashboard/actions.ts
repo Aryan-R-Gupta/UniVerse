@@ -38,7 +38,7 @@ export async function publishAlert(prevState: PublishAlertState, formData: FormD
       createdAt: serverTimestamp(),
     });
 
-    revalidatePath('/dashboard'); // To make students see the new alert
+    revalidatePath('/dashboard'); 
 
     return {
       message: 'The campus alert has been published successfully!',

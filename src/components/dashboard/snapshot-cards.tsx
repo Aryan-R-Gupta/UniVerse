@@ -14,6 +14,7 @@ export function SnapshotCards() {
   const [userType, setUserType] = useState<string | null>(null);
 
   useEffect(() => {
+    
     const storedUserType = localStorage.getItem('userType') || 'Student';
     setUserType(storedUserType);
 
@@ -46,7 +47,7 @@ export function SnapshotCards() {
     <div className="w-full">
       <h2 className="text-xl font-semibold mb-4">Today's Snapshot</h2>
       <div className="flex space-x-4 overflow-x-auto pb-4 -mx-4 px-4">
-        {/* Next Class Card */}
+        
         <Card className="min-w-[300px] flex-shrink-0">
           <CardHeader>
             <CardTitle>Next Class</CardTitle>
@@ -64,7 +65,7 @@ export function SnapshotCards() {
           </CardFooter>
         </Card>
 
-        {/* Canteen Quick Order Card */}
+        
         <Card className="min-w-[300px] flex-shrink-0">
           <CardHeader>
             <CardTitle>Canteen Quick Order</CardTitle>
@@ -88,7 +89,7 @@ export function SnapshotCards() {
           </CardFooter>
         </Card>
 
-        {/* Upcoming Event Card (for Students and Teachers) */}
+        
         {(userType === 'Student' || userType === 'Teacher') && (
             <Card className="min-w-[300px] flex-shrink-0 overflow-hidden">
                 <CardHeader>
@@ -106,7 +107,7 @@ export function SnapshotCards() {
             </Card>
         )}
 
-        {/* Active Bookings Card (not for students) */}
+        
         {userType !== 'Student' && (
           <Card className="min-w-[300px] flex-shrink-0">
             <CardHeader>

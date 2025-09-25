@@ -61,7 +61,7 @@ async function getSupportTickets(): Promise<SupportTicket[]> {
     return {
       id: doc.id,
       subject: data.subject,
-      user: data.userEmail, // Assuming the field is userEmail in Firestore
+      user: data.userEmail, 
       status: data.status,
       createdAt: createdAt ? formatDistanceToNow(createdAt.toDate(), { addSuffix: true }) : 'Just now',
     };
@@ -112,7 +112,7 @@ export default function AdminDashboardPage() {
     <div className="space-y-8">
       <h1 className="text-3xl font-bold">Administrator Overview</h1>
 
-      {/* Analytics Quick Links */}
+      
       <section>
         <h2 className="text-2xl font-semibold mb-4">Live Campus Analytics</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -152,7 +152,7 @@ export default function AdminDashboardPage() {
         </div>
       </section>
 
-      {/* Feedback & Support Hub */}
+      
       <section className="grid md:grid-cols-2 gap-6">
         <Card>
             <CardHeader>
@@ -220,7 +220,7 @@ export default function AdminDashboardPage() {
         </Card>
       </section>
       
-      {/* Dynamic Content Management */}
+      
       <section className="grid md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>

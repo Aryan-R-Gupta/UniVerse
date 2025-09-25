@@ -51,7 +51,7 @@ async function getFoundItems(): Promise<FoundItem[]> {
       reportedAt: (data.reportedAt as Timestamp)?.toDate() ?? new Date(),
     };
   });
-  // Sort on the client-side
+  
   return itemsList.sort((a, b) => b.reportedAt.getTime() - a.reportedAt.getTime());
 }
 
@@ -144,7 +144,7 @@ export default function LostAndFoundPage() {
       if (state.success) {
         toast({ title: 'Success', description: state.message });
         formRef.current?.reset();
-        fetchFoundItems(); // Refetch on new 'found' item
+        fetchFoundItems(); 
       } else {
         toast({ variant: 'destructive', title: 'Error', description: state.message });
       }

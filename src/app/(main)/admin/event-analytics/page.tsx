@@ -16,7 +16,7 @@ import { events as staticEvents } from "@/lib/data";
 
 type RegistrationData = {
   date: string;
-  [key: string]: number | string; // Allows for dynamic category keys
+  [key: string]: number | string; 
 };
 
 type EventPerformance = {
@@ -71,7 +71,7 @@ async function getEventPerformance(): Promise<EventPerformance[]> {
 
   const performanceList: EventPerformance[] = [];
 
-  // Use the static events data as the source of truth for events
+  
   const recentEvents = staticEvents.slice(0, 4);
 
   for (const event of recentEvents) {

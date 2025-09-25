@@ -46,7 +46,7 @@ async function getResourceUtilization(): Promise<ResourceUtilization[]> {
   const db = getFirestore(app);
   const bookingsCol = collection(db, 'resource-bookings');
 
-  // Use the static resource data to define categories and total counts
+  
   const resourcesByCategory: { [category: string]: { ids: Set<string>; count: number } } = {};
   staticResources.forEach(resource => {
     const category = resource.name.includes("Room") ? 'Study Rooms' 
@@ -61,7 +61,7 @@ async function getResourceUtilization(): Promise<ResourceUtilization[]> {
     resourcesByCategory[category].count++;
   });
 
-  // Fetch all confirmed bookings to find out which unique resources are booked
+  
   const bookingsSnapshot = await getDocs(query(bookingsCol, where('status', '==', 'Confirmed')));
   
   const bookedResourceIds = new Set<string>();
@@ -73,7 +73,7 @@ async function getResourceUtilization(): Promise<ResourceUtilization[]> {
   for (const category in resourcesByCategory) {
     const categoryInfo = resourcesByCategory[category];
     let bookedCount = 0;
-    // Count how many unique booked resource IDs belong to this category
+    
     bookedResourceIds.forEach(bookedId => {
         if (categoryInfo.ids.has(bookedId)) {
             bookedCount++;

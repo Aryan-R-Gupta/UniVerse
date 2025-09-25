@@ -1,7 +1,3 @@
-
-// To run this script, use the following command in your terminal:
-// npm run seed:canteen
-
 import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { allCanteenItems } from '@/lib/data';
@@ -29,7 +25,7 @@ async function seedCanteenItems() {
         category: findCategory(item.id),
         itemsSold: 0,
         totalRevenue: 0,
-        stockLevel: 100, // Initial stock level for all items
+        stockLevel: 100, 
       });
       console.log(`Successfully seeded: ${item.name} with stock 100`);
     } catch (error) {

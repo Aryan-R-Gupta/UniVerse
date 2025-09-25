@@ -26,7 +26,7 @@ type Resource = {
 };
 
 type Availability = {
-  [resourceId: string]: string[]; // Array of booked time slots
+  [resourceId: string]: string[]; 
 };
 
 const timeSlots = [
@@ -42,7 +42,7 @@ const timeSlots = [
 async function getAvailability(): Promise<Availability> {
     const db = getFirestore(app);
     const bookingsCol = collection(db, 'resource-bookings');
-    // For simplicity, we fetch all of today's bookings. In a real app, you'd filter by date.
+    
     const bookingsSnapshot = await getDocs(bookingsCol);
 
     const availability: Availability = {};
@@ -149,7 +149,7 @@ export default function ResourcesPage() {
           title: 'Success!',
           description: state.message,
         });
-        // Refetch availability and close dialog
+        
         getAvailability().then(setAvailability);
         dialogCloseRef.current?.click();
       }

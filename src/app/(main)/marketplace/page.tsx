@@ -144,8 +144,8 @@ export default function MarketplacePage() {
         toast({ variant: 'destructive', title: 'Error', description: listState.message });
       } else {
         toast({ title: 'Success', description: listState.message });
-        fetchItems(); // Re-fetch items
-        listDialogCloseRef.current?.click(); // Close dialog
+        fetchItems(); 
+        listDialogCloseRef.current?.click(); 
         listFormRef.current?.reset();
       }
     }

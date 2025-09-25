@@ -103,7 +103,7 @@ export default function PostPage({ params }: { params: { postId: string } }) {
 
 
     async function fetchData() {
-        // No setLoading(true) here to avoid flickering on re-fetch
+        
         try {
             const [postData, commentsData] = await Promise.all([
                 getPost(params.postId),
@@ -131,14 +131,14 @@ export default function PostPage({ params }: { params: { postId: string } }) {
             } else {
                  toast({ title: 'Success', description: commentState.message });
                  formRef.current?.reset();
-                 fetchData(); // Refetch data to show the new comment
+                 fetchData(); 
             }
         }
     }, [commentState, toast]);
 
     useEffect(() => {
         if (upvoteState.message && !upvoteState.error) {
-            fetchData(); // Refetch data to show new upvote count
+            fetchData(); 
         } else if (upvoteState.error) {
             toast({ variant: 'destructive', title: 'Error', description: upvoteState.error });
         }

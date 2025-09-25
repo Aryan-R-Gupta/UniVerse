@@ -1,13 +1,5 @@
 'use server';
 
-/**
- * @fileOverview Provides campus navigation using AI to find the quickest route.
- *
- * - navigateCampus - A function that finds the route to a location on campus.
- * - CampusNavigationInput - The input type for the navigateCampus function.
- * - CampusNavigationOutput - The return type for the navigateCampus function.
- */
-
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 

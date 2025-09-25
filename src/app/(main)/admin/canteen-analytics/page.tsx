@@ -47,7 +47,7 @@ async function getSalesData(): Promise<SalesData[]> {
 async function getInventoryStatus(): Promise<InventoryItem[]> {
   const db = getFirestore(app);
   const itemsCol = collection(db, 'canteen-items');
-  const q = query(itemsCol, orderBy('stockLevel', 'asc')); // Order by stock to see low items first
+  const q = query(itemsCol, orderBy('stockLevel', 'asc')); 
   const itemsSnapshot = await getDocs(q);
   const itemsList = itemsSnapshot.docs.map(doc => ({
     id: doc.id,

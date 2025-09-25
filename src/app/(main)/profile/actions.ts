@@ -63,5 +63,3 @@ export async function generatePersona(): Promise<PersonaOutput> {
 
   return output!;
 }
-
-    

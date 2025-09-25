@@ -12,7 +12,7 @@ import {
 import { app } from '@/lib/firebase';
 import { userProfileData } from '@/lib/data';
 
-// Coerce numeric fields because client often sends strings
+
 const CartItemSchema = z.object({
   id: z.coerce.number(),
   name: z.string(),
@@ -73,7 +73,7 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
     await runTransaction(db, async (transaction) => {
       const itemDocs = await Promise.all(itemRefs.map(ref => transaction.get(ref)));
 
-      // Check stock levels before processing order
+      
       for (let i = 0; i < orderItems.length; i++) {
         const itemDoc = itemDocs[i];
         const orderItem = orderItems[i];
@@ -86,7 +86,7 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
         }
       }
 
-      // If all items are in stock, proceed
+      
       transaction.set(newOrderRef, {
         userEmail,
         items: orderItems,
@@ -113,7 +113,7 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
         transaction.update(itemRef, {
           totalRevenue: currentRevenue + (item.price * item.quantity),
           itemsSold: currentItemsSold + item.quantity,
-          stockLevel: currentStock - item.quantity, // Decrement stock
+          stockLevel: currentStock - item.quantity, 
         });
       });
     });

@@ -42,7 +42,7 @@ export async function bookResource(prevState: BookingState, formData: FormData):
   const bookingsCol = collection(db, 'resource-bookings');
 
   try {
-    // Check for existing booking for the same resource and time slot
+    
     const q = query(bookingsCol, where('resourceId', '==', resourceId), where('timeSlot', '==', timeSlot));
     const existingBookings = await getDocs(q);
 
@@ -59,11 +59,11 @@ export async function bookResource(prevState: BookingState, formData: FormData):
       timeSlot,
       userEmail: userProfileData.email,
       userName: userProfileData.name,
-      status: 'Confirmed', // Default status
+      status: 'Confirmed', 
       bookedAt: serverTimestamp(),
     });
     
-    // Revalidate the resources page to show updated availability
+    
     revalidatePath('/resources');
 
     return {

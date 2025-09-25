@@ -95,17 +95,17 @@ export default function CanteenPage() {
       const existingItem = currentCart.find(item => item.id === itemToUpdate.id);
   
       if (newQuantity <= 0) {
-        // Remove item from cart
+        
         return currentCart.filter(item => item.id !== itemToUpdate.id);
       }
   
       if (existingItem) {
-        // Update quantity of existing item
+        
         return currentCart.map(item =>
           item.id === itemToUpdate.id ? { ...item, quantity: newQuantity } : item
         );
       } else {
-        // Add new item to cart
+        
         const newItem: CartItem = {
           id: itemToUpdate.id,
           name: itemToUpdate.name,
@@ -124,9 +124,9 @@ export default function CanteenPage() {
           title: 'Order Placed!',
           description: state.message,
         });
-        setCart([]); // Clear the cart on successful order
+        setCart([]); 
         formRef.current?.reset();
-        sheetCloseRef.current?.click(); // Close the cart sheet
+        sheetCloseRef.current?.click(); 
       } else {
          toast({
           variant: 'destructive',
