@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { BookMarked, CalendarDays, Home, Utensils, PartyPopper, User, Library, Salad, Search, Book, Navigation, Bell, TestTube, Dribbble, Compass, MessageSquare, HelpCircle, Shield, BarChart2, BookOpen, Utensils as UtensilsIcon, QrCode, BookCopy } from 'lucide-react';
+import { BookMarked, CalendarDays, Home, Utensils, PartyPopper, User, Library, Salad, Search, Book, Navigation, Bell, TestTube, Dribbble, Compass, MessageSquare, HelpCircle, Shield, BarChart2, BookOpen, Utensils as UtensilsIcon, QrCode, BookCopy, MessagesSquare } from 'lucide-react';
 
 export type NavItem = {
   title: string;
@@ -14,6 +14,7 @@ export const studentNavItems: NavItem[] = [
   { title: 'Canteen', href: '/canteen', icon: Utensils },
   { title: 'Events', href: '/events', icon: PartyPopper },
   { title: 'Book Exchange', href: '/book-exchange', icon: BookCopy },
+  { title: 'Forum', href: '/forum', icon: MessagesSquare },
   { title: 'Navigate', href: '/navigation', icon: Compass },
   { title: 'Feedback', href: '/feedback', icon: MessageSquare },
   { title: 'Support', href: '/support', icon: HelpCircle },
@@ -26,6 +27,7 @@ export const teacherNavItems: NavItem[] = [
   { title: 'Canteen', href: '/canteen', icon: Utensils },
   { title: 'Events', href: '/events', icon: PartyPopper },
   { title: 'Book Exchange', href: '/book-exchange', icon: BookCopy },
+  { title: 'Forum', href: '/forum', icon: MessagesSquare },
   { title: 'Resources', href: '/resources', icon: BookMarked },
   { title: 'Navigate', href: '/navigation', icon: Compass },
   { title: 'Feedback', href: '/feedback', icon: MessageSquare },
@@ -39,6 +41,7 @@ export const adminNavItems: NavItem[] = [
   { title: 'Resource Analytics', href: '/admin/resource-analytics', icon: BookOpen },
   { title: 'Event Analytics', href: '/admin/event-analytics', icon: BarChart2 },
   { title: 'Event Check-in', href: '/admin/event-check-in', icon: QrCode },
+  { title: 'Forum', href: '/forum', icon: MessagesSquare },
   { title: 'Canteen', href: '/canteen', icon: Utensils },
   { title: 'Events', href: '/events', icon: PartyPopper },
   { title: 'Feedback Hub', href: '/admin/feedback-hub', icon: MessageSquare },
@@ -124,7 +127,7 @@ export const allCanteenItems = {
 }
 
 export const events = [
-  { id: 1, title: 'AI & The Future', slug: 'ai-and-the-future', category: 'Workshops', date: 'Dec 15', image: 'https://images.unsplash.com/photo-1694903110330-cc64b7e1d21d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxBSSUyMHxlbnwwfHx8fDE3NTc1Nzk3ODB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'AI workshop' },
+  { id: 1, title: 'AI & The Future', slug: 'ai-and-the-future', category: 'Workshops', date: 'Dec 15', image: 'https://images.unsplash.com/photo-1694903110330-cc64b7e1d21d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxBSSUyMHxlbnwwfHx8fDE3NTc1Nzk3ODB8MA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'AI workshop' },
   { id: 2, title: 'Encore - Music Fest', slug: 'encore-music-fest', category: 'Cultural', date: 'Dec 18', image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtdXNpYyUyMGZlc3R8ZW58MHx8fHwxNzU3NjY5NTM2fDA&ixlibrb-4.1.0&q=80&w=1080', dataAiHint: 'music festival' },
   { id: 3, title: 'Hackathon 5.0', slug: 'hackathon-5-0', category: 'Tech', date: 'Dec 20', image: 'https://images.unsplash.com/photo-1637073849667-91120a924221?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoYWNrYXRob258ZW58MHx8fHwxNzU3NjY5NDQ5fDA&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'hackathon event' },
   { id: 4, title: 'University Soccer League', slug: 'university-soccer-league', category: 'Sports', date: 'Dec 22', image: 'https://images.unsplash.com/photo-1583027383321-51847ab7ada0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8U29jY2VyJTIwTGVhZ3VlfGVufDB8fHx8MTc1NzY2OTU1OHww&ixlib-rb-4.1.0&q=80&w=1080', dataAiHint: 'soccer match' },
@@ -160,5 +163,3 @@ export const userBookings = [
   { id: 1, resourceName: 'Study Room 1A', timeSlot: 'Today, 4:00 PM - 5:00 PM', status: 'Confirmed' },
   { id: 2, resourceName: 'Basketball Court', timeSlot: 'Today, 6:00 PM - 7:00 PM', status: 'Confirmed' },
 ];
-
-    
