@@ -8,14 +8,14 @@ import { app } from '@/lib/firebase';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ThumbsUp, MessageCircle, Send } from 'lucide-react';
+import { ThumbsUp, MessageCircle, Send, Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { type ForumPost, type ForumComment } from '../types';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { addComment, type AddCommentState } from '../actions';
+import { addComment, type AddCommentState } from '../../actions';
 import { userProfileData } from '@/lib/data';
 
 async function getPost(postId: string): Promise<ForumPost | null> {
@@ -197,3 +197,5 @@ export default function PostPage({ params }: { params: { postId: string } }) {
         </div>
     )
 }
+
+    
