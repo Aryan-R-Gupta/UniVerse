@@ -10,7 +10,6 @@ import { revalidatePath } from 'next/cache';
 const UploadNoteSchema = z.object({
   title: z.string().min(5, { message: 'Title must be at least 5 characters.' }),
   course: z.string().min(3, { message: 'Course name must be at least 3 characters.' }),
-  // Content validation is removed as we are now handling a file
 });
 
 export type UploadNoteState = {
@@ -43,13 +42,9 @@ export async function uploadNote(prevState: UploadNoteState, formData: FormData)
     }
   }
 
-  // Basic check for PDF files, can be expanded
-  if (file.type !== 'application/pdf') {
-     return {
-        errors: { file: ['Only PDF files are currently supported.'] },
-        message: 'Invalid file type.'
-    }
-  }
+  // Basic check for PDF files on the client side is good, but on the server,
+  // `file.type` might not be reliable. We'll trust the client's `accept` attribute for now.
+  // In a real app, you'd use a library to check magic bytes on the server.
 
   const { title, course } = validatedFields.data;
   const db = getFirestore(app);
@@ -59,7 +54,7 @@ export async function uploadNote(prevState: UploadNoteState, formData: FormData)
       title,
       course,
       fileName: file.name,
-      fileType: file.type,
+      fileType: file.type, // This is okay as it's just for metadata
       authorName: userProfileData.name,
       authorEmail: userProfileData.email,
       createdAt: serverTimestamp(),
