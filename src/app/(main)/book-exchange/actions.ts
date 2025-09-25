@@ -2,7 +2,7 @@
 'use server';
 
 import { z } from 'zod';
-import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { userProfileData } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
@@ -63,4 +63,34 @@ export async function listBook(prevState: BookListState, formData: FormData): Pr
   }
 }
 
+export type RequestBookState = {
+    message?: string | null;
+    error?: string | null;
+    bookId?: string | null;
+}
+
+export async function requestBook(prevState: RequestBookState, formData: FormData): Promise<RequestBookState> {
+    const bookId = formData.get('bookId') as string;
+    
+    if (!bookId) {
+        return { error: 'Book ID is missing.', bookId: null };
+    }
+
+    const db = getFirestore(app);
+    const bookRef = doc(db, 'book-exchange', bookId);
+
+    try {
+        await updateDoc(bookRef, {
+            status: 'Requested',
+            requestedByEmail: userProfileData.email,
+            requestedByName: userProfileData.name,
+        });
+
+        revalidatePath('/book-exchange');
+        return { message: 'Request sent successfully!', bookId };
+    } catch (e) {
+        console.error('Error requesting book:', e);
+        return { error: 'Failed to send request. Please try again.', bookId };
+    }
+}
     

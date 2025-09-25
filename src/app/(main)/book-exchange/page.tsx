@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useActionState, useRef } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger, DialogClose } from '@/components/ui/dialog';
@@ -13,7 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { BookCopy, PlusCircle, Loader2, User, Library } from 'lucide-react';
 import { getFirestore, collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
-import { listBook, type BookListState } from './actions';
+import { listBook, requestBook, type BookListState, type RequestBookState } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -47,7 +47,7 @@ async function getBooks(): Promise<Book[]> {
   return booksList;
 }
 
-function SubmitButton() {
+function ListBookSubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" className="w-full" disabled={pending}>
@@ -63,6 +63,24 @@ function SubmitButton() {
   );
 }
 
+function RequestButton({ bookId, currentStatus }: { bookId: string, currentStatus: string }) {
+    const { pending, data } = useFormStatus();
+    const isThisButtonPending = pending && data?.get('bookId') === bookId;
+  
+    return (
+      <Button className="w-full" disabled={currentStatus !== 'Available' || pending}>
+        {isThisButtonPending ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Requesting...
+          </>
+        ) : (
+          'Request to Borrow'
+        )}
+      </Button>
+    );
+}
+
 export default function BookExchangePage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,37 +88,51 @@ export default function BookExchangePage() {
   const formRef = useRef<HTMLFormElement>(null);
   const dialogCloseRef = useRef<HTMLButtonElement>(null);
   
-  const initialState: BookListState = { message: null, errors: null };
-  const [state, dispatch] = useActionState(listBook, initialState);
+  const initialListState: BookListState = { message: null, errors: null };
+  const [listState, listDispatch] = useActionState(listBook, initialListState);
+
+  const initialRequestState: RequestBookState = { message: null, error: null };
+  const [requestState, requestDispatch] = useActionState(requestBook, initialRequestState);
+
+
+  async function fetchBooks() {
+    setLoading(true);
+    try {
+      const booksData = await getBooks();
+      setBooks(booksData);
+    } catch (error) {
+      console.error("Failed to fetch books:", error);
+      toast({ variant: 'destructive', title: 'Error', description: 'Could not load books.' });
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function fetchBooks() {
-      setLoading(true);
-      try {
-        const booksData = await getBooks();
-        setBooks(booksData);
-      } catch (error) {
-        console.error("Failed to fetch books:", error);
-        toast({ variant: 'destructive', title: 'Error', description: 'Could not load books.' });
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchBooks();
   }, []);
 
   useEffect(() => {
-    if (state.message) {
-      if (state.errors) {
-        toast({ variant: 'destructive', title: 'Error', description: state.message });
+    if (listState.message) {
+      if (listState.errors) {
+        toast({ variant: 'destructive', title: 'Error', description: listState.message });
       } else {
-        toast({ title: 'Success', description: state.message });
-        getBooks().then(setBooks); // Re-fetch books
+        toast({ title: 'Success', description: listState.message });
+        fetchBooks(); // Re-fetch books
         dialogCloseRef.current?.click(); // Close dialog
         formRef.current?.reset();
       }
     }
-  }, [state, toast]);
+  }, [listState, toast]);
+
+  useEffect(() => {
+    if (requestState.message) {
+        toast({ title: 'Success', description: requestState.message });
+    } else if (requestState.error) {
+        toast({ variant: 'destructive', title: 'Error', description: requestState.error });
+    }
+  }, [requestState, toast]);
+
 
   return (
     <div className="space-y-6">
@@ -123,26 +155,26 @@ export default function BookExchangePage() {
                 Fill in the details of the book you want to lend or sell.
               </DialogDescription>
             </DialogHeader>
-            <form action={dispatch} ref={formRef}>
+            <form action={listDispatch} ref={formRef}>
               <div className="grid gap-4 py-4">
                 <div className="space-y-2">
                   <Label htmlFor="title">Book Title</Label>
                   <Input id="title" name="title" placeholder="e.g., Introduction to Algorithms" required />
-                  {state.errors?.title && <p className="text-sm text-destructive">{state.errors.title[0]}</p>}
+                  {listState.errors?.title && <p className="text-sm text-destructive">{listState.errors.title[0]}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="author">Author</Label>
                   <Input id="author" name="author" placeholder="e.g., Thomas H. Cormen" required />
-                   {state.errors?.author && <p className="text-sm text-destructive">{state.errors.author[0]}</p>}
+                   {listState.errors?.author && <p className="text-sm text-destructive">{listState.errors.author[0]}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="condition">Condition</Label>
                   <Input id="condition" name="condition" placeholder="e.g., Like New, Good, Used" required />
-                  {state.errors?.condition && <p className="text-sm text-destructive">{state.errors.condition[0]}</p>}
+                  {listState.errors?.condition && <p className="text-sm text-destructive">{listState.errors.condition[0]}</p>}
                 </div>
               </div>
               <DialogFooter>
-                <SubmitButton />
+                <ListBookSubmitButton />
               </DialogFooter>
             </form>
              <DialogClose ref={dialogCloseRef} />
@@ -186,9 +218,10 @@ export default function BookExchangePage() {
                  </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" disabled={book.status !== 'Available'}>
-                  Request to Borrow
-                </Button>
+                <form action={requestDispatch} className="w-full">
+                    <input type="hidden" name="bookId" value={book.id} />
+                    <RequestButton bookId={book.id} currentStatus={book.status} />
+                </form>
               </CardFooter>
             </Card>
           ))
