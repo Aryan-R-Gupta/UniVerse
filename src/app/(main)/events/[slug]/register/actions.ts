@@ -21,6 +21,7 @@ export type RegistrationState = {
         email?: string[];
         studentId?: string[];
     } | null;
+    registrationId?: string | null;
 }
 
 export async function registerForEvent(eventSlug: string, prevState: RegistrationState, formData: FormData): Promise<RegistrationState> {
@@ -52,7 +53,7 @@ export async function registerForEvent(eventSlug: string, prevState: Registratio
   try {
     const eventData = events.find(e => e.slug === eventSlug);
 
-    await addDoc(collection(db, 'event-registrations'), {
+    const docRef = await addDoc(collection(db, 'event-registrations'), {
       eventId: event.id,
       eventTitle: event.title,
       eventCategory: eventData?.category, // For analytics
@@ -66,6 +67,7 @@ export async function registerForEvent(eventSlug: string, prevState: Registratio
 
     return {
       message: `You have successfully registered for ${event.title}!`,
+      registrationId: docRef.id,
     };
   } catch (error) {
     console.error('Error submitting registration to Firestore:', error);

@@ -1,11 +1,10 @@
 
-
 'use client';
 
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { events } from '@/lib/data';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -26,18 +25,15 @@ function SubmitButton() {
 export default function EventRegistrationPage({ params }: { params: { slug: string } }) {
   const event = events.find(e => e.slug === params.slug);
   const { toast } = useToast();
+  const router = useRouter();
 
-  const initialState: RegistrationState = { message: null, errors: null };
-  // The first argument to useActionState is the server action, 
-  // and the second is the initial state.
-  // We also need to pass the event slug to our action.
+  const initialState: RegistrationState = { message: null, errors: null, registrationId: null };
   const registerWithSlug = registerForEvent.bind(null, params.slug);
   const [state, dispatch] = useActionState(registerWithSlug, initialState);
 
-
   useEffect(() => {
     if (state.message) {
-      if (state.errors) {
+      if (state.errors || !state.registrationId) {
         toast({
           variant: 'destructive',
           title: 'Error',
@@ -48,10 +44,10 @@ export default function EventRegistrationPage({ params }: { params: { slug: stri
           title: 'Success!',
           description: state.message,
         });
-        // Optionally, reset the form or redirect the user
+        router.push(`/events/ticket/${state.registrationId}`);
       }
     }
-  }, [state, toast]);
+  }, [state, toast, router]);
 
 
   if (!event) {
