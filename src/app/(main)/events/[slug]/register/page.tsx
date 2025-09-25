@@ -23,12 +23,13 @@ function SubmitButton() {
 }
 
 export default function EventRegistrationPage({ params }: { params: { slug: string } }) {
-  const event = events.find(e => e.slug === params.slug);
+  const slug = params.slug;
+  const event = events.find(e => e.slug === slug);
   const { toast } = useToast();
   const router = useRouter();
 
   const initialState: RegistrationState = { message: null, errors: null, registrationId: null };
-  const registerWithSlug = registerForEvent.bind(null, params.slug);
+  const registerWithSlug = registerForEvent.bind(null, slug);
   const [state, dispatch] = useActionState(registerWithSlug, initialState);
 
   useEffect(() => {
