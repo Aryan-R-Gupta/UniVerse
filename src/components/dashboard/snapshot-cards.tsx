@@ -8,9 +8,10 @@ import { ArrowRight, Navigation } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 export function SnapshotCards() {
-  const [userType, setUserType] = useState('Student');
+  const [userType, setUserType] = useState<string | null>(null);
 
   useEffect(() => {
     const storedUserType = localStorage.getItem('userType') || 'Student';
@@ -27,6 +28,19 @@ export function SnapshotCards() {
         window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
+
+  if (userType === null) {
+    return (
+      <div className="w-full">
+        <h2 className="text-xl font-semibold mb-4">Today's Snapshot</h2>
+        <div className="flex space-x-4 overflow-x-auto pb-4 -mx-4 px-4">
+          <Skeleton className="min-w-[300px] h-[250px] flex-shrink-0" />
+          <Skeleton className="min-w-[300px] h-[250px] flex-shrink-0" />
+          <Skeleton className="min-w-[300px] h-[250px] flex-shrink-0" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
