@@ -6,18 +6,20 @@ import { useFormStatus } from 'react-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger, DialogClose } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
-import { PlusCircle, Loader2, Tag, Mail, ShoppingBag } from 'lucide-react';
+import { PlusCircle, Loader2, Tag, Mail, ShoppingBag, Trash2, Pencil } from 'lucide-react';
 import { getFirestore, collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
-import { listItem, type ListItemState } from './actions';
+import { listItem, updateItem, deleteItem, type ListItemState } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { marketplaceCategories } from './data';
+import { userProfileData } from '@/lib/data';
 
 type MarketplaceItem = {
   id: string;
@@ -27,6 +29,7 @@ type MarketplaceItem = {
   category: string;
   contact: string;
   sellerName: string;
+  sellerEmail: string;
   createdAt: Date;
 };
 
@@ -45,37 +48,76 @@ async function getItems(): Promise<MarketplaceItem[]> {
       category: data.category,
       contact: data.contact,
       sellerName: data.sellerName,
+      sellerEmail: data.sellerEmail,
       createdAt: (data.createdAt as Timestamp)?.toDate() ?? new Date(),
     };
   });
   return itemsList;
 }
 
-function ListItemSubmitButton() {
+function ListItemSubmitButton({ isUpdate = false }: { isUpdate?: boolean }) {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" className="w-full" disabled={pending}>
       {pending ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Listing Item...
+          {isUpdate ? 'Updating...' : 'Listing...'}
         </>
       ) : (
-        'List My Item'
+        isUpdate ? 'Save Changes' : 'List My Item'
       )}
     </Button>
   );
 }
 
+function DeleteButton({ itemId }: { itemId: string }) {
+    const { pending } = useFormStatus();
+    return (
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button variant="ghost" size="icon" disabled={pending}>
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your item listing.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <form action={deleteItem}>
+                        <input type="hidden" name="itemId" value={itemId} />
+                        <AlertDialogAction type="submit" className="bg-destructive hover:bg-destructive/90">
+                           {pending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Delete
+                        </AlertDialogAction>
+                    </form>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    )
+}
+
+
 export default function MarketplacePage() {
   const [items, setItems] = useState<MarketplaceItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
+  const [currentItem, setCurrentItem] = useState<MarketplaceItem | null>(null);
+
   const { toast } = useToast();
-  const formRef = useRef<HTMLFormElement>(null);
-  const dialogCloseRef = useRef<HTMLButtonElement>(null);
+  const listFormRef = useRef<HTMLFormElement>(null);
+  const editFormRef = useRef<HTMLFormElement>(null);
+  const listDialogCloseRef = useRef<HTMLButtonElement>(null);
+  const editDialogCloseRef = useRef<HTMLButtonElement>(null);
   
   const initialListState: ListItemState = { message: null, errors: null };
   const [listState, listDispatch] = useActionState(listItem, initialListState);
+  const [editState, editDispatch] = useActionState(updateItem, initialListState);
+
 
   async function fetchItems() {
     try {
@@ -101,11 +143,76 @@ export default function MarketplacePage() {
       } else {
         toast({ title: 'Success', description: listState.message });
         fetchItems(); // Re-fetch items
-        dialogCloseRef.current?.click(); // Close dialog
-        formRef.current?.reset();
+        listDialogCloseRef.current?.click(); // Close dialog
+        listFormRef.current?.reset();
       }
     }
   }, [listState, toast]);
+
+  useEffect(() => {
+    if (editState.message) {
+        if (editState.errors) {
+            toast({ variant: 'destructive', title: 'Error', description: editState.message });
+        } else {
+            toast({ title: 'Success', description: editState.message });
+            fetchItems();
+            editDialogCloseRef.current?.click();
+        }
+    }
+  }, [editState, toast])
+
+  const handleEditClick = (item: MarketplaceItem) => {
+    setCurrentItem(item);
+    setIsEdit(true);
+  }
+
+  const ItemForm = ({ isUpdate = false, item, formRef, dispatch }: { isUpdate?: boolean, item?: MarketplaceItem | null, formRef: React.RefObject<HTMLFormElement>, dispatch: (payload: FormData) => void }) => {
+    const state = isUpdate ? editState : listState;
+    return (
+         <form action={dispatch} ref={formRef} className="space-y-4">
+            {isUpdate && <input type="hidden" name="itemId" value={item?.id} />}
+            <div className="space-y-2">
+                <Label htmlFor="title">Item Title</Label>
+                <Input id="title" name="title" defaultValue={item?.title} placeholder="e.g., Scientific Calculator" required />
+                {state.errors?.title && <p className="text-sm text-destructive">{state.errors.title[0]}</p>}
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea id="description" name="description" defaultValue={item?.description} placeholder="e.g., Casio FX-991EX, barely used" required />
+                {state.errors?.description && <p className="text-sm text-destructive">{state.errors.description[0]}</p>}
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="price">Price (₹)</Label>
+                    <Input id="price" name="price" type="number" defaultValue={item?.price} placeholder="e.g., 800" required />
+                    {state.errors?.price && <p className="text-sm text-destructive">{state.errors.price[0]}</p>}
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="category">Category</Label>
+                    <Select name="category" defaultValue={item?.category} required>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {marketplaceCategories.map(cat => (
+                                <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {state.errors?.category && <p className="text-sm text-destructive">{state.errors.category[0]}</p>}
+                </div>
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="contact">Contact Details</Label>
+                <Input id="contact" name="contact" defaultValue={item?.contact} placeholder="e.g., Email or Phone Number" required />
+                {state.errors?.contact && <p className="text-sm text-destructive">{state.errors.contact[0]}</p>}
+            </div>
+            <DialogFooter>
+                <ListItemSubmitButton isUpdate={isUpdate} />
+            </DialogFooter>
+        </form>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -114,7 +221,7 @@ export default function MarketplacePage() {
           <h1 className="text-3xl font-bold">Marketplace</h1>
           <p className="text-muted-foreground">Buy and sell second-hand items within the campus.</p>
         </div>
-        <Dialog>
+        <Dialog onOpenChange={(open) => !open && listFormRef.current?.reset()}>
           <DialogTrigger asChild>
             <Button>
               <PlusCircle className="mr-2 h-4 w-4" />
@@ -128,48 +235,8 @@ export default function MarketplacePage() {
                 Fill in the details of the item you want to sell.
               </DialogDescription>
             </DialogHeader>
-            <form action={listDispatch} ref={formRef} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title">Item Title</Label>
-                <Input id="title" name="title" placeholder="e.g., Scientific Calculator" required />
-                {listState.errors?.title && <p className="text-sm text-destructive">{listState.errors.title[0]}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea id="description" name="description" placeholder="e.g., Casio FX-991EX, barely used" required />
-                {listState.errors?.description && <p className="text-sm text-destructive">{listState.errors.description[0]}</p>}
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                    <Label htmlFor="price">Price (₹)</Label>
-                    <Input id="price" name="price" type="number" placeholder="e.g., 800" required />
-                    {listState.errors?.price && <p className="text-sm text-destructive">{listState.errors.price[0]}</p>}
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="category">Category</Label>
-                     <Select name="category" required>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {marketplaceCategories.map(cat => (
-                                <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    {listState.errors?.category && <p className="text-sm text-destructive">{listState.errors.category[0]}</p>}
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="contact">Contact Details</Label>
-                <Input id="contact" name="contact" placeholder="e.g., Email or Phone Number" required />
-                {listState.errors?.contact && <p className="text-sm text-destructive">{listState.errors.contact[0]}</p>}
-              </div>
-              <DialogFooter>
-                <ListItemSubmitButton />
-              </DialogFooter>
-            </form>
-            <DialogClose ref={dialogCloseRef} />
+            <ItemForm formRef={listFormRef} dispatch={listDispatch} />
+            <DialogClose ref={listDialogCloseRef} />
           </DialogContent>
         </Dialog>
       </div>
@@ -203,7 +270,7 @@ export default function MarketplacePage() {
                     <span>{marketplaceCategories.find(c => c.id === item.category)?.name || item.category}</span>
                  </div>
               </CardContent>
-              <CardFooter className="p-4 bg-muted/50 mt-4">
+              <CardFooter className="p-2 bg-muted/50 mt-4 flex items-center justify-between">
                  <div className="w-full">
                     <p className="text-sm font-medium">{item.sellerName}</p>
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
@@ -211,6 +278,28 @@ export default function MarketplacePage() {
                         <span>{item.contact}</span>
                     </div>
                 </div>
+                 {item.sellerEmail === userProfileData.email && (
+                    <div className="flex items-center">
+                        <Dialog onOpenChange={(open) => { if(!open) setIsEdit(false); }}>
+                            <DialogTrigger asChild>
+                                <Button variant="ghost" size="icon" onClick={() => handleEditClick(item)}>
+                                    <Pencil className="h-4 w-4" />
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[525px]">
+                                <DialogHeader>
+                                    <DialogTitle>Edit Your Listing</DialogTitle>
+                                    <DialogDescription>
+                                        Update the details of your item for sale.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                {isEdit && <ItemForm isUpdate={true} item={currentItem} formRef={editFormRef} dispatch={editDispatch} />}
+                                <DialogClose ref={editDialogCloseRef} />
+                            </DialogContent>
+                        </Dialog>
+                        <DeleteButton itemId={item.id} />
+                    </div>
+                 )}
               </CardFooter>
             </Card>
           ))
