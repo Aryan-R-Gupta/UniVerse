@@ -22,7 +22,8 @@ function SubmitButton() {
   );
 }
 
-export default function EventRegistrationPage({ params: { slug } }: { params: { slug: string } }) {
+export default function EventRegistrationPage({ params }: { params: { slug: string } }) {
+  const slug = params.slug;
   const event = events.find(e => e.slug === slug);
   const { toast } = useToast();
   const router = useRouter();
