@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useActionState, useRef } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger, DialogClose } from '@/components/ui/dialog';
@@ -74,6 +74,8 @@ function RequestButton({ bookId, currentStatus }: { bookId: string, currentStatu
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Requesting...
           </>
+        ) : currentStatus === 'Requested' ? (
+          'Requested'
         ) : (
           'Request to Borrow'
         )}
@@ -96,7 +98,7 @@ export default function BookExchangePage() {
 
 
   async function fetchBooks() {
-    setLoading(true);
+    // No need to set loading to true here, to avoid flashing on re-fetch
     try {
       const booksData = await getBooks();
       setBooks(booksData);
@@ -109,6 +111,7 @@ export default function BookExchangePage() {
   }
 
   useEffect(() => {
+    setLoading(true);
     fetchBooks();
   }, []);
 
@@ -126,8 +129,9 @@ export default function BookExchangePage() {
   }, [listState, toast]);
 
   useEffect(() => {
-    if (requestState.message) {
+    if (requestState.message && !requestState.error) {
         toast({ title: 'Success', description: requestState.message });
+        fetchBooks(); // Re-fetch books after a successful request
     } else if (requestState.error) {
         toast({ variant: 'destructive', title: 'Error', description: requestState.error });
     }
