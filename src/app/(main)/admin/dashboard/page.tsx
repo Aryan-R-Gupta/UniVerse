@@ -1,16 +1,22 @@
 
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Users, MessageSquare, HelpCircle, Megaphone, CalendarPlus, BarChart2, BookOpen, Utensils } from "lucide-react";
+import { Users, MessageSquare, HelpCircle, Megaphone, CalendarPlus, BarChart2, BookOpen, Utensils, Loader2 } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { getFirestore, collection, getDocs, query, orderBy, limit, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { formatDistanceToNow } from 'date-fns';
+import { useEffect, useActionState, useRef, useState } from "react";
+import { publishAlert, type PublishAlertState } from "./actions";
+import { useToast } from "@/hooks/use-toast";
+import { useFormStatus } from "react-dom";
+import { Input } from "@/components/ui/input";
 
 
 type Feedback = {
@@ -63,10 +69,44 @@ async function getSupportTickets(): Promise<SupportTicket[]> {
   return ticketsList;
 }
 
+function PublishAlertButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button className="w-full" type="submit" disabled={pending}>
+            {pending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Publishing...</> : 'Publish Alert'}
+        </Button>
+    )
+}
 
-export default async function AdminDashboardPage() {
-  const latestFeedback = await getFeedback();
-  const supportTickets = await getSupportTickets();
+
+export default function AdminDashboardPage() {
+  const [latestFeedback, setLatestFeedback] = useState<Feedback[]>([]);
+  const [supportTickets, setSupportTickets] = useState<SupportTicket[]>([]);
+  const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+  
+  const initialState: PublishAlertState = { message: null, errors: null };
+  const [state, dispatch] = useActionState(publishAlert, initialState);
+
+  useEffect(() => {
+    async function fetchData() {
+        const [feedbackData, ticketsData] = await Promise.all([getFeedback(), getSupportTickets()]);
+        setLatestFeedback(feedbackData);
+        setSupportTickets(ticketsData);
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (state.message) {
+      if (state.errors) {
+        toast({ variant: 'destructive', title: 'Error', description: state.message });
+      } else {
+        toast({ title: 'Success', description: state.message });
+        formRef.current?.reset();
+      }
+    }
+  }, [state, toast]);
 
   return (
     <div className="space-y-8">
@@ -187,15 +227,18 @@ export default async function AdminDashboardPage() {
             <CardTitle className="flex items-center gap-2"><Megaphone /> Publish Campus Alert</CardTitle>
             <CardDescription>Post an announcement for all users</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-                <Label htmlFor="alertMessage">Alert Message</Label>
-                <Textarea id="alertMessage" placeholder="e.g., The library will be closed tomorrow." />
-            </div>
-          </CardContent>
-           <CardFooter>
-            <Button className="w-full">Publish Alert</Button>
-          </CardFooter>
+           <form action={dispatch} ref={formRef}>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="alertMessage">Alert Message</Label>
+                    <Textarea id="alertMessage" name="alertMessage" placeholder="e.g., The library will be closed tomorrow." required />
+                    {state.errors?.alertMessage && <p className="text-sm text-destructive">{state.errors.alertMessage[0]}</p>}
+                </div>
+            </CardContent>
+            <CardFooter>
+                <PublishAlertButton />
+            </CardFooter>
+           </form>
         </Card>
         <Card>
           <CardHeader>
