@@ -16,10 +16,9 @@ async function seedCanteenItems() {
     ...allCanteenItems.meals,
   ];
 
-  console.log('Starting to seed canteen items...');
+  console.log('Starting to seed canteen items with stock levels...');
 
   for (const item of allItems) {
-    // We'll use a consistent ID format like `item-1`, `item-2`, etc.
     const docId = `item-${item.id}`;
     const itemRef = doc(db, itemsCol.path, docId);
 
@@ -27,18 +26,18 @@ async function seedCanteenItems() {
       await setDoc(itemRef, {
         name: item.name,
         price: item.price,
-        // Assuming canteen item categories are based on the keys in allCanteenItems
         category: findCategory(item.id),
         itemsSold: 0,
         totalRevenue: 0,
+        stockLevel: 100, // Initial stock level for all items
       });
-      console.log(`Successfully seeded: ${item.name}`);
+      console.log(`Successfully seeded: ${item.name} with stock 100`);
     } catch (error) {
       console.error(`Failed to seed ${item.name}:`, error);
     }
   }
 
-  console.log('Seeding complete. Your "canteen-items" collection should now be populated.');
+  console.log('Seeding complete. Your "canteen-items" collection should now be populated with stock levels.');
   console.log('You may need to restart the application to see the changes.');
   process.exit(0);
 }

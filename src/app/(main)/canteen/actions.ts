@@ -66,16 +66,27 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
   }
 
   try {
-    // Define all document references *before* the transaction
     const newOrderRef = doc(collection(db, 'canteen-orders'));
     const newSaleRef = doc(collection(db, 'canteen-sales'));
     const itemRefs = orderItems.map(item => doc(db, 'canteen-items', `item-${item.id}`));
 
     await runTransaction(db, async (transaction) => {
-      // 1. Get all item documents that need updating
       const itemDocs = await Promise.all(itemRefs.map(ref => transaction.get(ref)));
 
-      // 2. Set the new order document
+      // Check stock levels before processing order
+      for (let i = 0; i < orderItems.length; i++) {
+        const itemDoc = itemDocs[i];
+        const orderItem = orderItems[i];
+        if (!itemDoc.exists()) {
+          throw new Error(`Item "${orderItem.name}" does not exist in inventory.`);
+        }
+        const currentStock = itemDoc.data().stockLevel || 0;
+        if (currentStock < orderItem.quantity) {
+          throw new Error(`Not enough stock for ${orderItem.name}. Only ${currentStock} left.`);
+        }
+      }
+
+      // If all items are in stock, proceed
       transaction.set(newOrderRef, {
         userEmail,
         items: orderItems,
@@ -83,7 +94,6 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
         createdAt: serverTimestamp(),
       });
 
-      // 3. Set the new sales analytics document
       transaction.set(newSaleRef, {
         orderId: newOrderRef.id,
         sales: finalPrice,
@@ -91,30 +101,20 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
         itemCount: orderItems.reduce((acc, item) => acc + item.quantity, 0),
       });
 
-      // 4. Update total sales for each item
       orderItems.forEach((item, index) => {
         const itemDoc = itemDocs[index];
         const itemRef = itemRefs[index];
-
-        if (!itemDoc.exists()) {
-          // If the item doesn't exist in our analytics collection, create it.
-          // This case should ideally be handled by a seeding script, but we add it for robustness.
-          transaction.set(itemRef, {
-            name: item.name,
-            price: item.price,
-            itemsSold: item.quantity,
-            totalRevenue: item.price * item.quantity,
-          });
-        } else {
-          // If the item exists, update its sales figures
-          const currentRevenue = itemDoc.data().totalRevenue || 0;
-          const currentItemsSold = itemDoc.data().itemsSold || 0;
-          
-          transaction.update(itemRef, {
-            totalRevenue: currentRevenue + (item.price * item.quantity),
-            itemsSold: currentItemsSold + item.quantity,
-          });
-        }
+        
+        const currentData = itemDoc.data();
+        const currentRevenue = currentData.totalRevenue || 0;
+        const currentItemsSold = currentData.itemsSold || 0;
+        const currentStock = currentData.stockLevel || 0;
+        
+        transaction.update(itemRef, {
+          totalRevenue: currentRevenue + (item.price * item.quantity),
+          itemsSold: currentItemsSold + item.quantity,
+          stockLevel: currentStock - item.quantity, // Decrement stock
+        });
       });
     });
 
@@ -125,10 +125,8 @@ export async function placeOrder(prevState: OrderState, formData: FormData): Pro
   } catch (error: any) {
     console.error('Error placing order in transaction:', error);
     return {
-      message: 'Failed to place your order. Please try again.',
+      message: error.message || 'Failed to place your order. Please try again.',
       success: false,
     };
   }
 }
-
-    
