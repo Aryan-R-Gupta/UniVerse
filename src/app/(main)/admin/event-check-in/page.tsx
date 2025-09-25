@@ -23,6 +23,7 @@ type RegistrationDetails = {
 
 export default function EventCheckInPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const scannerRef = useRef<QrScanner | null>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [scanResult, setScanResult] = useState<RegistrationDetails | null>(null);
   const [isInvalid, setIsInvalid] = useState(false);
@@ -30,66 +31,58 @@ export default function EventCheckInPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    let scanner: QrScanner | null = null;
+    const videoElem = videoRef.current;
     
-    const getCameraAndStartScanner = async () => {
+    if (!videoElem) {
+      return;
+    }
+
+    const startScanner = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-        setHasCameraPermission(true);
-        
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          // The video needs to be played to start showing the feed
-          videoRef.current.play().catch(e => console.error("Video play failed:", e));
-
-          scanner = new QrScanner(
-            videoRef.current,
-            result => {
-                if (scanner) {
-                    scanner.stop();
-                }
-                handleScan(result.data);
-            },
-            {
-              onDecodeError: error => {
-                // Can be noisy, so we don't toast every error
-              },
-              highlightScanRegion: true,
-              highlightCodeOutline: true,
-            }
-          );
-
-          if (isScanning) {
-            scanner.start().catch(err => {
-                 toast({
-                    variant: 'destructive',
-                    title: 'Scanner Error',
-                    description: err.message || 'Could not start the scanner.'
-                })
-            });
-          }
+        if (!await QrScanner.hasCamera()) {
+          throw new Error('No camera found.');
         }
-      } catch (error) {
-        console.error('Error accessing camera:', error);
+        await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        setHasCameraPermission(true);
+
+        scannerRef.current = new QrScanner(
+          videoElem,
+          result => {
+            scannerRef.current?.stop();
+            handleScan(result.data);
+          },
+          {
+            onDecodeError: error => {
+              // Can be noisy, so we don't toast every error
+            },
+            highlightScanRegion: true,
+            highlightCodeOutline: true,
+          }
+        );
+
+        if (isScanning) {
+          await scannerRef.current.start();
+        }
+      } catch (error: any) {
+        console.error('Error accessing camera or starting scanner:', error);
         setHasCameraPermission(false);
         toast({
           variant: 'destructive',
-          title: 'Camera Access Denied',
-          description: 'Please enable camera permissions in your browser settings to use this app.',
+          title: 'Camera Error',
+          description: error.message || 'Please enable camera permissions in your browser settings.',
         });
       }
     };
 
-    if(isScanning) {
-      getCameraAndStartScanner();
+    if (isScanning && !scannerRef.current) {
+      startScanner();
     }
 
     return () => {
-      if (scanner) {
-        scanner.destroy();
-      }
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
+      scannerRef.current?.destroy();
+      scannerRef.current = null;
+      if (videoElem.srcObject) {
+        const stream = videoElem.srcObject as MediaStream;
         stream.getTracks().forEach(track => track.stop());
       }
     };
@@ -135,6 +128,15 @@ export default function EventCheckInPage() {
     setIsScanning(true);
     setScanResult(null);
     setIsInvalid(false);
+    if(scannerRef.current) {
+        scannerRef.current.start().catch(err => {
+            toast({
+                variant: 'destructive',
+                title: 'Scanner Error',
+                description: 'Could not restart the scanner.'
+            })
+        });
+    }
   };
 
   return (
@@ -149,7 +151,7 @@ export default function EventCheckInPage() {
           </CardHeader>
           <CardContent>
             <div className="w-full aspect-video bg-muted rounded-md flex items-center justify-center relative">
-                <video ref={videoRef} className="w-full h-full object-cover rounded-md" autoPlay muted playsInline />
+                <video ref={videoRef} className="w-full h-full object-cover rounded-md" playsInline />
                 {hasCameraPermission === null && <p>Checking for camera...</p>}
                 {hasCameraPermission === false && (
                     <Alert variant="destructive" className="absolute">
