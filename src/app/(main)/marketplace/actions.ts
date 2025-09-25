@@ -54,7 +54,6 @@ export async function listItem(prevState: ListItemState, formData: FormData): Pr
             contact,
             sellerName: userProfileData.name,
             sellerEmail: userProfileData.email,
-            imageUrl: `https://picsum.photos/seed/${title.replace(/\s/g, '')}/600/400`,
             createdAt: serverTimestamp(),
         });
 

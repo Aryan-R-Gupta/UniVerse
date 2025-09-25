@@ -18,7 +18,6 @@ import { formatDistanceToNow } from 'date-fns';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { marketplaceCategories } from './data';
-import Image from 'next/image';
 
 type MarketplaceItem = {
   id: string;
@@ -28,7 +27,6 @@ type MarketplaceItem = {
   category: string;
   contact: string;
   sellerName: string;
-  imageUrl: string;
   createdAt: Date;
 };
 
@@ -47,7 +45,6 @@ async function getItems(): Promise<MarketplaceItem[]> {
       category: data.category,
       contact: data.contact,
       sellerName: data.sellerName,
-      imageUrl: data.imageUrl,
       createdAt: (data.createdAt as Timestamp)?.toDate() ?? new Date(),
     };
   });
@@ -181,10 +178,12 @@ export default function MarketplacePage() {
         {loading ? (
           Array.from({ length: 6 }).map((_, i) => (
             <Card key={i}>
-              <CardHeader><Skeleton className="h-40 w-full" /></CardHeader>
-              <CardContent className="space-y-2">
+              <CardHeader className="space-y-2">
                 <Skeleton className="h-6 w-3/4" />
                 <Skeleton className="h-4 w-1/2" />
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-full" />
               </CardContent>
               <CardFooter><Skeleton className="h-10 w-full" /></CardFooter>
@@ -192,20 +191,19 @@ export default function MarketplacePage() {
           ))
         ) : items.length > 0 ? (
           items.map(item => (
-            <Card key={item.id} className="overflow-hidden group">
-              <CardHeader className="p-0">
-                <Image src={item.imageUrl} alt={item.title} width={600} height={400} className="w-full h-48 object-cover group-hover:scale-105 transition-transform" />
-              </CardHeader>
-              <CardContent className="p-4">
+            <Card key={item.id} className="flex flex-col">
+              <CardHeader>
                 <CardTitle className="truncate text-lg">{item.title}</CardTitle>
                 <p className="font-bold text-primary text-xl">₹{item.price}</p>
-                <p className="text-sm text-muted-foreground truncate h-10">{item.description}</p>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p className="text-sm text-muted-foreground line-clamp-3">{item.description}</p>
                  <div className="flex items-center gap-2 text-muted-foreground text-xs pt-2 mt-2 border-t">
                     <Tag className="h-3 w-3" />
                     <span>{marketplaceCategories.find(c => c.id === item.category)?.name || item.category}</span>
                  </div>
               </CardContent>
-              <CardFooter className="p-4 bg-muted/50">
+              <CardFooter className="p-4 bg-muted/50 mt-4">
                  <div className="w-full">
                     <p className="text-sm font-medium">{item.sellerName}</p>
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
