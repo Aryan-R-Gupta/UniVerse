@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
-import { MessageSquare, PlusCircle, Loader2, ThumbsUp, MessageCircle } from 'lucide-react';
+import { MessageSquare, PlusCircle, Loader2, ThumbsUp, MessageCircle, ZoomIn } from 'lucide-react';
 import { getFirestore, collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { createPost, type CreatePostState } from './actions';
@@ -36,7 +36,6 @@ async function getPosts(): Promise<ForumPost[]> {
       channel: data.channel,
       authorName: data.authorName,
       createdAt: (data.createdAt as Timestamp)?.toDate() ?? new Date(),
-      // These will be implemented later
       upvotes: data.upvotes ?? 0,
       commentCount: data.commentCount ?? 0,
     };
@@ -178,10 +177,38 @@ export default function ForumPage() {
           posts.map(post => (
             <Card key={post.id}>
               <CardContent className="p-4">
-                <p className="text-xs font-semibold text-primary mb-1">#{post.channel}</p>
-                <Link href={`/forum/post/${post.id}`} className="hover:underline">
-                    <h3 className="text-lg font-bold">{post.title}</h3>
-                </Link>
+                <div className="flex justify-between items-start">
+                    <div>
+                        <p className="text-xs font-semibold text-primary mb-1">#{post.channel}</p>
+                        <Link href={`/forum/post/${post.id}`} className="hover:underline">
+                            <h3 className="text-lg font-bold">{post.title}</h3>
+                        </Link>
+                    </div>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <ZoomIn className="h-5 w-5" />
+                                <span className="sr-only">View Post</span>
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-2xl">
+                            <DialogHeader>
+                                <DialogTitle>{post.title}</DialogTitle>
+                                <DialogDescription>
+                                    in #{post.channel} by {post.authorName} &bull; {formatDistanceToNow(post.createdAt, { addSuffix: true })}
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="py-4 whitespace-pre-wrap text-sm">
+                                {post.content}
+                            </div>
+                            <DialogFooter>
+                                <Button asChild>
+                                    <Link href={`/forum/post/${post.id}`}>View Comments</Link>
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                </div>
                 <p className="text-sm text-muted-foreground mt-1 truncate">{post.content}</p>
                 <div className="flex items-center justify-between text-sm text-muted-foreground mt-4">
                     <p>by {post.authorName} &bull; {formatDistanceToNow(post.createdAt, { addSuffix: true })}</p>
