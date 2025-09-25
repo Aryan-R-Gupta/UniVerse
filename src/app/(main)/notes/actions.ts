@@ -35,16 +35,14 @@ export async function uploadNote(prevState: UploadNoteState, formData: FormData)
   }
   
   const file = formData.get('file') as File | null;
-  if (!file || file.size === 0) {
+  // When a File object is passed via server action, it becomes a plain object.
+  // We need to check its properties carefully.
+  if (!file || typeof file !== 'object' || !('size' in file) || file.size === 0) {
     return {
         errors: { file: ['Please select a file to upload.'] },
         message: 'File is required.'
     }
   }
-
-  // Basic check for PDF files on the client side is good, but on the server,
-  // `file.type` might not be reliable. We'll trust the client's `accept` attribute for now.
-  // In a real app, you'd use a library to check magic bytes on the server.
 
   const { title, course } = validatedFields.data;
   const db = getFirestore(app);
@@ -53,8 +51,8 @@ export async function uploadNote(prevState: UploadNoteState, formData: FormData)
     await addDoc(collection(db, 'notes'), {
       title,
       course,
-      fileName: file.name,
-      fileType: file.type, // This is okay as it's just for metadata
+      fileName: file.name || 'Untitled',
+      fileType: file.type || 'application/octet-stream',
       authorName: userProfileData.name,
       authorEmail: userProfileData.email,
       createdAt: serverTimestamp(),
