@@ -130,9 +130,16 @@ export async function addComment(postId: string, prevState: AddCommentState, for
 export type UpvoteState = {
     message?: string | null;
     error?: string | null;
+    postId?: string | null;
 }
 
-export async function upvotePost(postId: string, prevState: UpvoteState, formData: FormData): Promise<UpvoteState> {
+export async function upvotePost(prevState: UpvoteState, formData: FormData): Promise<UpvoteState> {
+    const postId = formData.get('postId') as string;
+    
+    if (!postId) {
+        return { error: 'Post ID is missing.', postId: null };
+    }
+
     const db = getFirestore(app);
     const postRef = doc(db, 'forum-posts', postId);
 
@@ -149,10 +156,10 @@ export async function upvotePost(postId: string, prevState: UpvoteState, formDat
         revalidatePath(`/forum/post/${postId}`);
         revalidatePath('/forum');
 
-        return { message: 'Upvoted!' };
+        return { message: 'Upvoted!', postId };
 
     } catch (e) {
         console.error('Error upvoting post:', e);
-        return { error: 'Failed to upvote. Please try again.' };
+        return { error: 'Failed to upvote. Please try again.', postId };
     }
 }

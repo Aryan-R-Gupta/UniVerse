@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { MessageSquare, PlusCircle, Loader2, ThumbsUp, MessageCircle, ZoomIn } from 'lucide-react';
 import { getFirestore, collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
-import { createPost, type CreatePostState } from './actions';
+import { createPost, upvotePost, type CreatePostState, type UpvoteState } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
@@ -59,6 +59,22 @@ function CreatePostSubmitButton() {
   );
 }
 
+function UpvoteFeedButton({ postId, initialUpvotes }: { postId: string, initialUpvotes: number }) {
+    const { pending, data } = useFormStatus();
+    const isThisButtonPending = pending && data?.get('postId') === postId;
+
+    return (
+        <Button variant="ghost" size="sm" className="flex items-center gap-1" type="submit" disabled={pending}>
+             {isThisButtonPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+                <ThumbsUp className="h-4 w-4" /> 
+            )}
+            {initialUpvotes}
+        </Button>
+    )
+}
+
 export default function ForumPage() {
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +84,9 @@ export default function ForumPage() {
   
   const initialFormState: CreatePostState = { message: null, errors: null };
   const [formState, formDispatch] = useActionState(createPost, initialFormState);
+  
+  const initialUpvoteState: UpvoteState = {};
+  const [upvoteState, upvoteDispatch] = useActionState(upvotePost, initialUpvoteState);
 
 
   async function fetchPosts() {
@@ -99,6 +118,14 @@ export default function ForumPage() {
       }
     }
   }, [formState, toast]);
+
+  useEffect(() => {
+    if (upvoteState.message && !upvoteState.error) {
+        fetchPosts(); // Refetch posts to show new upvote count
+    } else if (upvoteState.error) {
+        toast({ variant: 'destructive', title: 'Error', description: upvoteState.error });
+    }
+  }, [upvoteState, toast]);
 
 
   return (
@@ -213,12 +240,13 @@ export default function ForumPage() {
                 <div className="flex items-center justify-between text-sm text-muted-foreground mt-4">
                     <p>by {post.authorName} &bull; {formatDistanceToNow(post.createdAt, { addSuffix: true })}</p>
                     <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1">
-                            <ThumbsUp className="h-4 w-4" /> {post.upvotes}
-                        </span>
-                         <span className="flex items-center gap-1">
+                        <form action={upvoteDispatch} className="flex items-center">
+                             <input type="hidden" name="postId" value={post.id} />
+                            <UpvoteFeedButton postId={post.id} initialUpvotes={post.upvotes} />
+                        </form>
+                         <Link href={`/forum/post/${post.id}`} className="flex items-center gap-1 hover:text-primary transition-colors">
                             <MessageCircle className="h-4 w-4" /> {post.commentCount}
-                        </span>
+                        </Link>
                     </div>
                 </div>
               </CardContent>
