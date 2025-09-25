@@ -68,7 +68,7 @@ function RequestButton({ bookId, currentStatus }: { bookId: string, currentStatu
     const isThisButtonPending = pending && data?.get('bookId') === bookId;
   
     return (
-      <Button className="w-full" disabled={currentStatus !== 'Available' || pending}>
+      <Button className="w-full" type="submit" disabled={currentStatus !== 'Available' || pending}>
         {isThisButtonPending ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -91,7 +91,7 @@ export default function BookExchangePage() {
   const initialListState: BookListState = { message: null, errors: null };
   const [listState, listDispatch] = useActionState(listBook, initialListState);
 
-  const initialRequestState: RequestBookState = { message: null, error: null };
+  const initialRequestState: RequestBookState = { message: null, error: null, bookId: null };
   const [requestState, requestDispatch] = useActionState(requestBook, initialRequestState);
 
 
@@ -238,5 +238,3 @@ export default function BookExchangePage() {
     </div>
   );
 }
-
-    
