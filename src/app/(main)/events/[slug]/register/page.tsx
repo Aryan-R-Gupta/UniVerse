@@ -82,7 +82,7 @@ export default function EventRegistrationPage({ params }: { params: { slug: stri
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="payal@example.com" required />
+              <Input id="email" name="email" type="email" placeholder="kanksha@university.edu" required />
               {state.errors?.email && <p className="text-sm text-destructive">{state.errors.email[0]}</p>}
             </div>
              <div className="space-y-2">
