@@ -53,6 +53,8 @@ export async function createPost(prevState: CreatePostState, formData: FormData)
     });
 
     revalidatePath('/forum');
+    revalidatePath(`/forum/post/[postId]`);
+
 
     return {
       message: 'Your post has been created successfully!',
@@ -101,7 +103,8 @@ export async function addComment(postId: string, prevState: AddCommentState, for
             }
 
             // 1. Add the new comment
-            transaction.set(doc(commentsCol), {
+            const newCommentRef = doc(commentsCol);
+            transaction.set(newCommentRef, {
                 postId,
                 content: comment,
                 authorName: userProfileData.name,
@@ -121,5 +124,35 @@ export async function addComment(postId: string, prevState: AddCommentState, for
     } catch (e) {
         console.error('Error adding comment:', e);
         return { message: 'Failed to add comment. Please try again.' };
+    }
+}
+
+export type UpvoteState = {
+    message?: string | null;
+    error?: string | null;
+}
+
+export async function upvotePost(postId: string, prevState: UpvoteState, formData: FormData): Promise<UpvoteState> {
+    const db = getFirestore(app);
+    const postRef = doc(db, 'forum-posts', postId);
+
+    try {
+        await runTransaction(db, async (transaction) => {
+            const postDoc = await transaction.get(postRef);
+            if (!postDoc.exists()) {
+                throw new Error("Post does not exist!");
+            }
+            const newUpvoteCount = (postDoc.data().upvotes || 0) + 1;
+            transaction.update(postRef, { upvotes: newUpvoteCount });
+        });
+        
+        revalidatePath(`/forum/post/${postId}`);
+        revalidatePath('/forum');
+
+        return { message: 'Upvoted!' };
+
+    } catch (e) {
+        console.error('Error upvoting post:', e);
+        return { error: 'Failed to upvote. Please try again.' };
     }
 }

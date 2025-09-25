@@ -3,10 +3,10 @@
 
 import { useState, useEffect, useActionState, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
-import { doc, getDoc, getFirestore, collection, query, where, orderBy, Timestamp, addDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, getFirestore, collection, query, where, orderBy, Timestamp } from 'firebase/firestore';
 import { app } from '@/lib/firebase';
 import { notFound } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ThumbsUp, MessageCircle, Send, Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { addComment, type AddCommentState } from '../../actions';
+import { addComment, upvotePost, type AddCommentState, type UpvoteState } from '../../actions';
 import { userProfileData } from '@/lib/data';
 
 async function getPost(postId: string): Promise<ForumPost | null> {
@@ -58,12 +58,12 @@ async function getComments(postId: string): Promise<ForumComment[]> {
     });
 }
 
-function CommentSubmitButton() {
+function UpvoteButton({ initialUpvotes }: { initialUpvotes: number }) {
     const { pending } = useFormStatus();
     return (
-        <Button type="submit" size="icon" disabled={pending}>
-            {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-            <span className="sr-only">Submit Comment</span>
+        <Button variant="ghost" size="sm" className="flex items-center gap-1" type="submit" disabled={pending}>
+            <ThumbsUp className="h-4 w-4" /> 
+            {pending ? 'Upvoting...' : `${initialUpvotes} Upvotes`}
         </Button>
     )
 }
@@ -76,10 +76,16 @@ export default function PostPage({ params }: { params: { postId: string } }) {
     const formRef = useRef<HTMLFormElement>(null);
 
     const addCommentWithPostId = addComment.bind(null, params.postId);
-    const initialState: AddCommentState = { message: null, errors: null };
-    const [commentState, commentDispatch] = useActionState(addCommentWithPostId, initialState);
+    const initialCommentState: AddCommentState = { message: null, errors: null };
+    const [commentState, commentDispatch] = useActionState(addCommentWithPostId, initialCommentState);
+    
+    const upvotePostWithId = upvotePost.bind(null, params.postId);
+    const initialUpvoteState: UpvoteState = {};
+    const [upvoteState, upvoteDispatch] = useActionState(upvotePostWithId, initialUpvoteState);
+
 
     async function fetchData() {
+        setLoading(true);
         try {
             const [postData, commentsData] = await Promise.all([
                 getPost(params.postId),
@@ -110,6 +116,15 @@ export default function PostPage({ params }: { params: { postId: string } }) {
             }
         }
     }, [commentState, toast]);
+
+    useEffect(() => {
+        if (upvoteState.message && !upvoteState.error) {
+            fetchData(); // Refetch data to show new upvote count
+        } else if (upvoteState.error) {
+            toast({ variant: 'destructive', title: 'Error', description: upvoteState.error });
+        }
+    }, [upvoteState, toast]);
+
 
     if (loading) {
         return (
@@ -148,9 +163,9 @@ export default function PostPage({ params }: { params: { postId: string } }) {
                 <CardContent className="p-6">
                     <p className="whitespace-pre-wrap">{post.content}</p>
                      <div className="flex items-center gap-4 text-sm text-muted-foreground mt-6 border-t pt-4">
-                        <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                            <ThumbsUp className="h-4 w-4" /> {post.upvotes} Upvotes
-                        </Button>
+                        <form action={upvoteDispatch}>
+                            <UpvoteButton initialUpvotes={post.upvotes} />
+                        </form>
                          <span className="flex items-center gap-1">
                             <MessageCircle className="h-4 w-4" /> {comments.length} Comments
                         </span>
@@ -198,4 +213,3 @@ export default function PostPage({ params }: { params: { postId: string } }) {
     )
 }
 
-    
