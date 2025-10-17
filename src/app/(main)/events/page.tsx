@@ -1,6 +1,5 @@
-
 "use client";
-
+import { Suspense } from 'react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -12,7 +11,8 @@ import Image from "next/image";
 
 type Category = 'All' | 'Workshops' | 'Cultural' | 'Tech' | 'Sports' | 'Volunteer';
 
-export default function EventsPage() {
+// Move the inner logic into a separate component
+function EventsPageContent() {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get('category') as Category || 'All';
   const [filter, setFilter] = useState<Category>(initialCategory);
@@ -20,7 +20,6 @@ export default function EventsPage() {
   useEffect(() => {
     setFilter(initialCategory);
   }, [initialCategory]);
-
 
   const filteredEvents = filter === 'All' ? events : events.filter(e => e.category === filter);
 
@@ -46,10 +45,19 @@ export default function EventsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredEvents.map(event => (
-          <Card key={event.id} className="overflow-hidden group">
+          <Card className="overflow-hidden group" key={event.id}>
             <div className="relative">
-              <Image src={event.image} alt={event.title} width={600} height={400} className="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105" data-ai-hint={event.dataAiHint} />
-               <Badge className="absolute top-2 right-2 bg-accent text-accent-foreground">{event.category}</Badge>
+              <Image
+                src={event.image}
+                alt={event.title}
+                width={600}
+                height={400}
+                className="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105"
+                data-ai-hint={event.dataAiHint}
+              />
+              <Badge className="absolute top-2 right-2 bg-accent text-accent-foreground">
+                {event.category}
+              </Badge>
             </div>
             <CardContent className="p-4">
               <h3 className="font-bold text-lg">{event.title}</h3>
@@ -66,4 +74,12 @@ export default function EventsPage() {
     </div>
   );
 }
-    
+
+// The default export now wraps the content in Suspense
+export default function EventsPage() {
+  return (
+    <Suspense fallback={<div>Loading events…</div>}>
+      <EventsPageContent />
+    </Suspense>
+  );
+}
